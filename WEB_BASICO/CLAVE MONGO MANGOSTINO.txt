@@ -1,0 +1,35 @@
+mangostino W9Wm7zG4Vlko9YpT
+
+Confoguracion Mongo
+----------------
+pip 0000
+
+npm install mongodb
+mongodb+srv://mangostino:W9Wm7zG4Vlko9YpT@mangostino.z3lrqtr.mongodb.net/?retryWrites=true&w=majority&appName=mangostino
+
+-----------------------------------------------------------------------------------------------------------------------
+24:06 
+
+index.js
+inst6all mongo
+
+instalamos nm mongoose
+para configurar
+
+en index, js:
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://127.0.0.1:27017/test')
+  .then(() => console.log('Connected!'));
+
+-----------------------------------------------------------------------------
+27:50
+mongoose.connect("mongodb+srv://mangostino:W9Wm7zG4Vlko9YpT@mangostino.z3lrqtr.mongodb.net/?retryWrites=true&w=majority&appName=mangostino")
+    .then(() => {
+        console.log("Connected to databaase");
+    })
+    .catch(() => {
+        console.log("Connection Failed");
+    });
+
+conectado con base de datos

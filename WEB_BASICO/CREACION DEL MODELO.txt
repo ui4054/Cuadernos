@@ -1,0 +1,81 @@
+CREACION DEL MODELO
+28:57
+
+const mongoose = require("mongoose");
+
+const ProductSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please enter product name"],
+    },
+
+    quantity: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    price: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    image: {
+      type: String,
+      required: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+-----------------------------------------------------
+
+configuración del pregoruter con modo POST :
+
+// agregamos app.post
+
+app.post('/api/products',(req,res) => {
+    console.log(req.body);
+    res.send(req.body);
+});
+
+------------CONFIGURACIÓN DEL MIDDLEWARE
+
+// CONFIGURARMOS EL MIDDLE WARE PARA LEER Y  NNO TENE UNDEFINED
+app.use(express.json());
+
+38:55
+debajo de apoo eexpress en index.js
+const Product = require('./models/product.model.js');
+
+luego en el try del router de POST prodcts, de observa
+app.post('/api/products',(req,res) => {
+    //console.log(req.body); ver body
+    //res.send(req.body);
+    try{
+        
+    }
+    catch{
+        res.status(500).json{message: error.message};
+    }
+});
+
+ ------------- agregamos SYNC
+app.post('/api/products', async (req,res) => {
+    //console.log(req.body); ver body
+    //res.send(req.body);
+    try{
+        const product =  await Product.create(req.body);
+        res.status(200).json(product);
+
+    }
+    catch{
+        res.status(500).json({message: error.message});
+    }
+});
+
+--------------------------- agegar el const rpdouct, al pguardar el json generado

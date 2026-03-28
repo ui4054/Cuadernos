@@ -1,0 +1,63 @@
+Set-ExecutionPolicy Unrestricted
+-----------------
+npm init-y
+--------------
+Console Log , en indez js, excercise
+
+----------------
+
+en index, js :
+"serve": "node index.js"
+
+terminal npm run serve
+
+--------------------------
+nom install express
+
+-------------------------
+en index .js
+
+import express from 'express'
+
+const app = express()
+
+app.listen(3000,() =>{
+    console.log('Server Runnning at 3000');
+})
+
+app.get('/',(req,res) =>{
+    res.send('Hola Mundo');
+});
+
+
+----------------------
+
+index.js
+const express = require('express');
+const app = express();
+
+app.listen(3000,() => {
+    console.log('Server is running on port 3000');
+});
+
+app.get('/',(req,res) =>{
+    res.send("Hello from Node API");
+})
+
+------------------------------------
+10:25
+instalar thunderclient y llamar
+htttp://localhost:3000/
+
+para que la API responda
+
+-------------------------------------
+insomnia y git bash, + gitignore
+node_modules
+------------------------------------
+17:59 install nodemon
+npm i nodemon
+verifica en package.json : dependencies : nodemon
+--------------------------------------------------
+
+hasta aquí configuración básica de server:
