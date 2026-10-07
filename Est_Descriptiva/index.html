@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estadística Descriptiva & EDA | Guía Interactiva y Cuadernos</title>
+  
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- KaTeX for Math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <!-- Chart.js for Interactive Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- PrismJS for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <i class="fa-solid fa-chart-pie logo-icon"></i>
+        <span>Estadística<strong>Descriptiva</strong> <small>EDA & Python</small></span>
+      </div>
+      <nav class="nav-links">
+        <a href="#intro" class="nav-item active"><i class="fa-solid fa-compass"></i> Intro</a>
+        <a href="#eda-teoria" class="nav-item"><i class="fa-solid fa-brain"></i> Teoría EDA</a>
+        <a href="#practica-python" class="nav-item"><i class="fa-solid fa-code"></i> Práctica Python</a>
+        <a href="#calculadora" class="nav-item btn-highlight"><i class="fa-solid fa-calculator"></i> Calculadora en Vivo</a>
+        <a href="#cuadernos" class="nav-item"><i class="fa-solid fa-book-bookmark"></i> Cuadernos</a>
+      </nav>
+      <button class="theme-toggle" id="themeToggle" title="Cambiar tema">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="layout-wrapper">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-title">Contenido del Curso</div>
+      <ul class="sidebar-menu">
+        <li class="menu-category">01. Fundamentos</li>
+        <li><a href="#sec-que-es"><i class="fa-solid fa-question-circle"></i> ¿Qué es la Estadística?</a></li>
+        <li><a href="#sec-para-que"><i class="fa-solid fa-bullseye"></i> ¿Para qué sirve?</a></li>
+        <li><a href="#sec-como-se-usa"><i class="fa-solid fa-gears"></i> ¿Cómo se usa el Ciclo de Datos?</a></li>
+        <li><a href="#sec-recomendaciones"><i class="fa-solid fa-lightbulb"></i> Recomendaciones Previas</a></li>
+
+        <li class="menu-category">02. Análisis Exploratorio (EDA)</li>
+        <li><a href="#sec-estructurados"><i class="fa-solid fa-table"></i> Datos Estructurados</a></li>
+        <li><a href="#sec-no-estructurados"><i class="fa-solid fa-file-lines"></i> Datos No Estructurados</a></li>
+        <li><a href="#sec-localizacion"><i class="fa-solid fa-location-crosshairs"></i> Estimación de Localización</a></li>
+        <li><a href="#sec-variabilidad"><i class="fa-solid fa-arrows-left-right"></i> Estimación de Variabilidad</a></li>
+        <li><a href="#sec-distribucion"><i class="fa-solid fa-chart-area"></i> Exploración de la Distribución</a></li>
+        <li><a href="#sec-binarios-categoricos"><i class="fa-solid fa-tags"></i> Datos Binarios y Categóricos</a></li>
+        <li><a href="#sec-correlacion"><i class="fa-solid fa-chart-line"></i> Correlación & Multivariable</a></li>
+        <li><a href="#sec-dos-categoricas"><i class="fa-solid fa-border-all"></i> Caso: 2 Variables Categóricas</a></li>
+        <li><a href="#sec-categorica-numerica"><i class="fa-solid fa-sliders"></i> Caso: Categórica vs Numérica</a></li>
+
+        <li class="menu-category">03. Laboratorio en Python</li>
+        <li><a href="#sec-muestreo-py"><i class="fa-brands fa-python"></i> Muestreo en Python</a></li>
+        <li><a href="#sec-tendencia-py"><i class="fa-solid fa-calculator"></i> Tendencia Central en Python</a></li>
+        <li><a href="#sec-frecuencias-py"><i class="fa-solid fa-list-check"></i> Tabla de Frecuencias (Sturges)</a></li>
+        <li><a href="#sec-histograma-py"><i class="fa-solid fa-chart-column"></i> Histograma y Análisis</a></li>
+
+        <li class="menu-category">04. Herramientas Interactivas</li>
+        <li><a href="#calculadora"><i class="fa-solid fa-wand-magic-sparkles"></i> Calculadora EDA Interactiva</a></li>
+        <li><a href="#cuadernos"><i class="fa-solid fa-folder-open"></i> Cuadernos Jupyter (.ipynb)</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+      <!-- HERO BANNER -->
+      <section class="hero-card">
+        <div class="hero-badge"><i class="fa-solid fa-graduation-cap"></i> Curso de Estadística Descriptiva</div>
+        <h1>Análisis Exploratorio de Datos & Guía Práctica en Python</h1>
+        <p class="hero-lead">Una presentación interactiva, didáctica e ilustrada para comprender la localización, variabilidad, forma de distribución y tablas de frecuencias con ejemplos aplicados.</p>
+        <div class="hero-actions">
+          <a href="#calculadora" class="btn btn-primary"><i class="fa-solid fa-play"></i> Probar Calculadora EDA</a>
+          <a href="#sec-que-es" class="btn btn-secondary"><i class="fa-solid fa-book-open"></i> Iniciar Lección</a>
+        </div>
+      </section>
+
+      <!-- SECCIÓN INTRODUCTORIA -->
+      <section id="intro" class="section-block">
+        <div class="section-header">
+          <span class="step-num">01</span>
+          <div>
+            <h2>Sección Introductoria a la Estadística</h2>
+            <p class="subtitle">Bases fundamentales para transformar datos ruidosos en decisiones inteligentes.</p>
+          </div>
+        </div>
+
+        <!-- Tarjetas Grid Intro -->
+        <div class="grid-2x2">
+          
+          <div class="card" id="sec-que-es">
+            <div class="card-icon blue"><i class="fa-solid fa-question"></i></div>
+            <h3>¿Qué es la Estadística?</h3>
+            <p>La <strong>Estadística</strong> es la ciencia y disciplina matemática encargada de <em>recolectar, organizar, resumir, analizar e interpretar datos</em> para extraer conclusiones válidas y tomar decisiones racionales en presencia de incertidumbre.</p>
+            <div class="callout callout-info">
+              <i class="fa-solid fa-divide"></i>
+              <div>
+                <strong>Se divide en dos grandes ramas:</strong>
+                <ul>
+                  <li><strong>Estadística Descriptiva:</strong> Resume y describe las características clave de un conjunto de datos (medias, varianzas, gráficos) sin hacer generalizaciones sobre una población completa.</li>
+                  <li><strong>Estadística Inferencial:</strong> Utiliza muestras para hacer predicciones o probar hipótesis sobre la población total.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" id="sec-para-que">
+            <div class="card-icon green"><i class="fa-solid fa-bullseye"></i></div>
+            <h3>¿Para qué sirve?</h3>
+            <p>En el mundo moderno dominado por los datos (Big Data y Data Science), la estadística descriptiva actúa como la <strong>linterna que ilumina el caos de los números</strong>:</p>
+            <ul class="styled-list">
+              <li><i class="fa-solid fa-check"></i> <strong>Toma de decisiones objetiva:</strong> Reemplaza la intuición por evidencia cuantificable.</li>
+              <li><i class="fa-solid fa-check"></i> <strong>Control de Calidad:</strong> Detectar variaciones en peso, dimensiones o fallas de producción (como en nuestras cajas de helado o café).</li>
+              <li><i class="fa-solid fa-check"></i> <strong>Optimización de Procesos:</strong> Medir tiempos de retardo, atención de tickets o rendimiento de combustible.</li>
+              <li><i class="fa-solid fa-check"></i> <strong>Aislamiento de Anomalías:</strong> Encontrar errores de digitación o patrones atípicos (outliers).</li>
+            </ul>
+          </div>
+
+          <div class="card" id="sec-como-se-usa">
+            <div class="card-icon purple"><i class="fa-solid fa-gears"></i></div>
+            <h3>¿Cómo se usa? El Ciclo de Datos</h3>
+            <p>El trabajo estadístico no es presionar botones; sigue un proceso metodológico riguroso:</p>
+            <ol class="step-process">
+              <li><strong>1. Definición del Problema:</strong> ¿Qué queremos saber? (Ej. ¿El Depto A rinde mejor que el Depto B?).</li>
+              <li><strong>2. Recolección de Datos:</strong> Muestreo representativo o censado de la población.</li>
+              <li><strong>3. Limpieza y Depuración:</strong> Tratamiento de datos faltantes, duplicados e imposibles.</li>
+              <li><strong>4. Análisis Exploratorio (EDA):</strong> Cálculo de medidas de localización, dispersión y gráficos.</li>
+              <li><strong>5. Interpretación & Acción:</strong> Transformar los gráficos en recomendaciones para gerencia o ciencia.</li>
+            </ol>
+          </div>
+
+          <div class="card" id="sec-recomendaciones">
+            <div class="card-icon orange"><i class="fa-solid fa-lightbulb"></i></div>
+            <h3>Recomendaciones Antes de Empezar</h3>
+            <div class="tip-box">
+              <div class="tip-header"><i class="fa-solid fa-triangle-exclamation"></i> 4 Reglas de Oro para el Analista</div>
+              <ol>
+                <li><strong>Conoce el Dominio del Problema:</strong> Un número sin contexto es inútil (ej. saber qué significa 500g en un estándar alimenticio).</li>
+                <li><strong>Cuidado con la Diferencia Muestra vs Población:</strong> Usa $n-1$ en el denominador para la varianza muestral ($s^2$) para evitar sesgo.</li>
+                <li><strong>No te fíes solo de la Media:</strong> La media es muy sensible a valores extremos. Revisa siempre la mediana y la variabilidad.</li>
+                <li><strong>Visualiza SIEMPRE los Datos:</strong> Dos conjuntos con la misma media pueden tener distribuciones totalmente opuestas (Paradoja de Anscombe).</li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SECCIÓN TEÓRICA EDA -->
+      <section id="eda-teoria" class="section-block">
+        <div class="section-header">
+          <span class="step-num">02</span>
+          <div>
+            <h2>Análisis Exploratorio de Datos (EDA) - Explicación Didáctica e Ilustrada</h2>
+            <p class="subtitle">Comprendiendo visualmente qué significa cada métrica y gráfica en la práctica.</p>
+          </div>
+        </div>
+
+        <!-- 1. Estructurados vs No Estructurados -->
+        <div class="card" id="sec-estructurados">
+          <h3>1. Elementos de Datos Estructurados vs No Estructurados</h3>
+          <div class="table-responsive">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Tipo de Dato</th>
+                  <th>Subtipo / Formato</th>
+                  <th>Ejemplos Comunes</th>
+                  <th>Tratamiento Estadístico</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="3"><strong>Estructurados</strong><br><small>(Tablas, filas y columnas definidas)</small></td>
+                  <td><strong>Numérico Continuo</strong></td>
+                  <td>Peso (g), Tiempo (min), Temperatura, Resistencia (kN)</td>
+                  <td>Media, Mediana, Varianza, Histogramas, KDE</td>
+                </tr>
+                <tr>
+                  <td><strong>Numérico Discreto</strong></td>
+                  <td>Número de hijos, Retardos semanales, Conteo de tickets</td>
+                  <td>Tablas de frecuencias, Diagramas de barras, Moda</td>
+                </tr>
+                <tr>
+                  <td><strong>Categórico (Nominal / Ordinal)</strong></td>
+                  <td>Nominal: Departamento (A, B), Color<br>Ordinal: Satisfacción (Bajo, Medio, Alto)</td>
+                  <td>Tablas de contingencia, Moda, Gráficos de sectores / barras</td>
+                </tr>
+                <tr id="sec-no-estructurados">
+                  <td rowspan="2"><strong>No Estructurados</strong><br><small>(Sin esquema tabular prefijado)</small></td>
+                  <td><strong>Texto Libre & Documentos</strong></td>
+                  <td>Comentarios de clientes, logs de servidores, emails</td>
+                  <td>TF-IDF, Embeddings vectoriales, Conteo de palabras, Análisis de sentimiento</td>
+                </tr>
+                <tr>
+                  <td><strong>Imágenes, Audio, Grafos</strong></td>
+                  <td>Fotografías de inspección de calidad, ondas de sonido, redes de contactos</td>
+                  <td>Extracción de características (Feature Extraction), Matrices numéricas de píxeles/espectrogramas</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2. Estimación de Localización DIDÁCTICA E ILUSTRADA -->
+        <div class="card" id="sec-localizacion">
+          <h3>2. Estimación de la Localización: ¿Qué significa realmente cada centro?</h3>
+          <p>En lugar de memorizar fórmulas, entendamos qué representa físicamente cada medida de centro:</p>
+          
+          <div class="grid-3col">
+            
+            <!-- TARJETA MEDIA -->
+            <div class="mini-card">
+              <h4><i class="fa-solid fa-scale-balanced"></i> La Media ($\bar{x}$): El Centro de Masa</h4>
+              <div class="math-box">$$\bar{x} = \frac{\sum x_i}{n}$$</div>
+              
+              <!-- Diagrama Ilustrativo Balanza -->
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 200 80">
+                  <line x1="20" y1="55" x2="180" y2="55" stroke="#10b981" stroke-width="4" />
+                  <polygon points="100,55 92,72 108,72" fill="#059669" />
+                  <circle cx="40" cy="45" r="8" fill="#3b82f6" />
+                  <circle cx="70" cy="45" r="8" fill="#3b82f6" />
+                  <circle cx="160" cy="45" r="14" fill="#ef4444" />
+                  <text x="100" y="20" text-anchor="middle" font-size="10" fill="#047857" font-weight="bold">Media = Pivote Físico de Pesos</text>
+                </svg>
+                <span class="didactic-caption">Físicamente, es el punto donde la tabla se equilibra perfectamente.</span>
+              </div>
+              <p><strong>Sensibilidad:</strong> Si agregas un dato gigante (rojo), el pivote debe moverse bruscamente a la derecha para compensar.</p>
+            </div>
+
+            <!-- TARJETA MEDIANA -->
+            <div class="mini-card">
+              <h4><i class="fa-solid fa-arrows-split-up-and-left"></i> La Mediana ($\tilde{x}$): El Corte 50-50</h4>
+              <div class="math-box">$$\text{Posición} = \frac{n+1}{2}$$</div>
+              
+              <!-- Diagrama Ilustrativo Fila 50-50 -->
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 200 80">
+                  <rect x="15" y="40" width="15" height="25" fill="#10b981" rx="3" />
+                  <rect x="45" y="35" width="15" height="30" fill="#10b981" rx="3" />
+                  <!-- MEDIANA HIGHLIGHT -->
+                  <rect x="90" y="25" width="20" height="40" fill="#f59e0b" rx="4" />
+                  <line x1="100" y1="10" x2="100" y2="25" stroke="#d97706" stroke-width="2" stroke-dasharray="3,3" />
+                  <text x="100" y="8" text-anchor="middle" font-size="9" fill="#b45309" font-weight="bold">50% Menor | 50% Mayor</text>
+                  
+                  <rect x="135" y="20" width="15" height="45" fill="#10b981" rx="3" />
+                  <rect x="165" y="15" width="15" height="50" fill="#ef4444" rx="3" />
+                </svg>
+                <span class="didactic-caption">Ordena los datos en fila india y toma exactamente a la persona del medio.</span>
+              </div>
+              <p><strong>Robustez:</strong> No le importa si el último sujeto mide 2 metros o 50 metros; la persona central sigue siendo exactamente la misma.</p>
+            </div>
+
+            <!-- TARJETA MODA -->
+            <div class="mini-card">
+              <h4><i class="fa-solid fa-crown"></i> La Moda ($Mo$): El Pico de Popularidad</h4>
+              <div class="math-box">$$\text{Moda} = \max(f_i)$$</div>
+              
+              <!-- Diagrama Ilustrativo Cúspide -->
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 200 80">
+                  <rect x="30" y="45" width="25" height="25" fill="#cbd5e1" rx="2" />
+                  <rect x="65" y="30" width="25" height="40" fill="#cbd5e1" rx="2" />
+                  <!-- MODA HIGHLIGHT -->
+                  <rect x="100" y="15" width="25" height="55" fill="#10b981" rx="2" />
+                  <polygon points="112,5 107,14 117,14" fill="#047857" />
+                  
+                  <rect x="135" y="38" width="25" height="32" fill="#cbd5e1" rx="2" />
+                </svg>
+                <span class="didactic-caption">El valor numérico o categoría que más veces se repite.</span>
+              </div>
+              <p>Es la única medida que se puede calcular para datos categóricos puros (ej. Color de ojos preferido).</p>
+            </div>
+
+          </div>
+
+          <!-- DEMOSTRACIÓN DIDÁCTICA DE IMPACTO DE OUTLIER -->
+          <div class="outlier-demo-box">
+            <h4><i class="fa-solid fa-vial"></i> Demostración Práctica: ¿Por qué la Media engaña con Outliers?</h4>
+            <p>Supongamos los sueldos mensuales de 5 empleados en una tienda pequeña: <code>[$1.000, $1.200, $1.300, $1.400, $25.000 (Gerente)]</code></p>
+            <ul>
+              <li><strong>Media ($\bar{x}$):</strong> $(1.000 + 1.200 + 1.300 + 1.400 + 25.000) / 5 = \mathbf{\$5.980}$ <em>(¡Engañoso! Ningún empleado común gana cerca de $6.000)</em>.</li>
+              <li><strong>Mediana ($\tilde{x}$):</strong> El dato central es $\mathbf{\$1.300}$ <em>(¡Refleja fielmente la realidad del 80% del equipo!)</em>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 3. Estimación de Variabilidad DIDÁCTICA -->
+        <div class="card" id="sec-variabilidad">
+          <h3>3. Estimación de la Variabilidad: ¿Qué tan dispersos o parejos son los datos?</h3>
+          <p>Dos grupos pueden tener la misma media (ej. 500g), pero uno tener latas entre 499g-501g (muy parejo) y otro entre 450g-550g (desastre industrial).</p>
+
+          <div class="grid-2col">
+            
+            <!-- DESVIACIÓN ESTÁNDAR DIDÁCTICA -->
+            <div class="subcard">
+              <h4><i class="fa-solid fa-bullseye"></i> Desviación Estándar ($s$): El Radio de Dispersión</h4>
+              <div class="math-box">$$s = \sqrt{\frac{\sum (x_i - \bar{x})^2}{n - 1}}$$</div>
+              
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 220 85">
+                  <!-- TIRO AL BLANCO -->
+                  <circle cx="60" cy="42" r="32" fill="none" stroke="#a7f3d0" stroke-width="2" />
+                  <circle cx="60" cy="42" r="18" fill="none" stroke="#10b981" stroke-width="2" />
+                  <circle cx="60" cy="42" r="4" fill="#047857" />
+                  <circle cx="58" cy="40" r="3" fill="#ef4444" />
+                  <circle cx="63" cy="44" r="3" fill="#ef4444" />
+                  <circle cx="59" cy="45" r="3" fill="#ef4444" />
+                  <text x="60" y="82" text-anchor="middle" font-size="9" fill="#047857" font-weight="bold">Baja Desviación (Consistente)</text>
+
+                  <circle cx="160" cy="42" r="32" fill="none" stroke="#fecaca" stroke-width="2" />
+                  <circle cx="160" cy="42" r="18" fill="none" stroke="#ef4444" stroke-width="2" />
+                  <circle cx="160" cy="42" r="4" fill="#991b1b" />
+                  <circle cx="138" cy="25" r="3" fill="#ef4444" />
+                  <circle cx="180" cy="55" r="3" fill="#ef4444" />
+                  <circle cx="150" cy="65" r="3" fill="#ef4444" />
+                  <text x="160" y="82" text-anchor="middle" font-size="9" fill="#991b1b" font-weight="bold">Alta Desviación (Inestable)</text>
+                </svg>
+              </div>
+              <p>Mide la <strong>distancia típica promedio</strong> a la que caen las mediciones respecto al centro. En una distribución Normal:</p>
+              <ul>
+                <li>$\bar{x} \pm 1s$ engloba el <strong>68%</strong> de la población.</li>
+                <li>$\bar{x} \pm 2s$ engloba el <strong>95%</strong> de la población.</li>
+              </ul>
+            </div>
+
+            <!-- BOXPLOT E IQR DIDÁCTICO -->
+            <div class="subcard">
+              <h4><i class="fa-solid fa-box-archive"></i> Diagrama de Caja (Boxplot) & Rango IQR</h4>
+              <div class="math-box">$$IQR = Q_3 - Q_1$$</div>
+              
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 220 85">
+                  <!-- BOXPLOT DIAGRAM -->
+                  <line x1="20" y1="42" x2="60" y2="42" stroke="#047857" stroke-width="2" />
+                  <line x1="20" y1="32" x2="20" y2="52" stroke="#047857" stroke-width="2" />
+                  
+                  <rect x="60" y="22" width="90" height="40" fill="#ecfdf5" stroke="#10b981" stroke-width="2" />
+                  <line x1="105" y1="22" x2="105" y2="62" stroke="#d97706" stroke-width="3" />
+                  
+                  <line x1="150" y1="42" x2="190" y2="42" stroke="#047857" stroke-width="2" />
+                  <line x1="190" y1="32" x2="190" y2="52" stroke="#047857" stroke-width="2" />
+
+                  <!-- OUTLIER DOT -->
+                  <circle cx="210" cy="42" r="4" fill="#ef4444" />
+                  
+                  <text x="60" y="75" text-anchor="middle" font-size="8" fill="#047857">Q1(25%)</text>
+                  <text x="105" y="75" text-anchor="middle" font-size="8" fill="#d97706" font-weight="bold">Mediana</text>
+                  <text x="150" y="75" text-anchor="middle" font-size="8" fill="#047857">Q3(75%)</text>
+                  <text x="210" y="75" text-anchor="middle" font-size="8" fill="#ef4444">Outlier</text>
+                </svg>
+              </div>
+              <p>El <strong>IQR</strong> mide el ancho del 50% central de tus datos. Todo valor que quede más allá de $1.5 \times IQR$ por fuera de la caja se considera un **Outlier (Punto atípico)**.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 4. Exploración de la Distribución y Forma DIDÁCTICA -->
+        <div class="card" id="sec-distribucion">
+          <h3>4. Forma de la Distribución: Asimetría (Sesgo) y Curtosis</h3>
+          <p>Visualizar la forma de la campana nos revela patrones ocultos sobre el comportamiento del proceso.</p>
+
+          <!-- GRÁFICAS DE SESGO / ASIMETRÍA -->
+          <h4 style="margin: 16px 0 10px; color: #047857;"><i class="fa-solid fa-shapes"></i> A. Asimetría o Sesgo (Skewness): ¿Hacia dónde se estira la cola?</h4>
+          <div class="distribution-visualizer">
+            
+            <!-- SESGO NEGATIVO -->
+            <div class="dist-card">
+              <h4>Sesgo Negativo (A la Izquierda)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 70">
+                  <path d="M 10 60 Q 40 58, 80 40 T 140 10 T 170 60" fill="none" stroke="#ef4444" stroke-width="3" />
+                  <line x1="140" y1="10" x2="140" y2="60" stroke="#10b981" stroke-dasharray="2,2" />
+                  <text x="140" y="68" text-anchor="middle" font-size="8" fill="#047857">Moda</text>
+                  <line x1="110" y1="28" x2="110" y2="60" stroke="#ef4444" stroke-dasharray="2,2" />
+                  <text x="100" y="68" text-anchor="middle" font-size="8" fill="#ef4444">Media</text>
+                </svg>
+              </div>
+              <p><strong>$\text{Media} < \text{Mediana} < \text{Moda}$</strong><br>La cola más larga está a la izquierda. Ej: Edades al morir o notas de un examen muy fácil.</p>
+            </div>
+
+            <!-- SIMÉTRICA -->
+            <div class="dist-card">
+              <h4>Distribución Simétrica (Normal)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 70">
+                  <path d="M 10 60 Q 50 58, 90 10 T 170 60" fill="none" stroke="#10b981" stroke-width="3" />
+                  <line x1="90" y1="10" x2="90" y2="60" stroke="#047857" stroke-dasharray="2,2" />
+                  <text x="90" y="68" text-anchor="middle" font-size="8" fill="#047857" font-weight="bold">Media = Mediana = Moda</text>
+                </svg>
+              </div>
+              <p><strong>$\text{Media} = \text{Mediana} = \text{Moda}$</strong><br>Campana perfectamente equilibrada. Ej: Estaturas de adultos o peso de empaques.</p>
+            </div>
+
+            <!-- SESGO POSITIVO -->
+            <div class="dist-card">
+              <h4>Sesgo Positivo (A la Derecha)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 70">
+                  <path d="M 10 60 Q 40 10, 80 35 T 140 58 T 170 60" fill="none" stroke="#3b82f6" stroke-width="3" />
+                  <line x1="40" y1="10" x2="40" y2="60" stroke="#10b981" stroke-dasharray="2,2" />
+                  <text x="40" y="68" text-anchor="middle" font-size="8" fill="#047857">Moda</text>
+                  <line x1="75" y1="30" x2="75" y2="60" stroke="#3b82f6" stroke-dasharray="2,2" />
+                  <text x="85" y="68" text-anchor="middle" font-size="8" fill="#3b82f6">Media</text>
+                </svg>
+              </div>
+              <p><strong>$\text{Moda} < \text{Mediana} < \text{Media}$</strong><br>La cola más larga está a la derecha. Ej: Salarios de una empresa o precio de viviendas.</p>
+            </div>
+
+          </div>
+
+          <!-- GRÁFICAS DE CURTOSIS -->
+          <h4 style="margin: 24px 0 10px; color: #047857;"><i class="fa-solid fa-mountain"></i> B. Curtosis ($K$): ¿Punta de aguja o mesa plana?</h4>
+          <div class="distribution-visualizer">
+            
+            <div class="dist-card">
+              <h4>Leptocúrtica ($K > 0$)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 70">
+                  <path d="M 10 60 Q 80 58, 90 5 T 170 60" fill="none" stroke="#8b5cf6" stroke-width="3" />
+                </svg>
+              </div>
+              <p><strong>Muy Puntiaguda:</strong> Los datos están súper amontonados en el centro con colas pesadas. Variabilidad baja con riesgo de valores extremos.</p>
+            </div>
+
+            <div class="dist-card">
+              <h4>Mesocúrtica ($K = 0$)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 70">
+                  <path d="M 10 60 Q 50 58, 90 20 T 170 60" fill="none" stroke="#10b981" stroke-width="3" />
+                </svg>
+              </div>
+              <p><strong>Campana Normal:</strong> Concentración estándar de datos propia de procesos bajo control estadístico tradicional.</p>
+            </div>
+
+            <div class="dist-card">
+              <h4>Platicúrtica ($K < 0$)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 70">
+                  <path d="M 10 60 Q 40 40, 90 40 T 170 60" fill="none" stroke="#f59e0b" stroke-width="3" />
+                </svg>
+              </div>
+              <p><strong>Achatada / Mesa Plana:</strong> Los datos están repartidos de forma más uniforme. <em>(Como en nuestras cajas de helado de 500g, $K \approx -0.60$ por momentos / $-0.48$ en Excel)</em>.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 5. Datos Binarios y Categóricos -->
+        <div class="card" id="sec-binarios-categoricos">
+          <h3>5. Exploración de Datos Binarios y Categóricos</h3>
+          <p>Para variables no numéricas (ej. Aprobado/Reprobado, Turno de trabajo, Categoría de producto):</p>
+          <ul>
+            <li><strong>Frecuencia Absoluta ($f_i$):</strong> Conteo directo de repeticiones.</li>
+            <li><strong>Frecuencia Relativa ($h_i$):</strong> Porcentaje o proporción $h_i = f_i / n$.</li>
+            <li><strong>Moda:</strong> La categoría más popular.</li>
+            <li><strong>Visualización Recomendada:</strong> Gráficos de barras verticales u horizontales (evitar gráficos circulares de pastel cuando hay más de 3 categorías).</li>
+          </ul>
+        </div>
+
+        <!-- 6. Correlación & Multivariable -->
+        <div class="card" id="sec-correlacion">
+          <h3>6. Entender Correlación y Exploración Multivariable (Pearson vs. Spearman)</h3>
+          <p>La correlación mide el grado de asociación o covariación entre dos variables numéricas: si al aumentar una, la otra tiende a aumentar o disminuir.</p>
+          
+          <!-- COMPARATIVA PEARSON VS SPEARMAN -->
+          <div class="grid-2col" style="margin-top: 16px;">
+            
+            <div class="subcard">
+              <h4><i class="fa-solid fa-chart-line"></i> Coeficiente de Pearson (<em>r</em>) — Relación Lineal</h4>
+              <div class="math-box">$$r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}$$</div>
+              <p>Mide la fuerza de la relación estrictamente <strong>lineal</strong> entre dos variables numéricas continuas.</p>
+              <ul>
+                <li><strong>Rango:</strong> $-1 \le r \le +1$.</li>
+                <li><strong>Sensibilidad:</strong> Muy sensible a valores atípicos (outliers).</li>
+                <li><strong>Uso:</strong> Cuando la relación parece una línea recta en un diagrama de dispersión.</li>
+              </ul>
+            </div>
+
+            <div class="subcard">
+              <h4><i class="fa-solid fa-arrow-trend-up"></i> Coeficiente de Spearman (<em>&rho;</em>) — Relación Monótona</h4>
+              <div class="math-box">$$\rho = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}$$</div>
+              <p>Mide la relación <strong>monótona</strong> (siempre creciente o siempre decreciente), transformando los datos en <strong>rangos u orden de puestos</strong> ($d_i = \text{rango}(x_i) - \text{rango}(y_i)$).</p>
+              <ul>
+                <li><strong>Rango:</strong> $-1 \le \rho \le +1$.</li>
+                <li><strong>Robustez:</strong> Robusto frente a outliers y relaciones curvadas pero ordenadas.</li>
+                <li><strong>Uso:</strong> Variables ordinales o relaciones no lineales monotónicas (ej. $y = x^3$).</li>
+              </ul>
+            </div>
+
+          </div>
+
+          <!-- GRÁFICAS EXPLICATIVAS DE CORRELACIÓN -->
+          <h4 style="margin: 24px 0 12px; color: #047857;"><i class="fa-solid fa-diagram-project"></i> Gráficas Explicativas: Interpretación de Scatter Plots</h4>
+          
+          <div class="distribution-visualizer">
+            
+            <div class="dist-card">
+              <h4>1. Correlación Positiva ($r > 0$)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 80">
+                  <line x1="20" y1="70" x2="160" y2="70" stroke="#cbd5e1" stroke-width="2"/>
+                  <line x1="20" y1="70" x2="20" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                  <!-- TREND LINE -->
+                  <line x1="30" y1="60" x2="150" y2="20" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3"/>
+                  <!-- SCATTER DOTS -->
+                  <circle cx="35" cy="58" r="4" fill="#059669"/>
+                  <circle cx="50" cy="52" r="4" fill="#059669"/>
+                  <circle cx="70" cy="48" r="4" fill="#059669"/>
+                  <circle cx="90" cy="38" r="4" fill="#059669"/>
+                  <circle cx="110" cy="32" r="4" fill="#059669"/>
+                  <circle cx="130" cy="24" r="4" fill="#059669"/>
+                  <circle cx="145" cy="18" r="4" fill="#059669"/>
+                </svg>
+              </div>
+              <p>Al aumentar $X$, $Y$ también aumenta. Ej: Horas de estudio vs Calificación obtenida.</p>
+            </div>
+
+            <div class="dist-card">
+              <h4>2. Sin Correlación ($r \approx 0$)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 80">
+                  <line x1="20" y1="70" x2="160" y2="70" stroke="#cbd5e1" stroke-width="2"/>
+                  <line x1="20" y1="70" x2="20" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                  <!-- SCATTER DOTS NUBE RANDOM -->
+                  <circle cx="40" cy="25" r="4" fill="#64748b"/>
+                  <circle cx="55" cy="55" r="4" fill="#64748b"/>
+                  <circle cx="75" cy="20" r="4" fill="#64748b"/>
+                  <circle cx="90" cy="60" r="4" fill="#64748b"/>
+                  <circle cx="110" cy="35" r="4" fill="#64748b"/>
+                  <circle cx="130" cy="50" r="4" fill="#64748b"/>
+                  <circle cx="145" cy="22" r="4" fill="#64748b"/>
+                </svg>
+              </div>
+              <p>No hay patrón o tendencia apreciable entre $X$ e $Y$. Ej: Estatura vs Número de la suerte.</p>
+            </div>
+
+            <div class="dist-card">
+              <h4>3. Correlación Negativa ($r < 0$)</h4>
+              <div class="didactic-diagram">
+                <svg class="didactic-svg" viewBox="0 0 180 80">
+                  <line x1="20" y1="70" x2="160" y2="70" stroke="#cbd5e1" stroke-width="2"/>
+                  <line x1="20" y1="70" x2="20" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                  <!-- TREND LINE -->
+                  <line x1="30" y1="18" x2="150" y2="62" stroke="#ef4444" stroke-width="2" stroke-dasharray="3,3"/>
+                  <!-- SCATTER DOTS -->
+                  <circle cx="35" cy="20" r="4" fill="#dc2626"/>
+                  <circle cx="55" cy="26" r="4" fill="#dc2626"/>
+                  <circle cx="75" cy="34" r="4" fill="#dc2626"/>
+                  <circle cx="95" cy="42" r="4" fill="#dc2626"/>
+                  <circle cx="115" cy="48" r="4" fill="#dc2626"/>
+                  <circle cx="135" cy="56" r="4" fill="#dc2626"/>
+                  <circle cx="148" cy="60" r="4" fill="#dc2626"/>
+                </svg>
+              </div>
+              <p>Al aumentar $X$, $Y$ disminuye. Ej: Edad del vehículo vs Valor comercial.</p>
+            </div>
+
+          </div>
+
+          <!-- COMPARACIÓN VISUAL: PEARSON VS SPEARMAN (CASO NO LINEAL) -->
+          <div class="outlier-demo-box" style="margin-top: 20px;">
+            <h4><i class="fa-solid fa-code-compare"></i> Caso Clave: ¿Cuándo usar Spearman sobre Pearson?</h4>
+            <div class="grid-2col" style="align-items: center; gap: 16px; margin-top: 10px;">
+              <div>
+                <p>Imagínate una curva creciente acelerada (ej. $Y = X^3$). La relación es perfectamente predecible y siempre creciente, pero <strong>no es una línea recta</strong>:</p>
+                <ul style="margin-top: 6px;">
+                  <li><strong>Pearson ($r \approx 0.86$):</strong> Castiga la curva porque busca una recta rígida.</li>
+                  <li><strong>Spearman ($\rho = 1.00$):</strong> Como solo le importa si el orden numérico se mantiene (1º con 1º, 2º con 2º...), ¡obtiene una correlación perfecta de 1.0!</li>
+                </ul>
+              </div>
+              <div class="didactic-diagram" style="margin: 0; background: #ffffff;">
+                <svg class="didactic-svg" viewBox="0 0 190 90">
+                  <line x1="20" y1="80" x2="170" y2="80" stroke="#cbd5e1" stroke-width="2"/>
+                  <line x1="20" y1="80" x2="20" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+                  <!-- CURVA MONÓTONA -->
+                  <path d="M 25 75 Q 90 70, 160 15" fill="none" stroke="#0d9488" stroke-width="3"/>
+                  <!-- DOTS MONÓTONOS -->
+                  <circle cx="30" cy="74" r="3.5" fill="#047857"/>
+                  <circle cx="60" cy="71" r="3.5" fill="#047857"/>
+                  <circle cx="90" cy="62" r="3.5" fill="#047857"/>
+                  <circle cx="120" cy="44" r="3.5" fill="#047857"/>
+                  <circle cx="145" cy="26" r="3.5" fill="#047857"/>
+                  <circle cx="160" cy="15" r="3.5" fill="#047857"/>
+                </svg>
+                <span class="didactic-caption">Curva Monótona: Pearson $r = 0.86$ vs. Spearman $\rho = 1.00$</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 7. Casos Específicos: Categórica-Categórica y Categórica-Numérica -->
+        <div class="grid-2col">
+          <div class="card" id="sec-dos-categoricas">
+            <h3>7. Caso: Dos Variables Categóricas</h3>
+            <p>Se analizan mediante <strong>Tablas de Contingencia (Crosstabs)</strong>:</p>
+            <div class="mini-table">
+              <table>
+                <tr><th>Turno / Estado</th><th>Aprobado</th><th>Rechazado</th></tr>
+                <tr><td>Mañana</td><td>120</td><td>10</td></tr>
+                <tr><td>Noche</td><td>85</td><td>35</td></tr>
+              </table>
+            </div>
+            <p><strong>Visualización:</strong> Gráficos de barras agrupadas o apiladas (Stacked Bar Charts).<br>
+               <strong>Prueba Estadística:</strong> Test de Chi-Cuadrado ($\chi^2$) de Independencia.</p>
+          </div>
+
+          <div class="card" id="sec-categorica-numerica">
+            <h3>8. Caso: Categórica vs. Numérica</h3>
+            <p>Permite comparar la distribución de una variable continua a través de diferentes grupos categóricos (ej. Rendimiento del Departamento A vs Departamento B).</p>
+            <ul>
+              <li><strong>Visualización Clave:</strong> Boxplots lado a lado (Side-by-side Boxplots) o Histogramas superpuestos.</li>
+              <li><strong>Prueba Estadística:</strong> Prueba t de Student (2 grupos) o ANOVA (&gt;2 grupos).</li>
+            </ul>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- SECCIÓN PRÁCTICA PYTHON -->
+      <section id="practica-python" class="section-block">
+        <div class="section-header">
+          <span class="step-num">03</span>
+          <div>
+            <h2>Sección Práctica: Laboratorio en Python</h2>
+            <p class="subtitle">Implementaciones con Pandas, NumPy y SciPy extraídas de nuestros cuadernos .ipynb.</p>
+          </div>
+        </div>
+
+        <!-- Bloque 1: Muestreo -->
+        <div class="card" id="sec-muestreo-py">
+          <div class="code-header">
+            <span><i class="fa-brands fa-python"></i> 1. Muestreo en Python (Aleatorio Simple y Estratificado)</span>
+            <button class="copy-btn" onclick="copyCode('code-muestreo')"><i class="fa-regular fa-copy"></i> Copiar</button>
+          </div>
+          <pre><code class="language-python" id="code-muestreo">import pandas as pd
+import numpy as np
+
+# Crear DataFrame simulado
+np.random.seed(42)
+df_poblacion = pd.DataFrame({
+    'empleado_id': range(1, 101),
+    'departamento': np.random.choice(['Depto_A', 'Depto_B'], size=100, p=[0.6, 0.4]),
+    'rendimiento': np.random.normal(loc=85, scale=5, size=100)
+})
+
+# 1. Muestreo Aleatorio Simple (n = 15)
+muestra_simple = df_poblacion.sample(n=15, random_state=42)
+print("Muestra Aleatoria Simple:")
+print(muestra_simple.head(3))
+
+# 2. Muestreo Estratificado por Departamento (proporcional)
+muestra_estratificada = df_poblacion.groupby('departamento', group_keys=False).apply(
+    lambda x: x.sample(frac=0.2, random_state=42)
+)
+print("\nMuestra Estratificada por Departamento:")
+print(muestra_estratificada['departamento'].value_counts())</code></pre>
+        </div>
+
+        <!-- Bloque 2: Medidas Tendencia Central -->
+        <div class="card" id="sec-tendencia-py">
+          <div class="code-header">
+            <span><i class="fa-brands fa-python"></i> 2. Medidas de Tendencia Central en Python</span>
+            <button class="copy-btn" onclick="copyCode('code-tendencia')"><i class="fa-regular fa-copy"></i> Copiar</button>
+          </div>
+          <pre><code class="language-python" id="code-tendencia">import pandas as pd
+import numpy as np
+from scipy import stats
+
+# Datos del Departamento A (del cuaderno Estudio_basico_completo.ipynb)
+datos_depto_a = [
+    85, 88, 90, 87, 89, 91, 92, 88, 87, 90,
+    89, 91, 93, 94, 88, 87, 90, 92, 91, 89,
+    90, 93, 94, 95, 88, 87, 89, 91, 92, 90
+]
+
+s_a = pd.Series(datos_depto_a)
+
+# Cálculos directos
+media = s_a.mean()
+mediana = s_a.median()
+moda = s_a.mode().tolist()
+media_recortada_10 = stats.trim_mean(s_a, proportiontocut=0.10)
+
+print(f"Media (Promedio): {media:.2f}")
+print(f"Mediana (50%):     {mediana:.2f}")
+print(f"Moda:              {moda}")
+print(f"Media Recortada 10%: {media_recortada_10:.2f}")</code></pre>
+        </div>
+
+        <!-- Bloque 3: Tabla de Frecuencias Agrupadas -->
+        <div class="card" id="sec-frecuencias-py">
+          <div class="code-header">
+            <span><i class="fa-brands fa-python"></i> 3. Tabla de Frecuencias con Regla de Sturges (Datos Agrupados)</span>
+            <button class="copy-btn" onclick="copyCode('code-frecuencias')"><i class="fa-regular fa-copy"></i> Copiar</button>
+          </div>
+          <pre><code class="language-python" id="code-frecuencias">import pandas as pd
+import numpy as np
+
+# Datos de control de calidad (Cajas de Helado 500g del cuaderno Taller_Est_desc.ipynb)
+datos_helado = [
+    494, 495, 496, 497, 497, 497, 498, 498, 498, 499, 
+    499, 499, 499, 500, 500, 500, 500, 501, 501, 501, 
+    502, 502, 502, 503, 503, 503, 504, 504, 505, 506
+]
+n = len(datos_helado)
+
+# 1. Regla de Sturges para calcular número de intervalos (k)
+k = int(np.ceil(1 + 3.322 * np.log10(n)))
+rango = max(datos_helado) - min(datos_helado)
+amplitud = rango / k
+
+print(f"n = {n} | k (Sturges) = {k} | Rango = {rango} | Amplitud = {amplitud:.2f}")
+
+# 2. Creación de intervalos y corte de datos
+bins = np.linspace(min(datos_helado), max(datos_helado), k + 1)
+df = pd.DataFrame({'peso': datos_helado})
+df['intervalo'] = pd.cut(df['peso'], bins=bins, include_lowest=True, right=False)
+
+# 3. Construcción de la Tabla de Frecuencias
+tabla = df['intervalo'].value_counts().sort_index().reset_index()
+tabla.columns = ['Intervalo', 'fi']
+tabla['Fi'] = tabla['fi'].cumsum()
+tabla['hi'] = tabla['fi'] / n
+tabla['Hi'] = tabla['hi'].cumsum()
+tabla['Marca_xi'] = bins[:-1] + (amplitud / 2)
+tabla['xi_fi'] = tabla['Marca_xi'] * tabla['fi']
+
+print("\n--- TABLA DE FRECUENCIAS COMPLETA ---")
+print(tabla.to_string(index=False))</code></pre>
+        </div>
+
+        <!-- Bloque 4: Histograma & Análisis -->
+        <div class="card" id="sec-histograma-py">
+          <div class="code-header">
+            <span><i class="fa-brands fa-python"></i> 4. Histograma y Análisis de Distribución con Seaborn / Matplotlib</span>
+            <button class="copy-btn" onclick="copyCode('code-histograma')"><i class="fa-regular fa-copy"></i> Copiar</button>
+          </div>
+          <pre><code class="language-python" id="code-histograma">import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Configuración visual moderna
+sns.set_theme(style="darkgrid")
+plt.figure(figsize=(10, 5))
+
+# Graficar Histograma con densidad KDE
+ax = sns.histplot(datos_helado, bins=k, kde=True, color="#10b981", edgecolor="black", alpha=0.7)
+
+plt.axvline(np.mean(datos_helado), color='red', linestyle='--', linewidth=2, label=f'Media: {np.mean(datos_helado):.2f}g')
+plt.axvline(np.median(datos_helado), color='green', linestyle='-', linewidth=2, label=f'Mediana: {np.median(datos_helado):.2f}g')
+
+plt.title("Distribución de Pesos - Control de Calidad (Objetivo: 500g)", fontsize=14, fontweight='bold')
+plt.xlabel("Peso (gramos)")
+plt.ylabel("Frecuencia (Cajas)")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Interpretación Estadística:
+# Curtosis = -0.60 (g2 momentos) | -0.48 (Excel =CURTOSIS) -> Ligeramente platicúrtica.
+# Media = 500.10g vs Mediana = 500.00g -> Distribución altamente simétrica.</code></pre>
+        </div>
+
+        <!-- Bloque 5: Correlación Pearson vs Spearman en Python -->
+        <div class="card" id="sec-correlacion-py">
+          <div class="code-header">
+            <span><i class="fa-brands fa-python"></i> 5. Correlación de Pearson vs. Spearman con Pandas y Seaborn</span>
+            <button class="copy-btn" onclick="copyCode('code-correlacion')"><i class="fa-regular fa-copy"></i> Copiar</button>
+          </div>
+          <pre><code class="language-python" id="code-correlacion">import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Dataset simulado con relaciones lineales y monótonas
+df_estudio = pd.DataFrame({
+    'horas_estudio': [2, 3, 5, 7, 8, 10, 12, 15],
+    'nota_examen':   [52, 60, 68, 78, 84, 91, 95, 99],
+    'retardos_min':  [25, 18, 15, 10, 8, 5, 2, 0]
+})
+
+# 1. Calcular matrices de correlación
+pearson_matrix = df_estudio.corr(method='pearson')
+spearman_matrix = df_estudio.corr(method='spearman')
+
+print("--- MATRIZ DE CORRELACIÓN DE PEARSON (LINEAL) ---")
+print(pearson_matrix.round(3))
+
+print("\n--- MATRIZ DE CORRELACIÓN DE SPEARMAN (MONÓTONA / RANGOS) ---")
+print(spearman_matrix.round(3))
+
+# 2. Visualización con Heatmap
+fig, axes = plt.subplots(1, 2, figsize=(12, 4.5))
+sns.heatmap(pearson_matrix, annot=True, cmap='Blues', fmt='.2f', ax=axes[0])
+axes[0].set_title("Correlación de Pearson (r)")
+
+sns.heatmap(spearman_matrix, annot=True, cmap='Greens', fmt='.2f', ax=axes[1])
+axes[1].set_title("Correlación de Spearman (ρ)")
+
+plt.tight_layout()
+plt.show()</code></pre>
+        </div>
+
+      </section>
+
+      <!-- HERRAMIENTA INTERACTIVA: CALCULADORA EDA EN VIVO -->
+      <section id="calculadora" class="section-block">
+        <div class="section-header">
+          <span class="step-num">04</span>
+          <div>
+            <h2>Calculadora Estadística EDA & Generador de Frecuencias</h2>
+            <p class="subtitle">Ingresa tus propios datos o selecciona un conjunto de ejemplo para calcular métricas e histograma en tiempo real.</p>
+          </div>
+        </div>
+
+        <div class="interactive-panel">
+          <div class="panel-controls">
+            <label for="sampleSelector"><strong>Cargar Datos de Ejemplo:</strong></label>
+            <select id="sampleSelector" class="form-select">
+              <option value="deptoA">Departamento A (Rendimiento 30 emp)</option>
+              <option value="deptoB">Departamento B (Rendimiento 30 emp)</option>
+              <option value="helado" selected>Cajas de Helado (Peso 500g)</option>
+              <option value="retardos">Retardos Semanales (Minutos)</option>
+              <option value="custom">Personalizado (Ingresar a mano)</option>
+            </select>
+
+            <label for="dataInput"><strong>Datos Numéricos (separados por comas):</strong></label>
+            <textarea id="dataInput" class="form-textarea" rows="3">494, 495, 496, 497, 497, 497, 498, 498, 498, 499, 499, 499, 499, 500, 500, 500, 500, 501, 501, 501, 502, 502, 502, 503, 503, 503, 504, 504, 505, 506</textarea>
+
+            <button id="btnCalculate" class="btn btn-primary btn-block"><i class="fa-solid fa-calculator"></i> Calcular y Generar Gráfico</button>
+          </div>
+
+          <!-- Métricas Resumen Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <span class="m-label">Muestra ($n$)</span>
+              <span class="m-value" id="resN">30</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Media ($\bar{x}$)</span>
+              <span class="m-value" id="resMean">500.10</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Mediana ($\tilde{x}$)</span>
+              <span class="m-value" id="resMedian">500.00</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Moda ($Mo$)</span>
+              <span class="m-value" id="resMode">499, 500</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Varianza ($s^2$)</span>
+              <span class="m-value" id="resVar">8.78</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Desv. Estándar ($s$)</span>
+              <span class="m-value" id="resStd">2.96</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Rango ($R$)</span>
+              <span class="m-value" id="resRange">12.00</span>
+            </div>
+            <div class="metric-card">
+              <span class="m-label">Curtosis ($K$)</span>
+              <span class="m-value" id="resKurtosis">-0.60 (g2) | -0.48 (Excel)</span>
+            </div>
+          </div>
+
+          <!-- Gráfico Interactivo Chart.js en Contenedor Ajustado -->
+          <div class="chart-container-box">
+            <h3><i class="fa-solid fa-chart-column"></i> Histograma de Frecuencias en Tiempo Real</h3>
+            <div class="chart-wrapper">
+              <canvas id="edaChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Tabla de Frecuencias Sturges Explicada -->
+          <div class="table-container-box">
+            <h3><i class="fa-solid fa-table-cells"></i> Tabla de Frecuencias Agrupadas (Regla de Sturges: $k = 1 + 3.322 \log_{10}(n)$)</h3>
+            <p style="font-size: 0.88rem; color: #475569; margin-bottom: 12px;">
+              <strong>¿Qué significa cada columna?</strong> <br>
+              • <strong>Intervalo $[L_i, L_s)$:</strong> Rango de valores agrupados.<br>
+              • <strong>Marca de Clase ($x_i$):</strong> Punto medio que actúa como representante o "vocero" del grupo.<br>
+              • <strong>$f_i$ (Frecuencia Absoluta):</strong> Número directo de observaciones en el intervalo.<br>
+              • <strong>$h_i$ (Frecuencia Relativa):</strong> Porcentaje del total ($f_i / n$).<br>
+              • <strong>$F_i$ (Frecuencia Acumulada):</strong> Suma progresiva de datos acumulados hasta esa fila.
+            </p>
+            <div class="table-responsive">
+              <table class="custom-table" id="freqTable">
+                <thead>
+                  <tr>
+                    <th>Intervalo $[L_i, L_s)$</th>
+                    <th>Marca de Clase ($x_i$)</th>
+                    <th>Frecuencia ($f_i$)</th>
+                    <th>Frec. Relativa ($h_i$)</th>
+                    <th>Frec. Acumulada ($F_i$)</th>
+                    <th>$x_i \cdot f_i$</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Generado por JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECCIÓN CUADERNOS DE TRABAJO -->
+      <section id="cuadernos" class="section-block">
+        <div class="section-header">
+          <span class="step-num">05</span>
+          <div>
+            <h2>Cuadernos Jupyter del Repositorio (.ipynb)</h2>
+            <p class="subtitle">Explora los cuadernos originales organizados en el directorio de trabajo.</p>
+          </div>
+        </div>
+
+        <div class="grid-2col">
+          
+          <div class="card notebook-card">
+            <div class="nb-badge green">⭐ Guía Oficial de Laboratorio</div>
+            <h3><i class="fa-solid fa-book-journal-whills"></i> Resumen_Estadistica_Descriptiva_Semana_1.ipynb</h3>
+            <p>Guía de laboratorio paso a paso que acompaña esta presentación. Contiene explicaciones teóricas, cálculos a mano corregidos y celdas de código Python ejecutables para cada concepto del curso.</p>
+            <div class="nb-footer">
+              <span class="file-path">Path: <code>./lab_guia/Resumen_...ipynb</code></span>
+              <a href="lab_guia/Resumen_Estadistica_Descriptiva_Semana_1.ipynb" download class="btn btn-secondary btn-sm"><i class="fa-solid fa-download"></i> Descargar Guía</a>
+            </div>
+          </div>
+
+          <div class="card notebook-card">
+            <div class="nb-badge orange">Caso Práctico: Base de Datos Taller</div>
+            <h3><i class="fa-solid fa-database"></i> Taller_Est_desc.ipynb</h3>
+            <p>Base de datos completa con 10 bloques de datos prácticos (producción, retardos, logística, mermas) para resolver talleres y aplicar el procedimiento del laboratorio.</p>
+            <div class="nb-footer">
+              <span class="file-path">Path: <code>./Taller_Est_desc.ipynb</code></span>
+              <a href="Taller_Est_desc.ipynb" download class="btn btn-secondary btn-sm"><i class="fa-solid fa-download"></i> Descargar Taller</a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <p>Estadística Descriptiva & EDA &bull; CUN Cuadernos &bull; Creado con HTML, CSS, JavaScript & Chart.js</p>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- FLOATING PRESENTATION CONTROLS (DESPLAZAMIENTO DE DIAPOSITIVAS) -->
+  <div class="slide-nav-bar" id="slideNavBar">
+    <button id="btnPrevSlide" class="slide-btn" title="Anterior Diapositiva (Flecha Izquierda)"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+    <span class="slide-counter">Diapositiva <strong id="currentSlideNum">1</strong> de <span id="totalSlidesNum">5</span></span>
+    <button id="btnNextSlide" class="slide-btn primary" title="Siguiente Diapositiva (Flecha Derecha / Espacio)">Siguiente <i class="fa-solid fa-chevron-right"></i></button>
+    <span class="slide-shortcut-hint"><i class="fa-solid fa-keyboard"></i> Teclas <strong>←</strong> <strong>→</strong></span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
