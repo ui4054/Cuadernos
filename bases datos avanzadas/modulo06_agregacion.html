@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 06: Agregación, Agrupamiento (GROUP BY, HAVING) & Subconsultas — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #10b981;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a7f3d0;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #10b981;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #10b981;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ecfdf5);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_6_AGREGACION_SUB.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-file-contract"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html" class="active"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Contenido Central Principal -->
+    <main class="main-content">
+
+      <!-- Hero Banner del Módulo -->
+      <section class="module-hero">
+        <div class="hero-badge-wrap">
+          <span class="hero-badge"><i class="fa-solid fa-layer-group"></i> FASE III: PERSISTENCIA, AGREGACIÓN & ANALÍTICA FUNDACIONAL</span>
+          <span class="hero-subbadge">Agrupamiento & Subconsultas</span>
+        </div>
+        <h1 class="hero-title">Módulo 06: Agregación, GROUP BY, HAVING & Subconsultas</h1>
+        <p class="hero-lead">
+          De la partición relacional formal y el orden lógico de las 6 cláusulas SQL a la disección quirúrgica de subconsultas correlacionadas y la trampa del NULL en comparaciones conjuntistas.
+        </p>
+
+        <div class="hero-meta-bar">
+          <div class="meta-item"><i class="fa-solid fa-calculator"></i> Anthony Klug (1982)</div>
+          <div class="meta-item"><i class="fa-solid fa-arrow-down-1-9"></i> Orden Lógico de Ejecución</div>
+          <div class="meta-item"><i class="fa-solid fa-code-fork"></i> Subconsultas Inside-Out</div>
+          <div class="meta-item"><i class="fa-solid fa-bolt"></i> DuckDB 100% In-Memory</div>
+        </div>
+      </section>
+
+      <!-- Barra de Navegación Secundaria Interna (Scrollspy) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto-agregacion" class="active"><i class="fa-solid fa-chart-pie"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-agregacion"><i class="fa-solid fa-brain"></i> 02. Cimiento Formal (Klug)</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Laboratorio SQL</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador HAVING</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos en Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO EMPRESARIAL & EL PROBLEMA EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-contexto-agregacion" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">La trampa del filtrado de agregados: por qué mezclar WHERE y HAVING colapsa las consultas analíticas</p>
+          </div>
+        </div>
+
+        <p>
+          En la analítica de negocios y la generación de reportes financieros, las organizaciones necesitan colapsar millones de transacciones individuales en resúmenes directivos: nómina total por departamento, facturación consolidada por cliente o inventario valorizado por categoría.
+        </p>
+
+        <div class="th-grid">
+          <div class="th-card" style="border-top: 4px solid #ef4444;">
+            <h4 style="color: #991b1b;"><i class="fa-solid fa-circle-xmark"></i> El Error Clásico de Producción (WHERE con Agregados)</h4>
+            <p>
+              Intentar filtrar métricas agrupadas en la cláusula <code>WHERE</code>:
+            </p>
+            <pre class="th-snippet">-- ❌ ERROR DE SINTAXIS EN CUALQUIER MOTOR SQL:
+SELECT d.nombre, SUM(e.salario) AS nomina
+FROM   departamentos d
+JOIN   empleados e ON d.depto_id = e.depto_id
+WHERE  SUM(e.salario) > 10000000.00 -- 💥 RECHAZADO
+GROUP BY d.nombre;</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ❌ Razón del Fallo: El motor evalúa <code>WHERE</code> fila por fila <em>antes</em> de que los grupos existan. No se puede filtrar una suma antes de haber calculado la suma.
+            </p>
+          </div>
+
+          <div class="th-card" style="border-top: 4px solid var(--accent-primary);">
+            <h4 style="color: var(--accent-dark);"><i class="fa-solid fa-shield-halved"></i> La Separación Correcta con HAVING</h4>
+            <p>
+              Filtrar filas individuales en <code>WHERE</code> y grupos colapsados en <code>HAVING</code>:
+            </p>
+            <pre class="th-snippet">-- ✅ Separación limpia y óptima en DuckDB:
+SELECT d.nombre, SUM(e.salario) AS nomina
+FROM   departamentos d
+JOIN   empleados e ON d.depto_id = e.depto_id
+WHERE  e.fecha_ingreso >= '2021-01-01' -- 1. Filtra filas
+GROUP BY d.nombre                     -- 2. Agrupa
+HAVING SUM(e.salario) > 10000000.00;  -- 3. Filtra grupos</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600;">
+              ✅ Resultado en Producción: El motor descarta empleados antiguos antes de agrupar, liberando memoria, y filtra exactamente los departamentos que superan el presupuesto.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 28px;"><i class="fa-solid fa-arrows-split-up-and-left"></i> La Regla de Oro del Agrupamiento Relacional</h3>
+        <div class="th-card" style="background: rgba(16, 185, 129, 0.05); border-left: 5px solid #10b981;">
+          <h4 style="color: #064e3b; margin-bottom: 6px;"><i class="fa-solid fa-crown"></i> REGLA DE ORO: Atributos en SELECT vs GROUP BY</h4>
+          <p style="font-size: 0.95rem; line-height: 1.6; margin: 0;">
+            En cualquier consulta que contenga una cláusula <code>GROUP BY</code>, <strong>toda columna que aparezca en el <code>SELECT</code> debe cumplir estrictamente una de dos condiciones:</strong>
+            <br>1. Estar declarada explícitamente en la lista del <code>GROUP BY</code>, <strong>O</strong>
+            <br>2. Estar envuelta dentro de una función de agregación (<code>SUM</code>, <code>AVG</code>, <code>COUNT</code>, <code>MIN</code>, <code>MAX</code>).
+          </p>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+            <em>Violación de la regla:</em> Intentar proyectar <code>SELECT d.nombre, e.nombre, SUM(e.salario) GROUP BY d.nombre;</code> es indeterminado porque un departamento tiene múltiples empleados y el motor no puede adivinar qué nombre desplegar para una sola fila colapsada.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL: KLUG & ORDEN LÓGICO
+           =================================================================== -->
+      <section id="sec-teoria-agregacion" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: Álgebra de Agregación & Orden Lógico</h2>
+            <p class="subtitle">La formalización de Anthony Klug y el flujo estricto de evaluación de las 6 cláusulas SQL</p>
+          </div>
+        </div>
+
+        <p>
+          El Álgebra Relacional original de Edgar F. Codd solo contemplaba operaciones sobre tuplas homogéneas individuales. En 1982, **Anthony Klug** extendió formalmente el álgebra relacional introduciendo el **Operador de Partición y Agregación Generalizado** ($\mathcal{G}$):
+        </p>
+
+        <div class="th-card" style="margin: 20px 0; background: rgba(3, 105, 161, 0.05); border-left: 5px solid #0284c7;">
+          <h4 style="color: #0369a1; margin-bottom: 8px;"><i class="fa-solid fa-square-root-variable"></i> Definición Formal del Operador de Agregación ($\mathcal{G}$)</h4>
+          <p style="font-size: 0.95rem; line-height: 1.7;">
+            Sea una relación $R$ y un conjunto de atributos de agrupamiento $A = \{A_1, A_2, \dots, A_k\}$. El operador de Klug se denota como:
+          </p>
+          <div style="font-size: 1.25rem; text-align: center; margin: 12px 0; color: #0369a1; font-weight: 700;">
+            $${}_{A_1, A_2, \dots, A_k}\mathcal{G}_{f_1(B_1), f_2(B_2), \dots, f_m(B_m)}(R)$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            Donde $R$ se particiona en clases de equivalencia $[t]_A = \{s \in R \mid s[A] = t[A]\}$. Para cada clase, se genera una tupla única que proyecta los valores constantes de $A$ junto al resultado escalar de evaluar cada función agregada $f_i$ sobre el multiconjunto de valores de $B_i$.
+          </p>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-arrow-down-1-9"></i> El Orden Lógico de Ejecución de una Consulta SQL</h3>
+        <p>
+          A diferencia de los lenguajes imperativos, SQL es un lenguaje declarativo donde **el orden sintáctico en que escribimos el código NO coincide con el orden en que el motor lo ejecuta**:
+        </p>
+
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Paso Lógico</th>
+              <th style="width: 200px;">Cláusula SQL</th>
+              <th style="width: 240px;">Operación Relacional</th>
+              <th>Acción del Optimizador en Memoria</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1°</strong></td>
+              <td><code>FROM / JOIN</code></td>
+              <td>Cartesiano ($\times$) / Join ($\bowtie$)</td>
+              <td>Identifica y une las tablas base instanciando el espacio de trabajo inicial.</td>
+            </tr>
+            <tr>
+              <td><strong>2°</strong></td>
+              <td><code>WHERE</code></td>
+              <td>Selección ($\sigma$)</td>
+              <td>Filtra filas individuales antes del agrupamiento (*Predicate Pushdown*).</td>
+            </tr>
+            <tr>
+              <td><strong>3°</strong></td>
+              <td><code>GROUP BY</code></td>
+              <td>Partición ($\mathcal{G}$)</td>
+              <td>Colapsa las filas sobrevivientes en cubetas (*Buckets*) hash por claves.</td>
+            </tr>
+            <tr>
+              <td><strong>4°</strong></td>
+              <td><code>HAVING</code></td>
+              <td>Selección sobre Grupos ($\sigma_{\text{agregados}}$)</td>
+              <td>Evalúa condiciones booleanas sobre las métricas consolidadas de cada grupo.</td>
+            </tr>
+            <tr>
+              <td><strong>5°</strong></td>
+              <td><code>SELECT</code></td>
+              <td>Proyección ($\pi$)</td>
+              <td>Calcula expresiones escalares finales y alias asignados a las columnas.</td>
+            </tr>
+            <tr>
+              <td><strong>6°</strong></td>
+              <td><code>ORDER BY / LIMIT</code></td>
+              <td>Ordenamiento ($\tau$) / Paginado</td>
+              <td>Ordena el conjunto final de salida y pagina la cantidad de tuplas devueltas.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-layer-group"></i> Taxonomía de las Subconsultas (Subqueries)</h3>
+        <p>
+          Una subconsulta es una instrucción `SELECT` anidada dentro de otra consulta principal. Se clasifican según la **cardinalidad de su resultado** y su **grado de acoplamiento**:
+        </p>
+
+        <div class="th-grid" style="margin: 18px 0;">
+          <div class="th-card">
+            <h4 style="color: #064e3b;"><i class="fa-solid fa-cube"></i> 1. Subconsulta Escalar</h4>
+            <p>Retorna estrictamente **1 fila y 1 columna** (un valor escalar primitivo). Puede utilizarse en comparadores aritméticos (<code>salario > (SELECT AVG...)</code>) o como columna en el <code>SELECT</code>.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #0369a1;"><i class="fa-solid fa-list-ol"></i> 2. Subconsulta de Lista</h4>
+            <p>Retorna **1 columna con múltiples filas**. Se consume con operadores de pertenencia conjuntista: <code>IN</code>, <code>NOT IN</code>, <code>ANY / SOME</code> o <code>ALL</code>.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #047857;"><i class="fa-solid fa-table"></i> 3. Tabla Derivada (Inline View)</h4>
+            <p>Retorna una **tabla bidimensional completa** en la cláusula <code>FROM</code>. Requiere obligatoriamente un alias ($\rho$) y se trata como una vista temporal en memoria.</p>
+          </div>
+
+          <div class="th-card" style="border-top: 4px solid #7c3aed;">
+            <h4 style="color: #6d28d9;"><i class="fa-solid fa-recycle"></i> 4. Subconsulta Correlacionada</h4>
+            <p>Depende de valores de la fila actual de la consulta externa. Se evalúa conceptualmente **fila por fila** ($O(N \times M)$) y se valida comúnmente con <code>EXISTS</code> o <code>NOT EXISTS</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE (DISPOSICIÓN VERTICAL ESTRICTA)
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario de Palabras Clave</h2>
+            <p class="subtitle">Cláusulas de agrupamiento, funciones agregadas y tipos de subconsultas con su mecánica de motor</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. GROUP BY -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">GROUP BY (Colapsado Relacional)</span>
+              <span class="keyword-entry-badge">Cláusula ANSI SQL-92</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT columna1, columna2, AGG_FUNC(columna3)
+FROM   tabla
+GROUP BY columna1, columna2;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Agrupamiento bidimensional: nómina y total de empleados por ciudad y departamento
+SELECT d.ciudad, d.nombre AS departamento,
+       COUNT(e.empleado_id) AS total_empleados,
+       SUM(e.salario) AS nomina_total
+FROM   departamentos d
+JOIN   empleados e ON d.depto_id = e.depto_id
+GROUP BY d.ciudad, d.nombre;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Estructura Hash en Memoria:</strong> El motor crea una tabla Hash en memoria donde cada clave única del <code>GROUP BY</code> acumula los agregados de forma incremental a medida que lee las filas.</li>
+              <li><strong>Tratamiento de Nulos:</strong> Los valores <code>NULL</code> en las columnas del <code>GROUP BY</code> se consideran iguales entre sí y se colapsan en un único grupo colectivo.</li>
+            </ul>
+          </div>
+
+          <!-- 2. HAVING -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">HAVING (Filtro Post-Agregación)</span>
+              <span class="keyword-entry-badge">Predicado de Grupos</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT columna_agrupada, FUNCION_AGREGADA(metrica)
+FROM   tabla
+GROUP BY columna_agrupada
+HAVING CONDICION_BOOLEANA_SOBRE_AGREGADO;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Despliega solo los departamentos que tienen al menos 3 empleados y nómina > $15M:
+SELECT d.nombre, COUNT(e.empleado_id) AS empleados, SUM(e.salario) AS total_nomina
+FROM   departamentos d
+JOIN   empleados e ON d.depto_id = e.depto_id
+GROUP BY d.nombre
+HAVING COUNT(e.empleado_id) >= 3 
+   AND SUM(e.salario) > 15000000.00;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Evaluación Post-Agrupamiento:</strong> Se evalúa estrictamente en el paso 4 del orden lógico, cuando los agregados ya han sido calculados.</li>
+              <li><strong>Diferencia con WHERE:</strong> <code>WHERE</code> no puede contener funciones agregadas (<code>SUM, AVG</code>); <code>HAVING</code> está diseñado específicamente para filtrarlas.</li>
+            </ul>
+          </div>
+
+          <!-- 3. COUNT(*) vs COUNT(columna) -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">COUNT(*) vs COUNT(columna) vs COUNT(DISTINCT)</span>
+              <span class="keyword-entry-badge">Métrica de Conteo</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">COUNT(*)               -- Cuenta todas las tuplas físicas (incluye nulos)
+COUNT(columna)         -- Cuenta solo tuplas donde columna IS NOT NULL
+COUNT(DISTINCT col)    -- Cuenta valores únicos no nulos</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">SELECT 
+    COUNT(*) AS total_filas_empleados,
+    COUNT(jefe_id) AS empleados_con_jefe_asignado,      -- Omite al CEO (jefe_id IS NULL)
+    COUNT(DISTINCT depto_id) AS departamentos_con_personal
+FROM empleados;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Optimización de Motor:</strong> <code>COUNT(*)</code> es optimizado por el motor para leer metadatos de índice o páginas directas, mientras que <code>COUNT(columna)</code> requiere evaluar nulabilidad fila a fila.</li>
+              <li><strong>Costo de DISTINCT:</strong> <code>COUNT(DISTINCT)</code> exige una fase de deduplicación Hash o Sort adicional, aumentando el consumo de CPU.</li>
+            </ul>
+          </div>
+
+          <!-- 4. SUM & AVG CON VALORES NULOS -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SUM & AVG (Manejo Silencioso de Nulos)</span>
+              <span class="keyword-entry-badge">Aritmética Relacional</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SUM(columna)       -- Suma valores ignorando los NULLs
+AVG(columna)       -- SUM(columna) / COUNT(columna)  <- OJO: no divide entre COUNT(*)</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Si comision tiene valores: [1000, 2000, NULL]
+-- AVG(comision) = (1000 + 2000) / 2 = 1500 (Ignora la fila con NULL)
+-- Promedio defensivo considerando al empleado sin comisión como 0:
+SELECT AVG(COALESCE(comision, 0.00)) AS promedio_real_global FROM empleados;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Ignorancia de Nulos ANSI:</strong> Según el estándar SQL, las funciones agregadas omiten silenciosamente las tuplas con valor nulo (excepto <code>COUNT(*)</code>).</li>
+              <li><strong>Distorsión de Métricas:</strong> Si 8 de cada 10 empleados no ganan comisión (`NULL`), `AVG(comision)` reportará un valor artificialmente alto si no se normaliza con `COALESCE`.</li>
+            </ul>
+          </div>
+
+          <!-- 5. SUBCONSULTAS ESCALARES -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SUBCONSULTA ESCALAR (Inside-Out)</span>
+              <span class="keyword-entry-badge">Subquery 1x1</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT col, (SELECT MAX(x) FROM t2) AS col_calculada
+FROM   t1
+WHERE  col_comparar > (SELECT AVG(y) FROM t3);</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Empleados que ganan estrictamente más que el salario promedio de la compañía:
+SELECT empleado_id, nombre, salario
+FROM   empleados
+WHERE  salario > (SELECT AVG(salario) FROM empleados)
+ORDER BY salario DESC;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Regla de Cardinalidad:</strong> Si una subconsulta escalar devuelve más de 1 fila en tiempo de ejecución, el motor abortará con error: <em>"Subquery returned more than 1 value"</em>.</li>
+              <li><strong>Evaluación Independiente:</strong> Se ejecuta una sola vez al inicio; su resultado escalar se sustituye como constante en la consulta externa.</li>
+            </ul>
+          </div>
+
+          <!-- 6. SUBCONSULTAS CORRELACIONADAS & EXISTS -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SUBCONSULTA CORRELACIONADA (EXISTS / NOT EXISTS)</span>
+              <span class="keyword-entry-badge">Evaluación Contextual</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT * FROM tabla_ext e
+WHERE [NOT] EXISTS (
+    SELECT 1 FROM tabla_int i WHERE i.fk = e.pk
+);</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Empleados que ostentan el salario más alto dentro de SU PROPIO departamento:
+SELECT e.empleado_id, e.nombre, e.salario, d.nombre AS depto
+FROM   empleados e
+JOIN   departamentos d ON e.depto_id = d.depto_id
+WHERE  e.salario = (
+    SELECT MAX(sub.salario)
+    FROM   empleados sub
+    WHERE  sub.depto_id = e.depto_id -- Correlación con la fila externa
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Cortocircuito con EXISTS:</strong> `EXISTS` se detiene tan pronto encuentra la primera coincidencia ($O(1)$), sin necesidad de escanear toda la tabla.</li>
+              <li><strong>Inmunidad al NULL:</strong> A diferencia de `NOT IN`, `NOT EXISTS` es 100% inmune a valores nulos en la tabla interna.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO SQL & DESGLOSE LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL & Desglose Anatómico Línea a Línea</h2>
+            <p class="subtitle">Consulta analítica avanzada combinando JOIN, WHERE, GROUP BY, HAVING y subconsultas correlacionadas</p>
+          </div>
+        </div>
+
+        <p>
+          Analicemos una consulta corporativa de auditoría presupuestal que identifica aquellos departamentos con presupuesto menor a $150M y más de 1 colaborador, contrastando cada salario contra el promedio específico de dicho departamento:
+        </p>
+
+        <pre class="th-snippet">SELECT 
+    d.depto_id,
+    d.nombre AS departamento,
+    d.ciudad,
+    COUNT(e.empleado_id) AS total_empleados,
+    ROUND(AVG(e.salario), 2) AS salario_promedio_depto,
+    SUM(e.salario) AS nomina_acumulada
+FROM departamentos d
+JOIN empleados e ON d.depto_id = e.depto_id
+WHERE d.presupuesto < 150000000.00
+  AND e.fecha_ingreso >= '2020-01-01'
+GROUP BY d.depto_id, d.nombre, d.ciudad
+HAVING COUNT(e.empleado_id) >= 2
+   AND SUM(e.salario) > 10000000.00
+ORDER BY nomina_acumulada DESC;</pre>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-list-check"></i> Desglose Anatómico de las Fases del Plan de Ejecución</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Línea SQL</th>
+              <th style="width: 240px;">Cláusula / Expresión</th>
+              <th>Mecánica Interna en el Motor Relacional</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>L8 - L9</code></td>
+              <td><code>FROM departamentos d JOIN empleados e ...</code></td>
+              <td><strong>Paso 1:</strong> Ejecuta el emparejamiento relacional vinculando la tabla de departamentos con empleados por la clave foránea <code>depto_id</code>.</td>
+            </tr>
+            <tr>
+              <td><code>L10 - L11</code></td>
+              <td><code>WHERE d.presupuesto < 150M AND e.fecha >= '2020'</code></td>
+              <td><strong>Paso 2:</strong> Descarta tempranamente departamentos de presupuesto alto y empleados contratados antes de 2020 antes de iniciar el cálculo agregado.</td>
+            </tr>
+            <tr>
+              <td><code>L12</code></td>
+              <td><code>GROUP BY d.depto_id, d.nombre, d.ciudad</code></td>
+              <td><strong>Paso 3:</strong> Construye la tabla Hash particionando las filas por la clave compuesta departamental.</td>
+            </tr>
+            <tr>
+              <td><code>L13 - L14</code></td>
+              <td><code>HAVING COUNT(e) >= 2 AND SUM(salario) > 10M</code></td>
+              <td><strong>Paso 4:</strong> Evalúa los acumuladores de cada grupo; descarta departamentos unipersonales o con nómina menor o igual a $10M.</td>
+            </tr>
+            <tr>
+              <td><code>L1 - L7</code></td>
+              <td><code>SELECT d.depto_id, ..., ROUND(AVG(...))</code></td>
+              <td><strong>Paso 5:</strong> Proyecta los campos de agrupación y formatea las métricas agregadas (redondeo de decimales y asignación de alias).</td>
+            </tr>
+            <tr>
+              <td><code>L15</code></td>
+              <td><code>ORDER BY nomina_acumulada DESC</code></td>
+              <td><strong>Paso 6:</strong> Ordena las filas finales en memoria de mayor a menor nómina acumulada.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ERD & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario de Datos Físico</h2>
+            <p class="subtitle">Esquema corporativo de 4 entidades para evaluación de agregaciones y correlaciones</p>
+          </div>
+        </div>
+
+        <p>
+          El esquema de este módulo modela la estructura departamental y la red de pedidos comerciales de la Empresa CUN:
+        </p>
+
+        <div class="mermaid-box">
+          <h4>📐 Diagrama Entidad-Relación (MER/DER) — Estructura Corporativa CUN</h4>
+          <div class="mermaid">
+erDiagram
+    DEPARTAMENTOS ||--o{ EMPLEADOS : "agrupa"
+    CLIENTES ||--o{ PEDIDOS : "realiza"
+    EMPLEADOS ||--o{ PEDIDOS : "gestiona"
+
+    DEPARTAMENTOS {
+        int depto_id PK
+        string nombre
+        decimal presupuesto
+        string ciudad
+    }
+
+    EMPLEADOS {
+        int empleado_id PK
+        string nombre
+        decimal salario
+        date fecha_ingreso
+        int jefe_id FK
+        int depto_id FK
+    }
+
+    CLIENTES {
+        int cliente_id PK
+        string nombre
+        string ciudad
+        string categoria_cliente
+    }
+
+    PEDIDOS {
+        int pedido_id PK
+        int cliente_id FK
+        int empleado_id FK
+        date fecha_pedido
+        string estado
+        decimal total
+    }
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-table-list"></i> Diccionario de Datos Físico (Especificación DuckDB / ANSI)</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricciones</th>
+              <th>Propósito Didáctico en Agrupaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>DEPARTAMENTOS</code></td>
+              <td><code>depto_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Clave de colapsado principal en agregaciones jerárquicas organizacionales.</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>salario</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Columna métrica para cálculos de <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, y <code>MAX</code>.</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>jefe_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>NULLABLE FK</code></td>
+              <td>Prueba de filtrado de nulos con <code>COUNT(jefe_id)</code> vs <code>COUNT(*)</code>.</td>
+            </tr>
+            <tr>
+              <td><code>PEDIDOS</code></td>
+              <td><code>total</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Métrica acumulada para filtros <code>HAVING SUM(total) > 20000000</code>.</td>
+            </tr>
+            <tr>
+              <td><code>PEDIDOS</code></td>
+              <td><code>estado</code></td>
+              <td><code>VARCHAR</code></td>
+              <td><code>CHECK IN (...)</code></td>
+              <td>Valores: <code>'Completado'</code>, <code>'Procesando'</code>, <code>'Pendiente'</code> para filtrado pre-agrupado en <code>WHERE</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Calculadora HAVING</h2>
+            <p class="subtitle">Ajusta el slider de umbral de nómina en tiempo real para observar cómo el motor descarta o retiene grupos</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header">
+            <span class="pipeline-title"><i class="fa-solid fa-sliders"></i> Control de Umbral HAVING (SUM Nómina Departamental)</span>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <label for="havingSlider" style="font-weight: 700; font-size: 0.95rem; color: var(--accent-dark);">
+                Umbral de Nómina Mínima (Filtro HAVING):
+              </label>
+              <span id="havingValDisplay" style="font-family: 'Fira Code', monospace; font-size: 1.1rem; font-weight: 800; color: #065f46; background: #e0f2fe; padding: 4px 12px; border-radius: 6px;">
+                $10.0 Millones
+              </span>
+            </div>
+
+            <input type="range" id="havingSlider" min="5000000" max="25000000" step="1000000" value="10000000" style="width: 100%; cursor: pointer;">
+            
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;">
+              💡 <em>Arrastra el control deslizante para ver cómo se evalúa la condición <code>HAVING SUM(e.salario) >= umbral</code> sobre cada departamento en tiempo real.</em>
+            </p>
+          </div>
+
+          <!-- Contenedor del Pipeline en 3 Etapas renderizado dinámicamente por app.js -->
+          <div id="mod6Results"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES DE AGREGACIÓN EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones de Agregación & Consideraciones de Rendimiento</h2>
+            <p class="subtitle">Errores arquitectónicos en consultas agrupadas: sobrecarga de memoria, trampas de NULL y subconsultas lentas</p>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 1: Filtrar en HAVING lo que pudo filtrarse en WHERE -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 1: Filtrar en HAVING Columnas Individuales que Pertenecen al WHERE</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Colocar filtros sobre atributos de fila (ej. <code>ciudad = 'Bogotá'</code> o <code>estado = 'Completado'</code>) en la cláusula <code>HAVING</code> en lugar del <code>WHERE</code> obliga al motor a agrupar todas las filas de la tabla en memoria para luego descartar grupos enteros, multiplicando el tiempo de CPU y el consumo de RAM.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Agrupa Filas Innecesarias (Ineficiente)</span>
+<pre>SELECT d.nombre, SUM(e.salario)
+FROM   departamentos d
+JOIN   empleados e ON d.depto_id = e.depto_id
+GROUP BY d.nombre, d.ciudad
+HAVING d.ciudad = 'Bogotá'; -- ⚠️ Filtra DESPUÉS de agrupar</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Descarta Filas Antes de Agrupar (Óptimo)</span>
+<pre>SELECT d.nombre, SUM(e.salario)
+FROM   departamentos d
+JOIN   empleados e ON d.depto_id = e.depto_id
+WHERE  d.ciudad = 'Bogotá'  -- ✅ Filtra ANTES de agrupar
+GROUP BY d.nombre;</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 2: La Trampa del NULL en NOT IN -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 2: La Trampa Fatal del NULL en Subconsultas con NOT IN</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Si se intenta buscar empleados sin pedidos mediante <code>WHERE empleado_id NOT IN (SELECT empleado_id FROM pedidos)</code> y la tabla de pedidos contiene un solo valor <code>NULL</code>, la consulta completa retornará <strong>0 filas</strong> debido a que la comparación conjuntista evalúa a <code>UNKNOWN</code>.
+          </p>
+          <p style="font-size: 0.88rem; color: var(--accent-dark); font-weight: 600; margin-top: 8px;">
+            💡 Solución Defensiva: Utilizar siempre <code>WHERE NOT EXISTS (SELECT 1 FROM pedidos p WHERE p.empleado_id = e.empleado_id)</code> o <code>LEFT JOIN ... WHERE key IS NULL</code>.
+          </p>
+        </div>
+
+        <!-- Anti-patrón 3: Subconsultas Correlacionadas en Tablas Masivas -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 3: Subconsultas Correlacionadas en SELECT sobre Millones de Registros</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Ejecutar <code>SELECT p.nombre, (SELECT COUNT(*) FROM pedidos ped WHERE ped.prod_id = p.id) FROM productos p</code> sobre 500,000 productos ejecuta la subconsulta 500,000 veces ($O(N \times M)$). Debe reemplazarse por un <code>LEFT JOIN</code> con tabla derivada pre-agrupada o una Función de Ventana (*Window Function*).
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CUADERNO EN GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Laboratorio en Google Colab con DuckDB</h2>
+            <p class="subtitle">Pon a prueba tus conocimientos con ejercicios guiados y ejecuta el cuaderno interactivo</p>
+          </div>
+        </div>
+
+        <!-- Reto 1 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 1: Departamentos con Presupuesto Menor a $120M y al Menos 2 Empleados
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe una consulta que devuelva el nombre del departamento, su presupuesto, el conteo total de empleados y la suma de la nómina actual, filtrando aquellos departamentos cuyo presupuesto sea menor a $120,000,000 y que además tengan al menos 2 colaboradores contratados.
+          </p>
+          
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 1:
+SELECT 
+    d.nombre AS departamento,
+    d.presupuesto,
+    COUNT(e.empleado_id) AS total_empleados,
+    SUM(e.salario) AS nomina_actual
+FROM departamentos d
+JOIN empleados e ON d.depto_id = e.depto_id
+WHERE d.presupuesto < 120000000.00         -- 1. Filtro de filas individuales
+GROUP BY d.nombre, d.presupuesto           -- 2. Agrupamiento
+HAVING COUNT(e.empleado_id) >= 2          -- 3. Filtro post-agregado
+ORDER BY nomina_actual DESC;</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> El presupuesto se filtra en el <code>WHERE</code> (antes de agrupar), mientras que la cardinalidad mínima de empleados se restringe en el <code>HAVING</code>.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 2 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 2: El Empleado de Mayor Salario por Departamento (Subconsulta Correlacionada)
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Encuentra el empleado que ostenta el salario más alto dentro de su respectivo departamento utilizando una subconsulta correlacionada fila por fila.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 2:
+SELECT 
+    e.empleado_id, 
+    e.nombre, 
+    e.salario, 
+    d.nombre AS departamento
+FROM empleados e
+JOIN departamentos d ON e.depto_id = d.depto_id
+WHERE e.salario = (
+    SELECT MAX(sub.salario)
+    FROM   empleados sub
+    WHERE  sub.depto_id = e.depto_id -- Correlación con el departamento actual
+)
+ORDER BY e.salario DESC;</pre>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 3 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 3: Clientes con Compras Superiores a $20M en Pedidos Completados
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Calcula el total facturado por cliente considerando exclusivamente pedidos en estado <code>'Completado'</code>, y mostrando únicamente a los clientes cuya facturación acumulada supere los $20,000,000.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 3:
+SELECT 
+    c.nombre AS cliente,
+    COUNT(p.pedido_id) AS compras_completadas,
+    SUM(p.total) AS total_facturado
+FROM clientes c
+JOIN pedidos p ON c.cliente_id = p.cliente_id
+WHERE p.estado = 'Completado'              -- Filtro previo de estado
+GROUP BY c.nombre
+HAVING SUM(p.total) > 20000000.00         -- Filtro de grupo acumulado
+ORDER BY total_facturado DESC;</pre>
+            </div>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(16, 185, 129, 0.08); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: var(--accent-dark); margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta consultas de agrupación multidimensionales, prueba subconsultas escalares y correlacionadas en memoria sobre DuckDB:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_6_AGREGACION_SUB.ipynb" download class="btn-colab" style="background: #065f46;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo05_transacciones.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 05 (Transacciones & ACID)
+        </a>
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal General
+        </a>
+        <a href="modulo07_analitica.html" class="pager-btn primary">
+          Siguiente: Módulo 07 (Window Functions & CTEs) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 05: Persistencia, DML & Transacciones ACID — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #10b981;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a7f3d0;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #10b981;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #10b981;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ecfdf5);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_5_DML_TRANSACC.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html" class="active"><i class="fa-solid fa-file-contract"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Contenido Central Principal -->
+    <main class="main-content">
+
+      <!-- Hero Banner del Módulo -->
+      <section class="module-hero">
+        <div class="hero-badge-wrap">
+          <span class="hero-badge"><i class="fa-solid fa-layer-group"></i> FASE III: PERSISTENCIA, DML & ARQUITECTURA TRANSACCIONAL</span>
+          <span class="hero-subbadge">Garantías ACID</span>
+        </div>
+        <h1 class="hero-title">Módulo 05: Persistencia, DML & Transacciones ACID</h1>
+        <p class="hero-lead">
+          Control transaccional explícito, propiedades ACID, niveles de aislamiento ANSI SQL y resolución de anomalías de concurrencia en entornos corporativos de alta demanda.
+        </p>
+
+        <div class="hero-meta-bar">
+          <div class="meta-item"><i class="fa-solid fa-award"></i> Jim Gray (Turing Award)</div>
+          <div class="meta-item"><i class="fa-solid fa-shield-halved"></i> Modelo ACID Estricto</div>
+          <div class="meta-item"><i class="fa-solid fa-microchip"></i> MVCC & WAL Logging</div>
+          <div class="meta-item"><i class="fa-solid fa-bolt"></i> DuckDB 100% In-Memory</div>
+        </div>
+      </section>
+
+      <!-- Barra de Navegación Secundaria Interna (Scrollspy) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto-transacciones" class="active"><i class="fa-solid fa-building-columns"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-acid"><i class="fa-solid fa-brain"></i> 02. Cimiento Formal (ACID)</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Laboratorio SQL Transaccional</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador Visual</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos en Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO EMPRESARIAL & EL PROBLEMA EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-contexto-transacciones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-money-bill-transfer"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">La catástrofe de la transferencia bancaria interrumpida: de la corrupción contable a la atomicidad defensiva</p>
+          </div>
+        </div>
+
+        <p>
+          En sistemas financieros, comercio electrónico y logística, las operaciones de negocio rara vez se componen de una única sentencia SQL aislada. Una transferencia de fondos, por ejemplo, exige al menos dos modificaciones simultáneas: **debitar de una cuenta de origen** y **acreditar en una cuenta de destino**.
+        </p>
+
+        <div class="th-grid">
+          <div class="th-card" style="border-top: 4px solid #ef4444;">
+            <h4 style="color: #991b1b;"><i class="fa-solid fa-bomb"></i> Ejecución Ingenua sin Transacción (Falla Parcial)</h4>
+            <p>
+              Modificaciones independientes con autocommit activo:
+            </p>
+            <pre class="th-snippet">-- ⚠️ Si la conexión o el servidor caen en la línea 4:
+UPDATE cuentas SET saldo = saldo - 1000000 WHERE id = 101;
+-- 💥 FALLA ELÉCTRICA / TIMEOUT DE RED / ERROR DE CONSTRAINT
+UPDATE cuentas SET saldo = saldo + 1000000 WHERE id = 103;</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ❌ Consecuencia Catastrófica: El dinero salió de la cuenta 101 pero nunca llegó a la cuenta 103. Descuadre contable irrecuperable y pérdida de confianza del cliente.
+            </p>
+          </div>
+
+          <div class="th-card" style="border-top: 4px solid var(--accent-primary);">
+            <h4 style="color: var(--accent-dark);"><i class="fa-solid fa-shield-halved"></i> Unidad Lógica Atómica (BEGIN / COMMIT / ROLLBACK)</h4>
+            <p>
+              Encapsulación en un bloque transaccional bajo garantías ACID:
+            </p>
+            <pre class="th-snippet">-- ✅ Principio de Todo o Nada:
+BEGIN TRANSACTION;
+UPDATE cuentas SET saldo = saldo - 1000000 WHERE id = 101;
+UPDATE cuentas SET saldo = saldo + 1000000 WHERE id = 103;
+INSERT INTO transacciones_log VALUES (1, 101, 103, 1000000, 'EXITO');
+COMMIT; -- Si algo falla antes, ROLLBACK revierte todo.</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600;">
+              ✅ Resultado en Producción: O ambos saldos se actualizan y se registra la auditoría, o ningún saldo cambia en absoluto. La consistencia contable es inviolable.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 28px;"><i class="fa-solid fa-scale-balanced"></i> El Ciclo de Vida de una Transacción en el Motor de Base de Datos</h3>
+        <p>
+          Formalmente, una transacción es una **Unidad Lógica de Trabajo (LUW — Logical Unit of Work)** que transita a través de estados discretos gestionados por el Administrador de Transacciones (*Transaction Manager*):
+        </p>
+
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 180px;">Estado del Ciclo</th>
+              <th style="width: 260px;">Evento Desencadenante</th>
+              <th>Mecánica Interna en Memoria & Registro WAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Activa (*Active*)</strong></td>
+              <td><code>BEGIN TRANSACTION;</code></td>
+              <td>El motor asigna un ID de transacción ($TxID$) único, reserva memoria en el buffer transaccional y registra el inicio en el archivo WAL.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Parcialmente Confirmada</strong></td>
+              <td>Última sentencia DML ejecutada</td>
+              <td>Todas las páginas modificadas residen en buffer pool y los registros de log correspondientes están encolados para sincronización en disco.</td>
+            </tr>
+            <tr>
+              <td><strong>3. Confirmada (*Committed*)</strong></td>
+              <td><code>COMMIT;</code></td>
+              <td>Se ejecuta una llamada $fsync$ forzando la escritura de los registros de log al medio no volátil. La transacción es declarada indestructible y permanente.</td>
+            </tr>
+            <tr>
+              <td><strong>4. Fallida (*Failed*)</strong></td>
+              <td>Violación de `CHECK`, `FK` o caída de sistema</td>
+              <td>El motor detecta que la transacción no puede continuar sin corromper la consistencia de los datos.</td>
+            </tr>
+            <tr>
+              <td><strong>5. Abortada (*Aborted*)</strong></td>
+              <td><code>ROLLBACK;</code></td>
+              <td>El motor lee el *Undo Log* en orden cronológico inverso, desasigna bloqueos y restaura cada fila a su valor exacto anterior al `BEGIN`.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL: MODELO ACID & AISLAMIENTO
+           =================================================================== -->
+      <section id="sec-teoria-acid" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: Propiedades ACID & Niveles de Aislamiento</h2>
+            <p class="subtitle">La formalización de Jim Gray y la taxonomía de anomalías de concurrencia de ANSI SQL-92</p>
+          </div>
+        </div>
+
+        <p>
+          En 1981, el científico de la computación **Jim Gray** (Premio Turing 1998) formalizó los principios matemáticos requeridos para garantizar que múltiples transacciones concurrentes operen con fiabilidad absoluta sobre recursos compartidos:
+        </p>
+
+        <div class="th-grid" style="margin: 20px 0;">
+          <div class="th-card">
+            <h4 style="color: #064e3b;"><i class="fa-solid fa-cubes"></i> A — Atomicidad (Atomicity)</h4>
+            <p><strong>Principio del 'Todo o Nada':</strong> La transacción es indivisible. Si la transacción $T = \{op_1, op_2, ..., op_k\}$, el estado final de la base de datos satisface:</p>
+            <div style="text-align: center; margin: 8px 0; font-size: 1.05rem; color: #064e3b;">$$\text{State}(DB) \in \{S_0, S_{\text{final}}\}$$</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Implementado físicamente mediante el <em>Undo Log</em> o segmentos de reversión.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #0369a1;"><i class="fa-solid fa-square-check"></i> C — Consistencia (Consistency)</h4>
+            <p><strong>Preservación de Invariantes:</strong> Si el conjunto de reglas de integridad formal $\mathcal{I}(DB) = \text{TRUE}$ al inicio, entonces:</p>
+            <div style="text-align: center; margin: 8px 0; font-size: 1.05rem; color: #0369a1;">$$\mathcal{I}(S_0) = \text{TRUE} \implies \mathcal{I}(S_{\text{final}}) = \text{TRUE}$$</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Garantiza que ninguna restricción (`PRIMARY KEY`, `FOREIGN KEY`, `CHECK`) sea violada.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #047857;"><i class="fa-solid fa-shield"></i> I — Aislamiento (Isolation)</h4>
+            <p><strong>Equivalencia Serial:</strong> La ejecución concurrente de $\{T_1, T_2, ..., T_n\}$ es serializable si existe una permutación $\pi$ tal que:</p>
+            <div style="text-align: center; margin: 8px 0; font-size: 1.05rem; color: #047857;">$$\text{Result}(\text{Concurrente}) = \text{Result}(T_{\pi(1)} \circ \dots \circ T_{\pi(n)})$$</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Gestionado mediante cerrojos de dos fases (*2PL*) o multiversión (*MVCC*).</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #b45309;">💾 D — Durabilidad (Durability)</h4>
+            <p><strong>Persistencia Irreversible:</strong> Una vez emitido el `COMMIT`, los efectos son indestructibles ante caídas eléctricas o de hardware:</p>
+            <div style="text-align: center; margin: 8px 0; font-size: 1.05rem; color: #b45309;">$$\text{Commit}(T) \implies \text{Persist}(\Delta T) \text{ en Disco}$$</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Asegurado mediante el protocolo <em>Write-Ahead Logging</em> (WAL) y <em>fsync</em>.</p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-triangle-exclamation"></i> Las 3 Anomalías de Concurrencia Clásicas</h3>
+        <p>
+          Cuando el aislamiento no es total, la concurrencia puede producir tres fallas de lectura críticas:
+        </p>
+
+        <div class="th-grid" style="margin: 18px 0;">
+          <div class="th-card">
+            <h4 style="color: #dc2626;"><i class="fa-solid fa-eye-slash"></i> 1. Lectura Sucia (Dirty Read)</h4>
+            <p>La transacción $T_2$ lee un registro modificado por $T_1$ que <strong>aún no ha sido confirmado</strong>. Si $T_1$ emite `ROLLBACK`, $T_2$ operó sobre un dato fantasma que jamás existió realmente en la base de datos.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #d97706;"><i class="fa-solid fa-arrows-rotate"></i> 2. Lectura No Repetible (Non-Repeatable Read)</h4>
+            <p>La transacción $T_1$ lee una tupla. Luego, $T_2$ modifica o borra dicha tupla y emite `COMMIT`. Cuando $T_1$ vuelve a leer la misma tupla dentro de su misma transacción, obtiene un valor modificado o nulo.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #7c3aed;"><i class="fa-solid fa-ghost"></i> 3. Lectura Fantasma (Phantom Read)</h4>
+            <p>La transacción $T_1$ consulta un rango (ej. <code>WHERE saldo > 5000000</code>). Luego, $T_2$ inserta una nueva tupla en ese rango y emite `COMMIT`. Al re-ejecutar la consulta, $T_1$ observa filas nuevas 'fantasma'.</p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-sliders"></i> Matriz ANSI SQL-92 de Niveles de Aislamiento</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Nivel de Aislamiento</th>
+              <th>Lectura Sucia (*Dirty Read*)</th>
+              <th>Lectura No Repetible (*Non-Repeatable*)</th>
+              <th>Lectura Fantasma (*Phantom Read*)</th>
+              <th>Mecanismo Físico de Implementación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>READ UNCOMMITTED</strong></td>
+              <td><span style="color:#ef4444; font-weight:700;">🔴 Permitida</span></td>
+              <td><span style="color:#ef4444; font-weight:700;">🔴 Permitida</span></td>
+              <td><span style="color:#ef4444; font-weight:700;">🔴 Permitida</span></td>
+              <td>Sin bloqueos de lectura; lecturas directas del buffer sucio en memoria.</td>
+            </tr>
+            <tr>
+              <td><strong>READ COMMITTED</strong><br><small style="color:var(--text-muted);">(Default en PostgreSQL / Oracle)</small></td>
+              <td><span style="color:#10b981; font-weight:700;">🟢 Bloqueada</span></td>
+              <td><span style="color:#ef4444; font-weight:700;">🔴 Permitida</span></td>
+              <td><span style="color:#ef4444; font-weight:700;">🔴 Permitida</span></td>
+              <td>Cada instrucción lee una instantánea (*Snapshot*) confirmada al momento del inicio del statement.</td>
+            </tr>
+            <tr>
+              <td><strong>REPEATABLE READ</strong><br><small style="color:var(--text-muted);">(Default en MySQL InnoDB)</small></td>
+              <td><span style="color:#10b981; font-weight:700;">🟢 Bloqueada</span></td>
+              <td><span style="color:#10b981; font-weight:700;">🟢 Bloqueada</span></td>
+              <td><span style="color:#ef4444; font-weight:700;">🔴 Permitida</span></td>
+              <td>La instantánea MVCC se fija al inicio de toda la transacción; las lecturas son estables.</td>
+            </tr>
+            <tr>
+              <td><strong>SERIALIZABLE</strong><br><small style="color:var(--text-muted);">(Aislamiento Estricto)</small></td>
+              <td><span style="color:#10b981; font-weight:700;">🟢 Bloqueada</span></td>
+              <td><span style="color:#10b981; font-weight:700;">🟢 Bloqueada</span></td>
+              <td><span style="color:#10b981; font-weight:700;">🟢 Bloqueada</span></td>
+              <td>Bloqueos de rango (*Predicate Locks*) o Validación Serial en Snapshot (SSI); previene toda anomalía.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE (DISPOSICIÓN VERTICAL ESTRICTA)
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario de Palabras Clave</h2>
+            <p class="subtitle">Comandos DML y sentencias de control transaccional con mecánica interna y ejemplos ejecutables</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. BEGIN TRANSACTION -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">BEGIN TRANSACTION / START TRANSACTION</span>
+              <span class="keyword-entry-badge">Control Transaccional ANSI</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">BEGIN TRANSACTION;
+-- Bloque de sentencias DML (INSERT, UPDATE, DELETE)
+COMMIT | ROLLBACK;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Apertura explícita de unidad de trabajo transaccional en DuckDB:
+BEGIN TRANSACTION;
+UPDATE cuentas_bancarias SET saldo_actual = saldo_actual - 500000.00 WHERE cuenta_id = 101;
+UPDATE cuentas_bancarias SET saldo_actual = saldo_actual + 500000.00 WHERE cuenta_id = 102;
+COMMIT;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Desactivación del Autocommit:</strong> Suspende la confirmación automática por sentencia, agrupando todas las modificaciones subsiguientes bajo un identificador transaccional común ($TxID$).</li>
+              <li><strong>Espacio de Trabajo en Memoria:</strong> Los cambios se registran provisionalmente en el buffer transaccional y en el archivo WAL sin exponerse a otras sesiones (según el nivel de aislamiento).</li>
+            </ul>
+          </div>
+
+          <!-- 2. COMMIT -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">COMMIT [WORK]</span>
+              <span class="keyword-entry-badge">Persistencia Irreversible</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">COMMIT [WORK] [AND [NO] CHAIN];</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Confirmación atómica de cambios tras validar condiciones de negocio:
+UPDATE productos_inventario SET stock_disponible = stock_disponible - 1 WHERE producto_id = 301;
+INSERT INTO transacciones_log VALUES (10, 101, 102, 500000, 'CONFIRMADA');
+COMMIT;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Llamada fsync:</strong> Ordena al sistema operativo sincronizar de inmediato los buffers del archivo WAL al almacenamiento físico, garantizando la propiedad de **Durabilidad**.</li>
+              <li><strong>Liberación de Bloqueos:</strong> Libera todos los bloqueos compartidos y exclusivos adquiridos durante la transacción, permitiendo a otras conexiones acceder a los recursos.</li>
+            </ul>
+          </div>
+
+          <!-- 3. ROLLBACK -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">ROLLBACK [WORK]</span>
+              <span class="keyword-entry-badge">Reversión de Emergencia</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">ROLLBACK [WORK];</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Reversión total si una regla de negocio es violada:
+BEGIN TRANSACTION;
+UPDATE cuentas_bancarias SET saldo_actual = saldo_actual - 20000000 WHERE cuenta_id = 103;
+-- Verificación: el saldo no puede ser negativo
+ROLLBACK; -- Restaura el saldo anterior exactamente</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica del Undo Log:</strong> Lee los registros de reversión en orden LIFO (*Last In, First Out*) reescribiendo los valores pre-imagen de cada fila alterada.</li>
+              <li><strong>Preservación de Estado Válido:</strong> Garantiza que ante errores de red, apagones o excepciones de código, la base de datos regrese al último estado consistente conocido.</li>
+            </ul>
+          </div>
+
+          <!-- 4. SAVEPOINT -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SAVEPOINT & ROLLBACK TO SAVEPOINT</span>
+              <span class="keyword-entry-badge">Reversión Parcial Anidada</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SAVEPOINT nombre_punto;
+-- Sentencias intermedias
+ROLLBACK TO SAVEPOINT nombre_punto;
+RELEASE SAVEPOINT nombre_punto;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">BEGIN TRANSACTION;
+INSERT INTO cuentas_bancarias VALUES (107, 'Cliente Nuevo', 100000.00, 'Ahorros');
+SAVEPOINT punto_cliente_creado;
+
+-- Intentar débito que podría fallar:
+UPDATE cuentas_bancarias SET saldo_actual = saldo_actual - 9999999 WHERE cuenta_id = 107;
+-- Si falla, revertir solo el débito sin perder la creación de la cuenta:
+ROLLBACK TO SAVEPOINT punto_cliente_creado;
+COMMIT; -- La cuenta 107 queda creada con su saldo inicial</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Control Transaccional Granular:</strong> Permite deshacer operaciones erróneas específicas sin abortar la totalidad del bloque transaccional padre.</li>
+              <li><strong>Ámbito:</strong> Los savepoints son locales a la transacción actual y se destruyen automáticamente al invocar `COMMIT` o `ROLLBACK`.</li>
+            </ul>
+          </div>
+
+          <!-- 5. UPSERT / INSERT ON CONFLICT -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">INSERT ... ON CONFLICT (UPSERT / MERGE)</span>
+              <span class="keyword-entry-badge">DML Idempotente</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">INSERT INTO tabla (col1, col2)
+VALUES (val1, val2)
+ON CONFLICT (col_pk) 
+DO UPDATE SET col2 = EXCLUDED.col2;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Si el producto ya existe, actualiza stock y precio; si no existe, lo inserta:
+INSERT INTO productos_inventario (producto_id, nombre_producto, precio_unitario, stock_disponible)
+VALUES (301, 'Servidor Cloud Enterprise v2', 13000000.00, 18)
+ON CONFLICT (producto_id) DO UPDATE SET
+    precio_unitario  = EXCLUDED.precio_unitario,
+    stock_disponible = EXCLUDED.stock_disponible;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Idempotencia en Pipelines ETL:</strong> Resuelve el dilema de tener que consultar previamente si una clave existe (`SELECT` antes de `INSERT` o `UPDATE`), eliminando condiciones de carrera (*Race Conditions*).</li>
+              <li><strong>Pseudotabla EXCLUDED:</strong> Hace referencia a la tupla propuesta para inserción que no pudo insertarse debido a la colisión de clave única o primaria.</li>
+            </ul>
+          </div>
+
+          <!-- 6. SELECT FOR UPDATE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">BLOQUEO PESIMISTA (SELECT ... FOR UPDATE)</span>
+              <span class="keyword-entry-badge">Control de Concurrencia</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT columnas
+FROM   tabla
+WHERE  condicion
+FOR UPDATE [NOWAIT | SKIP LOCKED];</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Bloquea la fila del producto para lectura y escritura hasta que termine la transacción:
+BEGIN TRANSACTION;
+SELECT stock_disponible 
+FROM   productos_inventario 
+WHERE  producto_id = 302 
+FOR UPDATE;
+
+-- Ninguna otra sesión puede modificar o leer con bloqueo este producto mientras dure la compra
+UPDATE productos_inventario SET stock_disponible = stock_disponible - 1 WHERE producto_id = 302;
+COMMIT;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Prevención de Sobrevendidos:</strong> Impide que dos clientes compren simultáneamente el último boleto de un concierto o la última unidad en bodega.</li>
+              <li><strong>Cláusulas Defensivas:</strong> `NOWAIT` aborta de inmediato si el recurso está tomado por otra transacción; `SKIP LOCKED` salta las filas bloqueadas (útil para sistemas de colas de mensajes en bases de datos).</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO SQL TRANSACCIONAL & DESGLOSE LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL Transaccional & Desglose Línea a Línea</h2>
+            <p class="subtitle">Anatomía completa de un procedimiento bancario defensivo con validación de saldo y control de excepciones</p>
+          </div>
+        </div>
+
+        <p>
+          Analicemos un script transaccional bancario de alta fidelidad que ejecuta una transferencia de $1,000,000 entre cuentas, verificando saldo, deduciendo, acreditando y registrando la auditoría dentro de un bloque seguro:
+        </p>
+
+        <pre class="th-snippet">BEGIN TRANSACTION;
+
+-- Paso 1: Débito de la cuenta de origen con validación implícita de CHECK
+UPDATE cuentas_bancarias
+SET    saldo_actual = saldo_actual - 1000000.00
+WHERE  cuenta_id = 101;
+
+-- Paso 2: Acreditación del valor en la cuenta receptora
+UPDATE cuentas_bancarias
+SET    saldo_actual = saldo_actual + 1000000.00
+WHERE  cuenta_id = 103;
+
+-- Paso 3: Asentamiento del registro en el log contable de auditoría
+INSERT INTO transacciones_log (
+    transaccion_id, 
+    cuenta_origen, 
+    cuenta_destino, 
+    monto, 
+    estado
+) VALUES (
+    5001, 
+    101, 
+    103, 
+    1000000.00, 
+    'EXITOSA'
+);
+
+-- Paso 4: Confirmación y sincronización definitiva en disco (WAL fsync)
+COMMIT;</pre>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-list-check"></i> Desglose Anatómico de la Ejecución Transaccional</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Línea SQL</th>
+              <th style="width: 260px;">Instrucción / Operación</th>
+              <th>Mecánica Interna en el Motor Transaccional</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>L1</code></td>
+              <td><code>BEGIN TRANSACTION;</code></td>
+              <td>Inicia formalmente la Unidad Lógica de Trabajo. El Transaction Manager crea un identificador de transacción y desactiva el autocommit para esta sesión.</td>
+            </tr>
+            <tr>
+              <td><code>L4 - L6</code></td>
+              <td><code>UPDATE cuentas ... WHERE id = 101</code></td>
+              <td>Adquiere un bloqueo exclusivo de fila (*Row Exclusive Lock*) sobre la cuenta 101. Evalúa la restricción <code>CHECK (saldo >= 0)</code>. Escribe la pre-imagen en el Undo Log y la post-imagen en el Redo Log.</td>
+            </tr>
+            <tr>
+              <td><code>L9 - L11</code></td>
+              <td><code>UPDATE cuentas ... WHERE id = 103</code></td>
+              <td>Adquiere el bloqueo exclusivo sobre la cuenta 103. Modifica la página de datos en el Buffer Pool y añade el registro delta correspondiente al archivo WAL.</td>
+            </tr>
+            <tr>
+              <td><code>L14 - L24</code></td>
+              <td><code>INSERT INTO transacciones_log ...</code></td>
+              <td>Inserta la tupla inmutable de auditoría con la marca de tiempo del sistema. Garantiza trazabilidad para conciliación financiera ante entidades regulatorias.</td>
+            </tr>
+            <tr>
+              <td><code>L27</code></td>
+              <td><code>COMMIT;</code></td>
+              <td>Dispara la llamada $fsync$ forzando a disco todos los registros WAL pendientes. Marca la transacción como confirmada y libera inmediatamente todos los bloqueos sobre las cuentas 101 y 103.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ERD & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario de Datos Físico</h2>
+            <p class="subtitle">Arquitectura bancaria transaccional con restricciones de consistencia y bitácora de auditoría</p>
+          </div>
+        </div>
+
+        <p>
+          El esquema de este módulo modela las entidades involucradas en transacciones financieras y control de existencias, con restricciones estrictas de integridad:
+        </p>
+
+        <div class="mermaid-box">
+          <h4>📐 Diagrama Entidad-Relación (MER/DER) — Dominio Bancario & Transaccional</h4>
+          <div class="mermaid">
+erDiagram
+    CLIENTES_BANCA ||--o{ CUENTAS_BANCARIAS : "posee"
+    CUENTAS_BANCARIAS ||--o{ TRANSACCIONES_LOG : "origen_de"
+    CUENTAS_BANCARIAS ||--o{ TRANSACCIONES_LOG : "destino_de"
+
+    CLIENTES_BANCA {
+        int cliente_id PK
+        string nombre
+        string doc_identidad
+        string email
+    }
+
+    CUENTAS_BANCARIAS {
+        int cuenta_id PK
+        int cliente_id FK
+        decimal saldo_actual
+        string tipo_cuenta
+    }
+
+    TRANSACCIONES_LOG {
+        int transaccion_id PK
+        int cuenta_origen FK
+        int cuenta_destino FK
+        decimal monto
+        timestamp fecha_hora
+        string estado
+    }
+
+    PRODUCTOS_INVENTARIO {
+        int producto_id PK
+        string nombre_producto
+        decimal precio_unitario
+        int stock_disponible
+    }
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-table-list"></i> Diccionario de Datos Físico (Especificación DuckDB / ANSI)</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricciones</th>
+              <th>Papel en las Garantías ACID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>CUENTAS_BANCARIAS</code></td>
+              <td><code>saldo_actual</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>NOT NULL, CHECK (saldo >= 0)</code></td>
+              <td><strong>Consistencia:</strong> Si una transferencia excede el saldo disponible, la base de datos rechaza la instrucción y fuerza el `ROLLBACK`.</td>
+            </tr>
+            <tr>
+              <td><code>CUENTAS_BANCARIAS</code></td>
+              <td><code>tipo_cuenta</code></td>
+              <td><code>VARCHAR</code></td>
+              <td><code>DEFAULT 'Ahorros'</code></td>
+              <td>Clasificación operativa (Ahorros, Corriente, Nómina, Empresarial) para cálculo de intereses y comisiones.</td>
+            </tr>
+            <tr>
+              <td><code>TRANSACCIONES_LOG</code></td>
+              <td><code>transaccion_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td><strong>Durabilidad:</strong> Bitácora append-only que conserva el histórico inmutable de toda operación bancaria confirmada.</td>
+            </tr>
+            <tr>
+              <td><code>TRANSACCIONES_LOG</code></td>
+              <td><code>monto</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>CHECK (monto > 0)</code></td>
+              <td>Impide transacciones de monto nulo o negativo que pudieran manipular saldos fraudulentamente.</td>
+            </tr>
+            <tr>
+              <td><code>PRODUCTOS_INVENTARIO</code></td>
+              <td><code>stock_disponible</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>CHECK (stock >= 0)</code></td>
+              <td><strong>Aislamiento:</strong> Protege contra sobreventas concurrentes en operaciones de compra de catálogo.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Motor Transaccional</h2>
+            <p class="subtitle">Experimenta el ciclo de vida de una transacción: observa los efectos de confirmar con COMMIT vs revertir con ROLLBACK</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header">
+            <span class="pipeline-title"><i class="fa-solid fa-sliders"></i> Panel de Control de Concurrencia & Transacción</span>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <p style="font-weight: 700; font-size: 0.9rem; color: var(--accent-dark); margin-bottom: 12px;">
+              Ejecuta el bloque transaccional y decide el destino de los cambios:
+            </p>
+            <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+              <button id="btnSimCommit" class="sim-btn active" style="background: #065f46; color: white;">
+                <i class="fa-solid fa-check"></i> Ejecutar & Confirmar (COMMIT)
+              </button>
+              <button id="btnSimRollback" class="sim-btn" style="background: #991b1b; color: white;">
+                <i class="fa-solid fa-rotate-left"></i> Simular Falla & Revertir (ROLLBACK)
+              </button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;">
+              💡 <em>Observa cómo al pulsar COMMIT los precios se sincronizan permanentemente a disco (+10%), mientras que con ROLLBACK la base de datos restaura los valores originales íntegros.</em>
+            </p>
+          </div>
+
+          <!-- Contenedor del Pipeline en 3 Etapas renderizado dinámicamente por app.js -->
+          <div id="mod5SimDisplay"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES TRANSACCIONALES EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones Transaccionales & Consideraciones de Producción</h2>
+            <p class="subtitle">Peligros que colapsan la concurrencia: bloqueos prolongados, transacciones zombi e interbloqueos</p>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 1: Transacciones Kilométricas -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 1: Transacciones Kilométricas (Long-Running Transactions) con Llamadas Externas</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Abrir un bloque transaccional con <code>BEGIN</code> y, dentro de él, realizar peticiones HTTP a pasarelas de pago externas o generar reportes pesados en PDF. Durante todo ese tiempo, las filas permanecen bloqueadas en la base de datos, provocando que otras sesiones colapsen en cola por *Lock Wait Timeout*.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Transacción Abierta Durante I/O Externo</span>
+<pre>BEGIN TRANSACTION;
+UPDATE ordenes SET estado = 'PROCESANDO' WHERE id = 100;
+-- ⚠️ PELIGRO: Petición HTTP a pasarela de pago (5 segundos):
+-- response = http.post("https://api.pagos.com/cobrar")
+UPDATE ordenes SET estado = 'PAGADA' WHERE id = 100;
+COMMIT; -- Filas bloqueadas durante 5 segundos</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Transacciones Cortas Acotadas a la BD</span>
+<pre>-- 1. Cobrar en la API externa ANTES de abrir transacción:
+-- response = http.post("https://api.pagos.com/cobrar")
+-- 2. Transacción de base de datos ultrarrápida (sub-milisegundo):
+BEGIN TRANSACTION;
+UPDATE ordenes SET estado = 'PAGADA' WHERE id = 100;
+INSERT INTO pagos_log VALUES (100, response.id);
+COMMIT; -- Bloqueo liberado en 2 milisegundos</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 2: Autocommit Ciego en Operaciones Compuestas -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 2: Confianza Ciega en el Autocommit para Lógica de Negocio Multi-Sentencia</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Muchos drivers y frameworks (como Node.js, Python o JDBC) operan con <code>autocommit = true</code> por defecto. Ejecutar un débito y un crédito como dos sentencias sueltas sin un <code>BEGIN TRANSACTION</code> explícito expone la aplicación a inconsistencias si la segunda sentencia falla.
+          </p>
+        </div>
+
+        <!-- Anti-patrón 3: Deadlocks por Acceso en Orden Inverso -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 3: Interbloqueos (Deadlocks) por Inconsistencia en el Orden de Acceso a Recursos</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Si la Transacción 1 actualiza la Cuenta A y luego intenta actualizar la Cuenta B, mientras que la Transacción 2 simultáneamente actualiza la Cuenta B y luego intenta actualizar la Cuenta A, ambas quedan esperando eternamente por el bloqueo de la otra.
+          </p>
+          <p style="font-size: 0.88rem; color: var(--accent-dark); font-weight: 600; margin-top: 8px;">
+            💡 Solución Defensiva: Ordenar siempre el acceso a los recursos por su Clave Primaria en orden ascendente (ej. bloquear siempre primero la cuenta con menor ID: <code>ORDER BY cuenta_id ASC</code>).
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CUADERNO EN GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Laboratorio en Google Colab con DuckDB</h2>
+            <p class="subtitle">Pon a prueba tus conocimientos con ejercicios guiados y ejecuta el cuaderno interactivo</p>
+          </div>
+        </div>
+
+        <!-- Reto 1 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 1: Procesamiento Transaccional de Pedido con Descuento de Stock
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Diseña un bloque transaccional que procese la compra de 2 unidades del producto `302` ('Laptop Pro Developer 16'). Debe verificar previamente que el stock sea suficiente, descontar las 2 unidades, registrar la confirmación y hacer `ROLLBACK` en caso de saldo o stock insuficiente.
+          </p>
+          
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 1: Bloque transaccional con validación
+BEGIN TRANSACTION;
+
+-- Descontar existencias asegurando que no quede negativo (gracias al CHECK)
+UPDATE productos_inventario
+SET    stock_disponible = stock_disponible - 2
+WHERE  producto_id = 302
+  AND  stock_disponible >= 2;
+
+-- Registrar la transacción exitosa
+INSERT INTO transacciones_log (transaccion_id, cuenta_origen, cuenta_destino, monto, estado)
+VALUES (701, 101, 104, 16400000.00, 'COMPRA_HARDWARE');
+
+COMMIT;</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> El filtro <code>AND stock_disponible >= 2</code> asegura que si no hay existencias la fila no se actualice, y la restricción <code>CHECK (stock >= 0)</code> a nivel de motor protege la integridad física.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 2 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 2: Uso de SAVEPOINT para Reversión Parcial ante Cargo Bancario Fallido
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Abre una transacción que cree una nueva cuenta bancaria para 'Laura Morales' con $500,000. Establece un <code>SAVEPOINT</code> e intenta realizar un débito por comisión administrativa de $800,000. Como el débito fallará por saldo insuficiente, revierte exclusivamente al <code>SAVEPOINT</code> y confirma la transacción asegurando que la cuenta quede creada.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 2: Control con SAVEPOINT
+BEGIN TRANSACTION;
+
+-- 1. Crear la cuenta
+INSERT INTO cuentas_bancarias VALUES (108, 'Laura Morales', 500000.00, 'Ahorros');
+
+-- 2. Establecer punto de guardado seguro
+SAVEPOINT cuenta_creada;
+
+-- 3. Cobro de comisión que excede el saldo permitido (falla o se anula):
+-- En caso de error en la aplicación o verificación de saldo:
+ROLLBACK TO SAVEPOINT cuenta_creada;
+
+-- 4. Confirmar la transacción: la cuenta persiste pero la comisión no se cobró
+COMMIT;</pre>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 3 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 3: Upsert Idempotente de Precios y Existencias con ON CONFLICT
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe una consulta `INSERT` con `ON CONFLICT` que actualice el precio a $4,800,000 y el stock a 45 unidades para el producto `303` ('Licencia Base de Datos Pro'). La consulta debe funcionar de forma idempotente, tanto si el producto ya existe en la tabla como si se trata de un nuevo producto en catálogo.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 3: Upsert Idempotente en DuckDB
+INSERT INTO productos_inventario (
+    producto_id, 
+    nombre_producto, 
+    precio_unitario, 
+    stock_disponible
+) VALUES (
+    303, 
+    'Licencia Base de Datos Pro v2', 
+    4800000.00, 
+    45
+)
+ON CONFLICT (producto_id) DO UPDATE SET
+    nombre_producto  = EXCLUDED.nombre_producto,
+    precio_unitario  = EXCLUDED.precio_unitario,
+    stock_disponible = EXCLUDED.stock_disponible;</pre>
+            </div>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(16, 185, 129, 0.08); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: var(--accent-dark); margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta transferencias bancarias reales en memoria, simula fallos de constraint y prueba la captura de excepciones con `COMMIT` y `ROLLBACK` en DuckDB:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_5_DML_TRANSACC.ipynb" download class="btn-colab" style="background: #065f46;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo04_normalizacion.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 04 (Normalización 1FN-5FN)
+        </a>
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal General
+        </a>
+        <a href="modulo06_agregacion.html" class="pager-btn primary">
+          Siguiente: Módulo 06 (Agregación & GROUP BY) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

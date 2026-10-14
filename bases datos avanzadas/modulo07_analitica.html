@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 07: SQL Analítico, Window Functions & CTEs Recursivas — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #0d9488;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f766e;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #5eead4;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #ccfbf1;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #0d9488;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #0d9488;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ccfbf1);
+    }
+    
+    .win-btn.active {
+      background: #0f766e !important;
+      color: #ffffff !important;
+      border-color: #0f766e !important;
+      font-weight: 700;
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_7_WINDOW_CTES.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-file-contract"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html" class="active"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Contenido Central Principal -->
+    <main class="main-content">
+
+      <!-- Hero Banner del Módulo -->
+      <section class="module-hero" style="background: linear-gradient(135deg, #0f766e 0%, #115e59 50%, #134e4a 100%);">
+        <div class="hero-badge-wrap">
+          <span class="hero-badge" style="background: rgba(204, 251, 241, 0.2); color: #ccfbf1;"><i class="fa-solid fa-layer-group"></i> FASE IV: ANALÍTICA & OPTIMIZACIÓN</span>
+          <span class="hero-subbadge" style="background: #ccfbf1; color: #0f766e;">SQL Analítico & Grafos</span>
+        </div>
+        <h1 class="hero-title">Módulo 07: SQL Analítico, Window Functions & CTEs Recursivas</h1>
+        <p class="hero-lead">
+          De la conservación estricta de la cardinalidad con la cláusula <code>OVER()</code> y los marcos deslizantes (Running Totals) a la computación de punto fijo de Knaster-Tarski para jerarquías organizacionales y grafos con <code>WITH RECURSIVE</code>.
+        </p>
+
+        <div class="hero-meta-bar">
+          <div class="meta-item"><i class="fa-solid fa-certificate"></i> Estándar ANSI SQL:2003</div>
+          <div class="meta-item"><i class="fa-solid fa-clone"></i> Preservación de Tuplas ($O(N \log N)$)</div>
+          <div class="meta-item"><i class="fa-solid fa-diagram-project"></i> Recursión de Punto Fijo</div>
+          <div class="meta-item"><i class="fa-solid fa-bolt"></i> DuckDB Vectorized Engine</div>
+        </div>
+      </section>
+
+      <!-- Barra de Navegación Secundaria Interna (Scrollspy) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto-analitica" class="active"><i class="fa-solid fa-chart-line"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-analitica"><i class="fa-solid fa-brain"></i> 02. Cimiento Formal (SQL:2003)</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Laboratorio SQL</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador Interactivo</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos en Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO EMPRESARIAL & EL PROBLEMA EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-contexto-analitica" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#ccfbf1; color:#0f766e;"><i class="fa-solid fa-business-time"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">El dilema del colapso de tuplas: cómo resolver métricas acumuladas, rankings y jerarquías sin caer en la trampa cuadrática de $O(N^2)$</p>
+          </div>
+        </div>
+
+        <p>
+          En los sistemas corporativos modernos (Fintech, E-commerce, Logística y ERPs como el de <strong>Empresa CUN</strong>), los directores de negocio y analistas cuantitativos exigen reportes que contrastan cada registro individual contra su contexto grupal:
+        </p>
+
+        <ul class="th-features-list" style="margin-bottom: 24px;">
+          <li><strong>Rankings Competitivos por Departamento:</strong> Determinar los 2 empleados mejor remunerados de cada área, pero reteniendo al resto de colaboradores en la misma consulta sin colapsar el detalle salarial.</li>
+          <li><strong>Acumulados Móviles de Facturación (Running Totals):</strong> Computar el flujo de caja progresivo transacción por transacción a lo largo del año calendario para auditoría fiscal.</li>
+          <li><strong>Análisis MoM (Month-over-Month) y Brechas Salariales:</strong> Calcular la diferencia porcentual y absoluta respecto a la venta o al colaborador anterior sin costosas auto-uniones (Self-Joins).</li>
+          <li><strong>Exploración de Organigramas y Grafos Jerárquicos:</strong> Reconstruir la cadena de mando completa desde la Gerencia General hasta los analistas operativos a partir de la relación recursiva <code>jefe_id</code>, cuya profundidad de niveles se desconoce de antemano.</li>
+        </ul>
+
+        <div class="th-grid">
+          <div class="th-card" style="border-top: 4px solid #ef4444;">
+            <h4 style="color: #991b1b;"><i class="fa-solid fa-circle-xmark"></i> La Solución Primitiva Pre-SQL:2003 (Colapso y $O(N^2)$)</h4>
+            <p>
+              Antes de las funciones de ventana, calcular un acumulado móvil obligaba a escribir subconsultas correlacionadas triangulares o uniones con producto cartesiano:
+            </p>
+            <pre class="th-snippet">-- ❌ ANTI-PATRÓN CUADRÁTICO O(N^2):
+SELECT p1.pedido_id, p1.fecha_pedido, p1.total,
+       (SELECT SUM(p2.total) 
+        FROM pedidos p2 
+        WHERE p2.fecha_pedido <= p1.fecha_pedido) AS total_acumulado
+FROM pedidos p1
+ORDER BY p1.fecha_pedido;
+
+-- 💥 Con 1.000.000 pedidos: 1 billón de comparaciones de I/O en disco.</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ❌ Razón del Fallo: Cada fila dispara una re-lectura completa de todas las filas previas. El buffer pool se satura, el planificador recurre a Nested Loop Joins y la consulta degrada catastróficamente.
+            </p>
+          </div>
+
+          <div class="th-card" style="border-top: 4px solid #0d9488;">
+            <h4 style="color: #0f766e;"><i class="fa-solid fa-shield-halved"></i> La Revolución Analítica con OVER() y CTEs Recursivas</h4>
+            <p>
+              Con el estándar ANSI SQL:2003 y los motores columnares como DuckDB, el cálculo se resuelve en <strong>una sola pasada ordenada</strong>:
+            </p>
+            <pre class="th-snippet">-- ✅ SQL ANALÍTICO ÓPTIMO O(N log N):
+SELECT pedido_id, fecha_pedido, total,
+       SUM(total) OVER (
+           ORDER BY fecha_pedido 
+           ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+       ) AS total_acumulado_movil
+FROM pedidos;
+
+-- ⚡ Una única pasada secuencial sobre memoria ordenada.</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #0f766e; font-weight: 600;">
+              ✅ Ventaja Radical: No colapsa filas (a diferencia de <code>GROUP BY</code>). Cada tupla preserva su identidad atómica y recibe en paralelo el cálculo analítico intra-ventana.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL
+           =================================================================== -->
+      <section id="sec-teoria-analitica" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#ccfbf1; color:#0f766e;"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: Estándar ANSI SQL:2003 & Semántica de Punto Fijo</h2>
+            <p class="subtitle">Definición matemática del operador de ventana $\tau_W$, delimitación de marcos y teoría de Datalog para recursión</p>
+          </div>
+        </div>
+
+        <p>
+          Formalmente, una función de ventana no reduce la cardinalidad de la relación de entrada. Si la relación base $R$ posee $|R| = N$ tuplas, el resultado tras aplicar una función de ventana $f_W$ mantendrá exactamente $N$ tuplas.
+        </p>
+
+        <div class="concept-callout" style="border-left: 4px solid #0d9488; background: rgba(13, 148, 136, 0.05); padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="color: #0f766e; margin-bottom: 8px;"><i class="fa-solid fa-square-root-variable"></i> Formalización Matemática del Operador de Ventana ($\tau_W$)</h4>
+          <p>
+            Sea una relación $R(A_1, A_2, \dots, A_n)$. El operador analítico de ventana $\tau_{W, f}(R)$ extiende cada tupla $t \in R$ con un nuevo atributo sintético $f_W$:
+          </p>
+          $$\tau_{W, f}(R) = \left\{ t \circ \langle f(W(t)) \rangle \;\middle|\; t \in R \right\}$$
+          <p style="margin-top: 10px;">
+            Donde $W(t) \subseteq R$ es el subconjunto ordenado de tuplas (el <em>Window Frame</em>) asociado a la tupla corriente $t$, definido unívocamente por tres componentes ortogonales:
+          </p>
+          $$\text{OVER} \Big( \underbrace{\text{PARTITION BY } P_1, \dots, P_k}_{\text{Equivalencia de Clases } [t]_\sim}, \quad \underbrace{\text{ORDER BY } O_1, \dots, O_m}_{\text{Orden Total Intra-Partición } \le}, \quad \underbrace{\text{FRAME\_SPEC}}_{\text{Topología del Marco } [u_1, u_2]} \Big)$$
+        </div>
+
+        <h3>1. Topología del Marco de Ventana: ROWS vs RANGE</h3>
+        <p>
+          La especificación del marco (<em>Window Frame Specification</em>) delimita las fronteras físicas o lógicas del cálculo relativo a la fila actual:
+        </p>
+
+        <div class="table-responsive">
+          <table class="table-formal">
+            <thead>
+              <tr>
+                <th>Especificación de Marco</th>
+                <th>Definición Semántica</th>
+                <th>Comportamiento ante Valores Duplicados</th>
+                <th>Complejidad de Cómputo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ROWS BETWEEN ...</code></td>
+                <td><strong>Límites Físicos Estrictos:</strong> Cuenta filas individuales por desplazamiento cardinal ($n$ filas atrás / adelante).</td>
+                <td>Trata filas con valores idénticos de forma determinista e independiente.</td>
+                <td>$O(1)$ amortizado con acumulador en streaming.</td>
+              </tr>
+              <tr>
+                <td><code>RANGE BETWEEN ...</code></td>
+                <td><strong>Límites Lógicos por Valor:</strong> Compara la distancia escalar de los valores en la columna de ordenamiento.</td>
+                <td><strong>Empates Agrupados:</strong> Filas con el mismo valor en <code>ORDER BY</code> se evalúan conjuntamente en el mismo marco.</td>
+                <td>Requiere escaneo de bordes de rango o búfer de repetición.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert-box alert-warning" style="margin-top: 16px;">
+          <strong>⚠️ Trampa del Estándar ANSI SQL:</strong> Si incluyes una cláusula <code>ORDER BY</code> dentro de <code>OVER()</code> pero <strong>omites</strong> el marco explícito, el estándar impone silenciosamente por defecto:
+          <div style="font-family: 'Fira Code', monospace; margin: 6px 0; font-size: 0.95rem; color: #9a3412;">
+            RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+          </div>
+          Si hay múltiples filas con la misma fecha o monto, <code>RANGE</code> sumará todas las filas empatadas de golpe en lugar de incrementar fila a fila. Para acumulación estricta tupla a tupla, <strong>siempre declara <code>ROWS BETWEEN</code> explícitamente</strong>.
+        </div>
+
+        <h3 style="margin-top: 32px;">2. Teoría de Expresiones de Tabla Comunes (CTEs) & Punto Fijo de Knaster-Tarski</h3>
+        <p>
+          Las CTEs (<em>Common Table Expressions</em>, introducidas por la cláusula <code>WITH</code>) permiten modularizar consultas complejas en grafos dirigidos acíclicos (DAG) de dependencias relacionales legibles. Cuando se añade la directiva <code>RECURSIVE</code>, el motor relacional implementa la semántica de <strong>Punto Fijo Mínimo (Least Fixed Point - LFP)</strong> derivada de la teoría de Datalog y el teorema de Knaster-Tarski:
+        </p>
+
+        <div class="concept-callout" style="border-left: 4px solid #0f766e; background: rgba(15, 118, 110, 0.05); padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="color: #0f766e; margin-bottom: 8px;"><i class="fa-solid fa-infinity"></i> Semántica Formal de Recursión Relacional</h4>
+          <p>
+            Dada una consulta recursiva compuesta por un término ancla $Q_{\text{base}}$ y un término inductivo $Q_{\text{rec}}$, el motor construye una secuencia inductiva de conjuntos temporales $\{R_0, R_1, R_2, \dots\}$:
+          </p>
+          $$R_0 = Q_{\text{base}} \quad \text{(Término Ancla no recursivo)}$$
+          $$R_{i+1} = Q_{\text{rec}}(R_i) \quad \text{(Paso Inductivo que consume la tupla generada en el paso anterior)}$$
+          $$R_{\text{final}} = \bigcup_{i=0}^{k} R_i \quad \text{donde } R_{k+1} = \emptyset \quad \text{(Condición de Parada / Punto Fijo)}$$
+          <p style="margin-top: 10px;">
+            El proceso converge de manera determinista cuando una iteración genera un conjunto vacío ($\emptyset$). Si el grafo modelado contiene ciclos sin romper, la evaluación no converge y diverge hacia un bucle infinito a menos que se limite por profundidad.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE (DISPOSICIÓN VERTICAL ESTRICTA)
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#ccfbf1; color:#0f766e;"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario Anatómico de Palabras Clave</h2>
+            <p class="subtitle">Estructura estricta vertical (Término → Sintaxis → Ejemplo → Detalles Técnicos a 100% de ancho sin columnas ensanduchadas)</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. OVER & PARTITION BY -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">OVER() & PARTITION BY</span>
+              <span class="keyword-entry-badge">Cláusula Ventana</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">&lt;funcion_analitica&gt;() OVER (
+    [PARTITION BY col1, col2, ...]
+    [ORDER BY col_orden [ASC|DESC]]
+    [ROWS|RANGE BETWEEN limite_inf AND limite_sup]
+)</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">SELECT nombre, depto_id, salario,
+       AVG(salario) OVER (PARTITION BY depto_id) AS salario_medio_depto,
+       salario - AVG(salario) OVER (PARTITION BY depto_id) AS desviacion_media
+FROM empleados;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Preservación de Tuplas:</strong> A diferencia de <code>GROUP BY</code> que reduce $N$ filas a $G$ grupos, <code>OVER()</code> devuelve exactamente las $N$ filas originales, adjuntando la métrica analítica a cada una.</li>
+              <li><strong>Aislamiento de Particiones:</strong> <code>PARTITION BY</code> segmenta el dataset en subconjuntos disjuntos. Los cálculos de ranking, desplazamiento y agregación se reinician en cada frontera de partición.</li>
+              <li><strong>Cláusula OVER vacía <code>OVER()</code>:</strong> Considera todo el conjunto resultante de la consulta como una única gran partición global.</li>
+            </ul>
+          </div>
+
+          <!-- 2. ROW_NUMBER vs RANK vs DENSE_RANK -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">ROW_NUMBER() vs RANK() vs DENSE_RANK()</span>
+              <span class="keyword-entry-badge">Funciones de Ranking</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">ROW_NUMBER() OVER ([PARTITION BY ...] ORDER BY col_val [ASC|DESC])
+RANK()       OVER ([PARTITION BY ...] ORDER BY col_val [ASC|DESC])
+DENSE_RANK() OVER ([PARTITION BY ...] ORDER BY col_val [ASC|DESC])</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">SELECT nombre, salario,
+       ROW_NUMBER() OVER (ORDER BY salario DESC) AS num_fila_estricto,
+       RANK()       OVER (ORDER BY salario DESC) AS rnk_con_huecos,
+       DENSE_RANK() OVER (ORDER BY salario DESC) AS rnk_sin_huecos
+FROM empleados;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong><code>ROW_NUMBER()</code>:</strong> Genera una secuencia entera estrictamente incremental $1, 2, 3, 4, \dots$ sin empates. Si dos empleados ganan lo mismo, el orden es no determinista a menos que se use una clave secundaria de desempate en <code>ORDER BY</code>.</li>
+              <li><strong><code>RANK()</code>:</strong> Asigna la misma posición a empates de valor, pero <em>deja huecos</em> en la secuencia consecutiva. Si hay empate en el puesto 2: $1, 2, 2, 4, 5$. El salto refleja la cardinalidad de elementos precedentes.</li>
+              <li><strong><code>DENSE_RANK()</code>:</strong> Asigna la misma posición a empates de valor pero <em>no deja huecos</em> cardinales: $1, 2, 2, 3, 4$. Esencial para el ranking de podio ("Top 3 salarios más altos").</li>
+            </ul>
+          </div>
+
+          <!-- 3. LAG & LEAD -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">LEAD() & LAG()</span>
+              <span class="keyword-entry-badge">Desplazamiento Relacional</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">LAG(columna [, offset_filas [, valor_por_defecto]])  OVER ([PARTITION BY ...] ORDER BY ...)
+LEAD(columna [, offset_filas [, valor_por_defecto]]) OVER ([PARTITION BY ...] ORDER BY ...)</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">SELECT fecha_pedido, total,
+       LAG(total, 1, 0.0) OVER (ORDER BY fecha_pedido) AS venta_anterior,
+       total - LAG(total, 1, total) OVER (ORDER BY fecha_pedido) AS variacion_diaria,
+       LEAD(total, 1, NULL) OVER (ORDER BY fecha_pedido) AS venta_siguiente
+FROM pedidos;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Acceso Inter-Tupla sin Joins:</strong> Permite consultar el valor de una columna en la fila previa (<code>LAG</code>) o posterior (<code>LEAD</code>) sin requerir costosos self-joins o punteros en cursores.</li>
+              <li><strong>Parámetro Offset:</strong> Por defecto es 1, pero se puede solicitar saltos mayores (ej. <code>LAG(total, 7)</code> para comparar contra el mismo día de la semana previa).</li>
+              <li><strong>Manejo Seguro de Bordes:</strong> La primera fila en <code>LAG</code> y la última en <code>LEAD</code> retornan <code>NULL</code> si no se especifica el tercer parámetro opcional de valor por defecto.</li>
+            </ul>
+          </div>
+
+          <!-- 4. FIRST_VALUE & LAST_VALUE -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">FIRST_VALUE() & LAST_VALUE()</span>
+              <span class="keyword-entry-badge">Extremos de Ventana</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">FIRST_VALUE(columna) OVER (
+    [PARTITION BY ...] 
+    ORDER BY ... 
+    [ROWS BETWEEN ...]
+)
+LAST_VALUE(columna) OVER (
+    [PARTITION BY ...] 
+    ORDER BY ... 
+    ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+)</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">SELECT depto_id, nombre, salario,
+       FIRST_VALUE(nombre) OVER (
+           PARTITION BY depto_id ORDER BY salario DESC
+       ) AS empleado_top_pagado,
+       LAST_VALUE(nombre) OVER (
+           PARTITION BY depto_id ORDER BY salario DESC
+           ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+       ) AS empleado_menor_salario
+FROM empleados;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Trampa del Marco en <code>LAST_VALUE</code>:</strong> Por defecto, el marco termina en <code>CURRENT ROW</code>. En consecuencia, sin la cláusula explícita <code>ROWS BETWEEN ... UNBOUNDED FOLLOWING</code>, <code>LAST_VALUE()</code> simplemente retorna el valor de la fila actual en lugar del último de toda la partición.</li>
+              <li><strong>Cálculo de Ratios Directos:</strong> Permite comparar el salario actual directamente contra el valor del líder departamental: <code>salario / FIRST_VALUE(salario) OVER (...) * 100</code>.</li>
+            </ul>
+          </div>
+
+          <!-- 5. ROWS BETWEEN UNBOUNDED PRECEDING -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">ROWS BETWEEN (Running Totals & Marcos Deslizantes)</span>
+              <span class="keyword-entry-badge">Marco Deslizante</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">ROWS BETWEEN &lt;punto_inicio&gt; AND &lt;punto_fin&gt;
+
+-- Opciones válidas de frontera:
+-- UNBOUNDED PRECEDING    (Desde la primera fila de la partición)
+-- n PRECEDING            (n filas antes de la actual)
+-- CURRENT ROW            (La fila actual)
+-- n FOLLOWING            (n filas después de la actual)
+-- UNBOUNDED FOLLOWING    (Hasta la última fila de la partición)</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">-- Acumulado móvil histórico (Running Total):
+SELECT pedido_id, fecha_pedido, total,
+       SUM(total) OVER (
+           ORDER BY fecha_pedido 
+           ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+       ) AS acumulado_historico,
+       -- Media móvil de los últimos 3 pedidos (Ventana móvil suavizada):
+       AVG(total) OVER (
+           ORDER BY fecha_pedido 
+           ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+       ) AS media_movil_3_pedidos
+FROM pedidos;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Complejidad Lineal Óptima:</strong> En DuckDB y PostgreSQL, los agregados con marco <code>ROWS BETWEEN</code> usan algoritmos de agregación deslizante incremental en $O(1)$ por fila, sin recalcular toda la ventana.</li>
+              <li><strong>Media Móvil Predictiva:</strong> <code>ROWS BETWEEN 2 PRECEDING AND CURRENT ROW</code> agrupa exactamente 3 tuplas (la actual y las dos anteriores), fundamental para suavizar curvas en análisis de series de tiempo.</li>
+            </ul>
+          </div>
+
+          <!-- 6. WITH (CTE) -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">WITH (Common Table Expressions - CTE)</span>
+              <span class="keyword-entry-badge">Modularidad Relacional</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">WITH &lt;nombre_cte_1&gt; AS (
+    SELECT ...
+),
+&lt;nombre_cte_2&gt; AS (
+    SELECT ... FROM &lt;nombre_cte_1&gt; WHERE ...
+)
+SELECT * FROM &lt;nombre_cte_2&gt;;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">WITH ranking_salarial AS (
+    SELECT empleado_id, nombre, depto_id, salario,
+           DENSE_RANK() OVER (PARTITION BY depto_id ORDER BY salario DESC) AS rnk
+    FROM empleados
+)
+SELECT d.nombre AS departamento, r.nombre AS empleado, r.salario
+FROM ranking_salarial r
+JOIN departamentos d ON r.depto_id = d.depto_id
+WHERE r.rnk &lt;= 2; -- ✅ Filtro post-ventana sin error</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Superación del Ciclo de Ejecución SQL:</strong> Dado que las funciones de ventana se evalúan en la Fase 5 del motor relacional, no se pueden filtrar directamente en <code>WHERE</code>. Una CTE desacopla la fase de cálculo de la fase de filtrado de resultados.</li>
+              <li><strong>Inlining vs Materialización:</strong> DuckDB y Postgres optimizan CTEs mediante <em>Inlining</em> (fusión de predicados en el plan físico de consulta), evitando la sobrecarga de I/O de tablas temporales físicas a menos que se declare <code>MATERIALIZED</code>.</li>
+            </ul>
+          </div>
+
+          <!-- 7. WITH RECURSIVE -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">WITH RECURSIVE (Punto Fijo & Grafos)</span>
+              <span class="keyword-entry-badge">Recursión ANSI</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">WITH RECURSIVE &lt;nombre_cte&gt; AS (
+    -- 1. Miembro Ancla (Caso Base)
+    SELECT columnas_base, 1 AS nivel
+    FROM tabla_base
+    WHERE condicion_raiz
+
+    UNION ALL
+
+    -- 2. Miembro Recursivo (Paso Inductivo)
+    SELECT h.columnas, r.nivel + 1
+    FROM tabla_base h
+    JOIN &lt;nombre_cte&gt; r ON h.fk_padre = r.pk_nodo
+    WHERE r.nivel &lt; 20 -- Guarda defensiva de corte
+)
+SELECT * FROM &lt;nombre_cte&gt;;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">WITH RECURSIVE organigrama AS (
+    -- Caso Base: Directores Generales (sin jefe)
+    SELECT empleado_id, nombre, jefe_id, 1 AS nivel_jerarquico,
+           CAST(nombre AS VARCHAR) AS ruta_mando
+    FROM empleados
+    WHERE jefe_id IS NULL
+
+    UNION ALL
+
+    -- Paso Recursivo: Colaboradores directos de los supervisores ya resueltos
+    SELECT e.empleado_id, e.nombre, e.jefe_id, o.nivel_jerarquico + 1,
+           CAST(o.ruta_mando || ' -> ' || e.nombre AS VARCHAR)
+    FROM empleados e
+    JOIN organigrama o ON e.jefe_id = o.empleado_id
+)
+SELECT nivel_jerarquico, nombre, ruta_mando
+FROM organigrama
+ORDER BY nivel_jerarquico, nombre;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>UNION ALL Obligatorio:</strong> En casi todos los motores SQL relacionales, el enlace entre el miembro ancla y el miembro recursivo debe realizarse mediante <code>UNION ALL</code> para evitar la sobrecarga de deduplicación en cada iteración del bucle.</li>
+              <li><strong>Semántica de Cola (Working Table):</strong> El motor mantiene internamente una <em>working table</em> con las tuplas producidas en el ciclo $i$. En el ciclo $i+1$, el paso inductivo solo se ejecuta contra las tuplas de esa tabla de trabajo, terminando automáticamente cuando la tabla de trabajo queda vacía.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO SQL & DESGLOSE ANATÓMICO LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#ccfbf1; color:#0f766e;"><i class="fa-solid fa-flask-vial"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL & Desglose Anatómico Línea a Línea</h2>
+            <p class="subtitle">Cuatro consultas analíticas de grado industrial diseccionadas quirúrgicamente instrucción por instrucción</p>
+          </div>
+        </div>
+
+        <!-- Consulta 1 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="color: #0f766e; margin-bottom: 8px;">
+            <i class="fa-solid fa-ranking-star"></i> Consulta 1: Podio Salarial Departamental con DENSE_RANK() y CTE
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Encontrar los dos mejores salarios de cada departamento, resolviendo posibles empates sin descartar colaboradores y proyectando el nombre del departamento.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+WITH clasificacion_empleados AS (
+    SELECT 
+        e.empleado_id,
+        e.nombre AS empleado,
+        e.depto_id,
+        e.salario,
+        DENSE_RANK() OVER (
+            PARTITION BY e.depto_id 
+            ORDER BY e.salario DESC
+        ) AS puesto_salarial
+    FROM empleados e
+)
+SELECT 
+    d.nombre AS departamento,
+    c.empleado,
+    c.salario,
+    c.puesto_salarial
+FROM clasificacion_empleados c
+JOIN departamentos d ON c.depto_id = d.depto_id
+WHERE c.puesto_salarial <= 2
+ORDER BY d.nombre, c.puesto_salarial;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>WITH clasificacion_empleados AS (</code>: Declara una Expresión de Tabla Común (CTE) para encapsular la ventana analítica antes de aplicar cualquier filtrado.</li>
+            <li><code>e.empleado_id, e.nombre, e.salario,</code>: Proyecta las columnas atómicas individuales de los empleados.</li>
+            <li><code>DENSE_RANK() OVER (</code>: Invoca la función analítica que asigna enteros cardinales sin saltos ante empates.</li>
+            <li><code>PARTITION BY e.depto_id</code>: <strong>Segmentación física:</strong> El motor separa las tuplas en particiones independientes por departamento. El contador se reinicia a 1 en cada departamento.</li>
+            <li><code>ORDER BY e.salario DESC</code>: Ordena los empleados de cada departamento de mayor a menor retribución para asignar el puesto 1 al salario máximo.</li>
+            <li><code>JOIN departamentos d ON c.depto_id = d.depto_id</code>: Resuelve la clave foránea para obtener el nombre legible del área empresarial.</li>
+            <li><code>WHERE c.puesto_salarial <= 2</code>: <strong>Filtrado Legal:</strong> Al estar en la consulta externa consumidora de la CTE, el predicado <code>WHERE</code> actúa sobre la columna ya materializada, reteniendo únicamente el Top 2 por departamento.</li>
+          </ol>
+        </div>
+
+        <!-- Consulta 2 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="color: #0f766e; margin-bottom: 8px;">
+            <i class="fa-solid fa-arrows-split-up-and-left"></i> Consulta 2: Análisis de Desplazamiento MoM & Brechas Salariales con LAG()
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Evaluar la escala salarial ascendente dentro de la empresa, comparando el sueldo de cada colaborador contra el inmediatamente anterior para auditar equidad interna.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+SELECT 
+    nombre,
+    fecha_ingreso,
+    salario,
+    LAG(salario, 1, salario) OVER (
+        ORDER BY salario ASC
+    ) AS salario_escalon_anterior,
+    (salario - LAG(salario, 1, salario) OVER (
+        ORDER BY salario ASC
+    )) AS brecha_salarial_absoluta,
+    ROUND((salario - LAG(salario, 1, salario) OVER (
+        ORDER BY salario ASC
+    )) / LAG(salario, 1, salario) OVER (
+        ORDER BY salario ASC
+    ) * 100, 2) AS incremento_porcentual
+FROM empleados
+ORDER BY salario ASC;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>LAG(salario, 1, salario) OVER (ORDER BY salario ASC)</code>: Accede al salario de la fila inmediatamente previa. El tercer argumento <code>salario</code> actúa como fallback seguro: para la fila con el salario mínimo (primera fila), en lugar de devolver <code>NULL</code>, retorna su propio salario para evitar divisiones entre cero posteriores.</li>
+            <li><code>(salario - LAG(...) OVER (...))</code>: Calcula la diferencia neta en pesos colombianos ($COP) respecto al escalafón retributivo inmediatamente inferior.</li>
+            <li><code>ROUND((... / LAG(...)) * 100, 2)</code>: Proyecta la brecha en términos porcentuales para comités de compensaciones y recursos humanos.</li>
+            <li><code>ORDER BY salario ASC</code>: Garantiza que el cursor de salida presente la jerarquía de ingresos en orden estrictamente ascendente.</li>
+          </ol>
+        </div>
+
+        <!-- Consulta 3 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="color: #0f766e; margin-bottom: 8px;">
+            <i class="fa-solid fa-chart-line"></i> Consulta 3: Acumulado Móvil de Facturación (Running Total) con ROWS BETWEEN
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Calcular el flujo de ingresos acumulado a lo largo de los pedidos del año 2024 junto con la media móvil trimestral de ventas.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+SELECT 
+    pedido_id,
+    cliente_id,
+    fecha_pedido,
+    total,
+    SUM(total) OVER (
+        ORDER BY fecha_pedido, pedido_id
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS facturacion_acumulada_movil,
+    AVG(total) OVER (
+        ORDER BY fecha_pedido, pedido_id
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS media_movil_ultimos_3_pedidos
+FROM pedidos
+ORDER BY fecha_pedido, pedido_id;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>SUM(total) OVER ( ... )</code>: Aplica la suma en modo de ventana sin colapsar registros de compras individuales.</li>
+            <li><code>ORDER BY fecha_pedido, pedido_id</code>: Clave compuesta de ordenamiento temporal. Se añade <code>pedido_id</code> como clave unívoca secundaria para garantizar determinismo absoluto ante transacciones del mismo día.</li>
+            <li><code>ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code>: <strong>Marco Running Total:</strong> Suma acumulativa desde la primera tupla de la relación histórica hasta la tupla que está siendo evaluada en el momento.</li>
+            <li><code>ROWS BETWEEN 2 PRECEDING AND CURRENT ROW</code>: <strong>Marco Móvil Estricto:</strong> Suma y promedia un búfer dinámico de exactamente 3 tuplas (las 2 previas y la actual) para amortiguar oscilaciones de demanda.</li>
+          </ol>
+        </div>
+
+        <!-- Consulta 4 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 12px;">
+          <h3 style="color: #0f766e; margin-bottom: 8px;">
+            <i class="fa-solid fa-sitemap"></i> Consulta 4: Árbol Jerárquico Organizacional con WITH RECURSIVE
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Recorrer el grafo acíclico de mando de la tabla <code>empleados</code> resolviendo la profundidad jerárquica de cada colaborador y construyendo el path textual de supervisión.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+WITH RECURSIVE organigrama_cun AS (
+    -- 1. CASO ANCLA (BASE): Empleados de nivel directivo (sin jefe)
+    SELECT 
+        empleado_id,
+        nombre,
+        jefe_id,
+        depto_id,
+        1 AS nivel,
+        CAST(nombre AS VARCHAR) AS ruta_jerarquica
+    FROM empleados
+    WHERE jefe_id IS NULL
+
+    UNION ALL
+
+    -- 2. PASO RECURSIVO (INDUCTIVO): Colaboradores supervisados
+    SELECT 
+        e.empleado_id,
+        e.nombre,
+        e.jefe_id,
+        e.depto_id,
+        o.nivel + 1 AS nivel,
+        CAST(o.ruta_jerarquica || ' -> ' || e.nombre AS VARCHAR) AS ruta_jerarquica
+    FROM empleados e
+    JOIN organigrama_cun o ON e.jefe_id = o.empleado_id
+    WHERE o.nivel < 10 -- Guarda defensiva contra bucles cíclicos
+)
+SELECT 
+    nivel,
+    REPEAT('   ', nivel - 1) || '├── ' || nombre AS estructura_visual,
+    ruta_jerarquica
+FROM organigrama_cun
+ORDER BY ruta_jerarquica;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>WITH RECURSIVE organigrama_cun AS (</code>: Habilita la máquina de inferencia de punto fijo relacional en DuckDB.</li>
+            <li><code>WHERE jefe_id IS NULL</code>: <strong>Caso Base:</strong> Localiza las raíces del bosque jerárquico (Carlos Mendoza, Sofía Ramírez, Javier Castro, Andrés Herrera y Camila Ospina). Asigna nivel de profundidad 1.</li>
+            <li><code>UNION ALL</code>: Combina iterativamente la tabla de trabajo sin aplicar un costo innecesario de <code>DISTINCT</code>.</li>
+            <li><code>JOIN organigrama_cun o ON e.jefe_id = o.empleado_id</code>: <strong>Paso Inductivo:</strong> Une a los subordinados con sus supervisores ya calculados en el ciclo precedente.</li>
+            <li><code>o.nivel + 1</code>: Incrementa la métrica de profundidad jerárquica en cada nivel del árbol.</li>
+            <li><code>CAST(o.ruta_jerarquica || ' -> ' || e.nombre AS VARCHAR)</code>: Concatena la ruta de linaje organizacional para auditorías de gobierno corporativo.</li>
+            <li><code>REPEAT('   ', nivel - 1) || '├── '</code>: Formatea una indentación ASCII para visualización de árbol en terminales de desarrollo.</li>
+          </ol>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ENTIDAD-RELACIÓN (MERMAID) & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#ccfbf1; color:#0f766e;"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario Físico Analítico</h2>
+            <p class="subtitle">Arquitectura relacional del esquema Empresa CUN con auto-referencia jerárquica y métricas temporales</p>
+          </div>
+        </div>
+
+        <p>
+          El siguiente diagrama ilustra las 6 entidades de <strong>Empresa CUN</strong>. Presta especial atención a la relación unaria reflexiva <code>EMPLEADOS ||--o{ EMPLEADOS</code> (vía <code>jefe_id</code>), que constituye el fundamento para las consultas analíticas de recursión jerárquica:
+        </p>
+
+        <!-- Diagrama Mermaid 100% Compatible 9.4.3 -->
+        <div class="mermaid-wrap" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 28px;">
+          <div class="mermaid">
+erDiagram
+    DEPARTAMENTOS ||--o{ EMPLEADOS : asigna
+    EMPLEADOS ||--o{ EMPLEADOS : supervisa
+    CLIENTES ||--o{ PEDIDOS : genera
+    EMPLEADOS ||--o{ PEDIDOS : gestiona
+    PEDIDOS ||--|{ DETALLE_PEDIDOS : contiene
+    PRODUCTOS ||--o{ DETALLE_PEDIDOS : incluye
+
+    DEPARTAMENTOS {
+        int depto_id PK
+        string nombre
+        decimal presupuesto
+        string ciudad
+    }
+
+    EMPLEADOS {
+        int empleado_id PK
+        string nombre
+        decimal salario
+        date fecha_ingreso
+        int jefe_id FK
+        int depto_id FK
+    }
+
+    CLIENTES {
+        int cliente_id PK
+        string nombre
+        string ciudad
+        string categoria_cliente
+        date fecha_registro
+    }
+
+    PRODUCTOS {
+        int producto_id PK
+        string nombre
+        string categoria
+        decimal precio
+        int stock
+    }
+
+    PEDIDOS {
+        int pedido_id PK
+        int cliente_id FK
+        int empleado_id FK
+        date fecha_pedido
+        string estado
+        decimal total
+    }
+
+    DETALLE_PEDIDOS {
+        int detalle_id PK
+        int pedido_id FK
+        int producto_id FK
+        int cantidad
+        decimal precio_unitario
+    }
+          </div>
+        </div>
+
+        <!-- Diccionario Físico Analítico -->
+        <h3 style="margin-top: 24px; margin-bottom: 14px;">Diccionario de Columnas Críticas para SQL Analítico</h3>
+        <table class="table-formal">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricción Relacional</th>
+              <th>Rol y Propósito en SQL Analítico</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>jefe_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>NULLABLE FK</code> (Reflexiva a <code>empleado_id</code>)</td>
+              <td>Columna clave para la resolución de grafos y recursión de árbol con <code>WITH RECURSIVE</code>. Los valores <code>NULL</code> marcan los nodos raíz.</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>depto_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>FK NOT NULL</code></td>
+              <td>Columna de segmentación física preferente para <code>PARTITION BY</code> en cálculos de ranking salarial departamental.</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>salario</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Métrica cuantitativa para evaluar funciones de ordenación (<code>ROW_NUMBER</code>, <code>RANK</code>, <code>DENSE_RANK</code>) y variaciones inter-fila (<code>LAG</code>).</td>
+            </tr>
+            <tr>
+              <td><code>PEDIDOS</code></td>
+              <td><code>fecha_pedido</code></td>
+              <td><code>DATE</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Eje temporal para funciones de desplazamiento (<code>LAG</code>, <code>LEAD</code>) y ordenamiento de marcos acumulados (<code>ORDER BY fecha_pedido</code>).</td>
+            </tr>
+            <tr>
+              <td><code>PEDIDOS</code></td>
+              <td><code>total</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Monto base para la agregación de ventana <code>SUM(total) OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#ccfbf1; color:#0f766e;"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Motor de Ventanas</h2>
+            <p class="subtitle">Selecciona un modo de cálculo para observar cómo el motor segmenta, desplaza o acumula valores sin colapsar registros</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <span class="pipeline-title"><i class="fa-solid fa-table-columns"></i> Modos de Análisis con Window Functions</span>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="pager-btn win-btn active" data-mode="ranking" style="font-size:0.85rem; padding:8px 14px;">
+                <i class="fa-solid fa-ranking-star"></i> 1. Ranking Particionado
+              </button>
+              <button class="pager-btn win-btn" data-mode="lag_lead" style="font-size:0.85rem; padding:8px 14px;">
+                <i class="fa-solid fa-arrows-split-up-and-left"></i> 2. Desplazamiento (LAG/LEAD)
+              </button>
+              <button class="pager-btn win-btn" data-mode="running" style="font-size:0.85rem; padding:8px 14px;">
+                <i class="fa-solid fa-chart-line"></i> 3. Acumulado Móvil (ROWS BETWEEN)
+              </button>
+            </div>
+          </div>
+
+          <!-- Contenedor inyectado dinámicamente por app.js -->
+          <div id="mod7WindowDisplay" style="margin-top: 18px;"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES DE PRODUCCIÓN & SOLUCIÓN DEFENSIVA
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones Analíticos de Producción & Solución Defensiva</h2>
+            <p class="subtitle">Los 4 errores más destructivos al trabajar con Window Functions y CTEs en entornos reales</p>
+          </div>
+        </div>
+
+        <div class="antipattern-grid">
+          
+          <!-- Anti-patrón 1 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 1</div>
+            <h4>Filtrar Funciones de Ventana en la Cláusula WHERE o HAVING</h4>
+            <p class="antipattern-desc">
+              Intentar restringir el top de elementos directamente en la misma consulta:
+            </p>
+            <pre class="th-snippet">-- ❌ ERROR DE FASE DE COMPILACIÓN EN EL MOTOR:
+SELECT nombre, salario,
+       ROW_NUMBER() OVER (ORDER BY salario DESC) AS rnk
+FROM empleados
+WHERE ROW_NUMBER() OVER (ORDER BY salario DESC) <= 3;
+-- 💥 Falla: "Window functions are not allowed in WHERE"</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                Por especificación ANSI, <code>WHERE</code> se evalúa en la <strong>Fase 2</strong> y <code>HAVING</code> en la <strong>Fase 4</strong>, mientras que las funciones de ventana se computan en la <strong>Fase 5</strong>. Envuelve la consulta en una CTE o subconsulta derivada para evaluar el predicado sobre la columna ya generada:
+              </p>
+              <pre class="th-snippet" style="background: #064e3b; color: #ecfdf5;">-- ✅ CORRECTO: ENCAPSULAR EN CTE
+WITH clasificados AS (
+    SELECT nombre, salario,
+           ROW_NUMBER() OVER (ORDER BY salario DESC) AS rnk
+    FROM empleados
+)
+SELECT nombre, salario, rnk 
+FROM clasificados 
+WHERE rnk <= 3;</pre>
+            </div>
+          </div>
+
+          <!-- Anti-patrón 2 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 2</div>
+            <h4>Confiar en el Marco por Defecto RANGE ante Valores Duplicados</h4>
+            <p class="antipattern-desc">
+              Omitir la especificación <code>ROWS BETWEEN</code> al calcular sumas acumuladas con fechas idénticas:
+            </p>
+            <pre class="th-snippet">-- ⚠️ RESULTADO AMBIGUO EN PRODUCCIÓN:
+SELECT fecha_pedido, total,
+       SUM(total) OVER (ORDER BY fecha_pedido) AS acumulado
+FROM pedidos;
+-- 💥 Si 3 pedidos tienen la misma fecha, los 3 reciben
+-- la suma total conjunta en vez del valor progresivo.</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                El estándar impone <code>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</code> por defecto, el cual agrupa empates de valor. Declara explícitamente el marco físico tupla a tupla:
+              </p>
+              <pre class="th-snippet" style="background: #064e3b; color: #ecfdf5;">-- ✅ DECLARACIÓN FÍSICA EXPLÍCITA
+SUM(total) OVER (
+    ORDER BY fecha_pedido, pedido_id
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+)</pre>
+            </div>
+          </div>
+
+          <!-- Anti-patrón 3 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 3</div>
+            <h4>Bucles Infinitos en CTEs Recursivas por Grafos Cíclicos</h4>
+            <p class="antipattern-desc">
+              Recorrer relaciones jerárquicas donde existe una referencia circular inadvertida (ej. Empleado A es jefe de B, y B es jefe de A):
+            </p>
+            <pre class="th-snippet">-- 💥 Desborde de pila (Stack Overflow / Infinite Loop):
+WITH RECURSIVE red AS (
+    SELECT id, jefe_id FROM personal WHERE id = 1
+    UNION ALL
+    SELECT p.id, p.jefe_id FROM personal p JOIN red r ON p.jefe_id = r.id
+)
+SELECT * FROM red; -- 🚨 Nunca termina</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                Añadir siempre una <strong>guarda defensiva de profundidad</strong> (<code>nivel &lt; 20</code>) o rastrear el historial de nodos visitados en un array/string para detectar ciclos:
+              </p>
+              <pre class="th-snippet" style="background: #064e3b; color: #ecfdf5;">-- ✅ GUARDA DEFENSIVA DE PROFUNDIDAD MÁXIMA
+WHERE r.nivel < 15 
+  AND INSTR(r.ruta_visitada, CAST(p.id AS VARCHAR)) = 0</pre>
+            </div>
+          </div>
+
+          <!-- Anti-patrón 4 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 4</div>
+            <h4>Omitir ORDER BY en Window Functions de Orden Sensible</h4>
+            <p class="antipattern-desc">
+              Ejecutar <code>ROW_NUMBER()</code>, <code>LAG()</code> o <code>LEAD()</code> sin especificar <code>ORDER BY</code> dentro de <code>OVER()</code>:
+            </p>
+            <pre class="th-snippet">-- ❌ ORDEN NO DETERMINISTA E IMPREDECIBLE:
+SELECT nombre, 
+       ROW_NUMBER() OVER (PARTITION BY depto_id) AS rnk
+FROM empleados;
+-- 💥 Cada ejecución puede asignar números distintos.</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                Las funciones posicionales y de ranking exigen un orden total estricto. Incluye siempre una columna de ordenación determinista y añade una clave única secundaria para romper posibles empates:
+              </p>
+              <pre class="th-snippet" style="background: #064e3b; color: #ecfdf5;">-- ✅ ORDEN DETERMINISTA TOTAL
+ROW_NUMBER() OVER (
+    PARTITION BY depto_id 
+    ORDER BY salario DESC, empleado_id ASC
+)</pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CONEXIÓN CON GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#ccfbf1; color:#0f766e;"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Conexión con Cuaderno DuckDB / Google Colab</h2>
+            <p class="subtitle">Pon a prueba tu dominio analítico ejecutando los desafíos en el entorno interactivo sin dependencias externas</p>
+          </div>
+        </div>
+
+        <div class="challenge-box">
+          <div class="challenge-header">
+            <span class="challenge-tag">RETO 1: RANKING POR ANTIGÜEDAD</span>
+            <h4>Identificar a los 2 Colaboradores más Antiguos por Departamento</h4>
+          </div>
+          <p>
+            Escribe una consulta que utilice <code>ROW_NUMBER()</code> particionado por <code>depto_id</code> y ordenado por <code>fecha_ingreso ASC</code>. Utiliza una CTE para proyectar únicamente los puestos 1 y 2 de cada departamento, mostrando el nombre del departamento y la fecha de ingreso.
+          </p>
+          <details style="margin-top: 12px; background: var(--bg-card); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <summary style="font-weight: 700; cursor: pointer; color: #0f766e;">Ver Solución Recomendada</summary>
+            <pre class="th-snippet" style="margin-top: 10px; background: #0f172a; color: #f8fafc;">WITH veteranos AS (
+    SELECT e.empleado_id, e.nombre, e.depto_id, e.fecha_ingreso,
+           ROW_NUMBER() OVER (PARTITION BY e.depto_id ORDER BY e.fecha_ingreso ASC) AS rnk
+    FROM empleados e
+)
+SELECT d.nombre AS departamento, v.nombre AS empleado, v.fecha_ingreso, v.rnk
+FROM veteranos v
+JOIN departamentos d ON v.depto_id = d.depto_id
+WHERE v.rnk &lt;= 2
+ORDER BY d.nombre, v.rnk;</pre>
+          </details>
+        </div>
+
+        <div class="challenge-box" style="margin-top: 20px;">
+          <div class="challenge-header">
+            <span class="challenge-tag">RETO 2: PARTICIÓN Y PORCENTAJE DE APORTE</span>
+            <h4>Calcular el Porcentaje de Contribución Salarial al Departamento</h4>
+          </div>
+          <p>
+            Calcula el salario de cada empleado junto con la suma total de nómina de su departamento (usando <code>SUM(salario) OVER (PARTITION BY depto_id)</code>) y el porcentaje exacto que representa el salario individual sobre el presupuesto de nómina de su área.
+          </p>
+          <details style="margin-top: 12px; background: var(--bg-card); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <summary style="font-weight: 700; cursor: pointer; color: #0f766e;">Ver Solución Recomendada</summary>
+            <pre class="th-snippet" style="margin-top: 10px; background: #0f172a; color: #f8fafc;">SELECT 
+    d.nombre AS departamento,
+    e.nombre AS empleado,
+    e.salario,
+    SUM(e.salario) OVER (PARTITION BY e.depto_id) AS nomina_total_depto,
+    ROUND((e.salario / SUM(e.salario) OVER (PARTITION BY e.depto_id)) * 100, 2) AS pct_aporte_depto
+FROM empleados e
+JOIN departamentos d ON e.depto_id = d.depto_id
+ORDER BY d.nombre, e.salario DESC;</pre>
+          </details>
+        </div>
+
+        <div class="challenge-box" style="margin-top: 20px;">
+          <div class="challenge-header">
+            <span class="challenge-tag">RETO 3: RECURSIÓN Y DISTANCIA AL NODO RAÍZ</span>
+            <h4>Calcular la Cantidad de Subordinados Directos e Indirectos</h4>
+          </div>
+          <p>
+            Utilizando <code>WITH RECURSIVE</code>, genera un reporte para el empleado <strong>Carlos Mendoza</strong> (ID: 101) que liste a todos los colaboradores bajo su línea de reporte directa e indirecta indicando el nivel de distancia organizacional respecto a él.
+          </p>
+          <details style="margin-top: 12px; background: var(--bg-card); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <summary style="font-weight: 700; cursor: pointer; color: #0f766e;">Ver Solución Recomendada</summary>
+            <pre class="th-snippet" style="margin-top: 10px; background: #0f172a; color: #f8fafc;">WITH RECURSIVE equipo_carlos AS (
+    SELECT empleado_id, nombre, jefe_id, 0 AS distancia
+    FROM empleados
+    WHERE empleado_id = 101
+
+    UNION ALL
+
+    SELECT e.empleado_id, e.nombre, e.jefe_id, c.distancia + 1
+    FROM empleados e
+    JOIN equipo_carlos c ON e.jefe_id = c.empleado_id
+)
+SELECT distancia, nombre, empleado_id, jefe_id
+FROM equipo_carlos
+WHERE distancia &gt; 0
+ORDER BY distancia, nombre;</pre>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(15, 118, 110, 0.08); border: 2px solid #0d9488; border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: #0f766e; margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta las consultas analíticas de ventana, prueba desplazamientos con LAG y experimenta con recursión jerárquica en memoria sobre DuckDB:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_7_WINDOW_CTES.ipynb" download class="btn-colab" style="background: #0f766e;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab" style="background: #0d9488;">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo06_agregacion.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 06 (Agregación & Subconsultas)
+        </a>
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal General
+        </a>
+        <a href="modulo08_optimizacion.html" class="pager-btn primary" style="background: #0f766e; border-color: #0f766e;">
+          Siguiente: Módulo 08 (Optimización & JSON) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

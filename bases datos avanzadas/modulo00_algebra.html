@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 00: Álgebra Relacional, Fundamento Matemático de Codd & Teoría de Conjuntos — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #10b981;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a7f3d0;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #10b981;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #10b981;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ecfdf5);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_0_ALGEBREL.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html" class="active"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-floppy-disk"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Lienzo de Contenido Principal (Landing Completa del Módulo 00) -->
+    <main class="main-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+        <span class="sep">/</span>
+        <span>Fase 0: Fundamentos Matemáticos</span>
+        <span class="sep">/</span>
+        <span style="color: var(--text-main); font-weight: 700;">Módulo 00: Álgebra Relacional & Teoría de Conjuntos</span>
+      </nav>
+
+      <!-- HERO DE LA LANDING -->
+      <section class="module-hero">
+        <div class="hero-badges">
+          <span class="badge-stage">FASE 0: FUNDAMENTOS MATEMÁTICOS</span>
+          <span class="badge-bloom">Bloom: 2. Comprender & 3. Aplicar</span>
+          <span class="badge-engine">Álgebra Formal de Codd (1970) & DuckDB In-Memory</span>
+        </div>
+        <h1>Módulo 00: Álgebra Relacional, Fundamento Matemático de Codd & Teoría de Conjuntos</h1>
+        <p class="hero-desc">
+          Comprende el cimiento científico sobre el cual operan todas las bases de datos relacionales modernas. Modela relaciones como subconjuntos del producto cartesiano de dominios ($R \subseteq D_1 \times D_2 \times \dots \times D_n$), domina los operadores unarios ($\sigma, \pi$) y binarios ($\times, \bowtie, \cup, \cap, -$), y traduce la notación matemática formal en consultas declarativas SQL optimizadas.
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat-item"><i class="fa-solid fa-square-root-variable"></i> <strong>Operadores de Codd:</strong> 5 Primitivos + 3 Derivados</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-atom"></i> <strong>Teoría Formal:</strong> Tuplas, Dominios, Grado & Cardinalidad</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-diagram-project"></i> <strong>Modelo ERD:</strong> 3 Entidades (Deptos, Empleados, Clientes)</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-flask"></i> <strong>Simulador:</strong> Pipeline Interactivo 3 Etapas (σ, π, ⋈)</div>
+        </div>
+      </section>
+
+      <!-- NAVEGACIÓN SECUNDARIA FLOTANTE DENTRO DE LA LANDING (ON-PAGE NAV) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto"><i class="fa-solid fa-briefcase"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-codd"><i class="fa-solid fa-brain"></i> 02. Cimiento Formal de Codd</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Desglose SQL Línea a Línea</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador 3 Etapas</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos & Cuaderno Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO DE NEGOCIO & EL PROBLEMA REAL
+           =================================================================== -->
+      <section id="sec-contexto" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-briefcase"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">La catástrofe de memoria provocada por productos cartesianos no intencionados</p>
+          </div>
+        </div>
+
+        <p class="th-lead">
+          SQL es un lenguaje <strong>declarativo</strong>: el desarrollador le indica al motor <em>qué resultado desea</em>, pero no <em>el algoritmo exacto de cómo obtenerlo</em>. Cuando un ingeniero desconoce el <strong>Álgebra Relacional</strong> subyacente, escribe consultas sintácticamente válidas que el optimizador traduce a operaciones combinatorias brutales, provocando caídas de bases de datos corporativas.
+        </p>
+
+        <div class="th-grid" style="margin-top: 20px;">
+          <div class="th-card">
+            <h4><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> El Accidental Cross Join en Reporting Masivo</h4>
+            <p>
+              Un desarrollador une la tabla de <code>empleados</code> ($100.000$ filas) con <code>departamentos</code> ($50.000$ filas) usando la sintaxis antigua sin condición de igualdad explícita:
+            </p>
+            <pre class="th-snippet">-- Error típico: Omisión de condición de emparejamiento
+SELECT e.nombre, d.nombre
+FROM   empleados e, departamentos d;</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ⚠️ Consecuencia Matemática: El motor ejecuta un <strong>Producto Cartesiano ($R \times S$)</strong>, generando $100.000 \times 50.000 = 5.000.000.000$ (5 mil millones) de tuplas temporales. Se satura el buffer pool, el disco temporal (tempdb) se desborda y el motor aborta con un error de <em>Out of Memory (OOM)</em>.
+            </p>
+          </div>
+
+          <div class="th-card">
+            <h4><i class="fa-solid fa-shield-halved" style="color: var(--accent-primary);"></i> Transformación Álgebraica Defensiva ($\theta$-Join & Proyección)</h4>
+            <p>
+              Comprensión del operador formal <strong>Theta Join ($\bowtie_\theta$)</strong> combinado con <strong>Proyección ($\pi$)</strong>:
+            </p>
+            <pre class="th-snippet">-- Tratamiento formal: Theta-Join con predicado y proyección
+SELECT e.nombre, d.nombre AS departamento
+FROM   empleados e
+INNER JOIN departamentos d 
+        ON e.depto_id = d.depto_id;</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600;">
+              ✅ Resultado Ingenieril: El motor aplica algoritmos optimizados (Hash Join o Index Nested Loop) que emparejan únicamente las tuplas coincidentes ($100.000$ filas finales), con un consumo mínimo de CPU y memoria RAM.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL: LA MÁQUINA RELACIONAL DE CODD
+           =================================================================== -->
+      <section id="sec-teoria-codd" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: La Máquina Relacional de Edgar F. Codd</h2>
+            <p class="subtitle">Fundamento matemático de 1970: dominios, relaciones, propiedades de cierre y aridad</p>
+          </div>
+        </div>
+
+        <p>
+          En 1970, el matemático e investigador de IBM <strong>Edgar Frank Codd</strong> publicó el artículo fundacional de la computación moderna: <em>"A Relational Model of Data for Large Shared Data Banks"</em>. Codd propuso independizar las consultas de la representación física de almacenamiento mediante la <strong>Teoría de Conjuntos y la Lógica de Predicados de Primer Orden</strong>.
+        </p>
+
+        <div class="th-grid" style="margin: 20px 0;">
+          <div class="th-card">
+            <h4>1. Dominio ($D$) & Tupla ($t$)</h4>
+            <p>Un <strong>Dominio</strong> es un conjunto de valores atómicos homogéneos (ej. enteros, cadenas). Una <strong>Tupla</strong> $t$ es una lista ordenada de valores: $t = \langle v_1, v_2, \dots, v_n \rangle$ donde cada $v_i \in D_i$.</p>
+          </div>
+          <div class="th-card">
+            <h4>2. Relación ($R$)</h4>
+            <p>Una relación $R$ con esquema $R(A_1, A_2, \dots, A_n)$ es formalmente un <strong>subconjunto matemático del producto cartesiano de sus dominios</strong>:</p>
+            <div style="text-align: center; margin-top: 6px; font-weight: 700; color: #064e3b;">
+              $$R \subseteq D_1 \times D_2 \times \dots \times D_n$$
+            </div>
+          </div>
+          <div class="th-card" style="border-top: 4px solid #10b981;">
+            <h4 style="color: #064e3b;">3. Aridad vs. Cardinalidad</h4>
+            <p><strong>Grado o Aridad ($n$):</strong> Es el número de atributos o columnas de la relación.  
+            <br><strong>Cardinalidad ($|R|$):</strong> Es el número de tuplas o filas presentes en un instante dado.</p>
+          </div>
+        </div>
+
+        <div class="th-callout why">
+          <i class="fa-solid fa-lightbulb"></i>
+          <div>
+            <strong>La Propiedad de Cierre Relacional (Relational Closure):</strong>
+            En el Álgebra Relacional, la entrada de cualquier operador es una o dos relaciones, y el resultado producido es <strong>siempre y sin excepción una nueva relación</strong>. Esta propiedad matemática es la que permite anidar consultas infinitamente: el resultado de una subconsulta puede ser filtrado, proyectado o unido exactamente igual que una tabla base física.
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-table-cells"></i> Matriz Canónica de Operadores del Álgebra Relacional</h3>
+        <p>Codd clasificó las operaciones en operadores primitivos (esenciales) y operadores derivados (construidos mediante combinación de los primitivos):</p>
+
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Operador</th>
+              <th>Símbolo</th>
+              <th>Tipo</th>
+              <th>Notación Formal</th>
+              <th>Mapeo Declarativo SQL</th>
+              <th>Comportamiento Relacional</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Selección</strong></td>
+              <td>$$\sigma$$</td>
+              <td>Unario (1 tabla)</td>
+              <td>$$\sigma_{\text{condicion}}(R)$$</td>
+              <td><code>SELECT * FROM R WHERE condicion</code></td>
+              <td>Filtra filas horizontalmente según un predicado lógico.</td>
+            </tr>
+            <tr>
+              <td><strong>Proyección</strong></td>
+              <td>$$\pi$$</td>
+              <td>Unario (1 tabla)</td>
+              <td>$$\pi_{A_1, A_2}(R)$$</td>
+              <td><code>SELECT DISTINCT A1, A2 FROM R</code></td>
+              <td>Selecciona atributos verticales eliminando duplicados.</td>
+            </tr>
+            <tr>
+              <td><strong>Producto Cartesiano</strong></td>
+              <td>$$\times$$</td>
+              <td>Binario (2 tablas)</td>
+              <td>$$R \times S$$</td>
+              <td><code>SELECT * FROM R CROSS JOIN S</code></td>
+              <td>Combina cada tupla de $R$ con cada tupla de $S$. Filas: $|R| \times |S|$.</td>
+            </tr>
+            <tr>
+              <td><strong>Unión</strong></td>
+              <td>$$\cup$$</td>
+              <td>Binario de Conjuntos</td>
+              <td>$$R \cup S$$</td>
+              <td><code>SELECT * FROM R UNION SELECT * FROM S</code></td>
+              <td>Tuplas pertenecientes a $R$, a $S$ o a ambos. Requiere compatibilidad.</td>
+            </tr>
+            <tr>
+              <td><strong>Diferencia</strong></td>
+              <td>$$-$$</td>
+              <td>Binario de Conjuntos</td>
+              <td>$$R - S$$</td>
+              <td><code>SELECT * FROM R EXCEPT SELECT * FROM S</code></td>
+              <td>Tuplas presentes en $R$ pero que no existen en $S$.</td>
+            </tr>
+            <tr>
+              <td><strong>Intersección</strong> (Derivado)</td>
+              <td>$$\cap$$</td>
+              <td>Derivado: $$R - (R - S)$$</td>
+              <td>$$R \cap S$$</td>
+              <td><code>SELECT * FROM R INTERSECT SELECT * FROM S</code></td>
+              <td>Tuplas que existen simultáneamente en $R$ y en $S$.</td>
+            </tr>
+            <tr>
+              <td><strong>Theta Join</strong> (Derivado)</td>
+              <td>$$\bowtie_\theta$$</td>
+              <td>Derivado: $$\sigma_\theta(R \times S)$$</td>
+              <td>$$R \bowtie_{\theta} S$$</td>
+              <td><code>SELECT * FROM R JOIN S ON condicion</code></td>
+              <td>Producto cartesiano filtrado bajo una condición $\theta$.</td>
+            </tr>
+            <tr>
+              <td><strong>Renombramiento</strong></td>
+              <td>$$\rho$$</td>
+              <td>Unario Auxiliar</td>
+              <td>$$\rho_{S}(R)$$ o $$\rho_{A/B}(R)$$</td>
+              <td><code>SELECT * FROM R AS S</code></td>
+              <td>Asigna un alias a la relación o a sus atributos para desambiguar.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="th-callout pitfall" style="margin-top: 20px;">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div>
+            <strong>El Requisito Matemático de Compatibilidad de Unión (Union-Compatibility):</strong>
+            Dos relaciones $R$ y $S$ solo pueden someterse a operadores de conjuntos ($\cup, \cap, -$) si cumplen dos condiciones estrictas:
+            1. Tienen la **misma aridad** (el mismo número de columnas).
+            2. Los **dominios correspondientes** de izquierda a derecha son compatibles ($dom(A_i) \cong dom(B_i)$ para todo $i$).
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario de Palabras Clave</h2>
+            <p class="subtitle">Sintaxis, comportamiento formal en el motor relacional y equivalencia algebraica</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. SELECCIÓN (σ) / WHERE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SELECCIÓN (σ) / Cláusula WHERE</span>
+              <span class="keyword-entry-badge">Operador Unario Primitivo</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">σ_{predicado}(Relacion)
+SELECT * FROM nombre_tabla WHERE condicion_booleana;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Filtra horizontalmente las filas de empleados con salario superior a 6 millones en el departamento 1
+SELECT empleado_id, nombre, salario, depto_id
+FROM   empleados
+WHERE  depto_id = 1 AND salario > 6000000.00;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Evalúa cada tupla de la relación de entrada contra una fórmula proposicional booleana (con operadores $=, <>, <, >, \le, \ge, \land, \lor, \neg$).</li>
+              <li><strong>Preservación de Aridad:</strong> La relación de salida conserva exactamente el mismo esquema y número de columnas que la relación de origen ($grado(\sigma(R)) = grado(R)$).</li>
+              <li><strong>Cardinalidad:</strong> El número de tuplas retornadas es siempre menor o igual al original ($0 \le |\sigma(R)| \le |R|$).</li>
+            </ul>
+          </div>
+
+          <!-- 2. PROYECCIÓN (π) / SELECT [DISTINCT] -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">PROYECCIÓN (π) / Cláusula SELECT [DISTINCT]</span>
+              <span class="keyword-entry-badge">Operador Unario Primitivo</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">π_{Atributo_1, Atributo_2, ..., Atributo_k}(Relacion)
+SELECT [DISTINCT] columna_1, columna_2 FROM nombre_tabla;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Particiona verticalmente seleccionando exclusivamente el nombre y salario de los empleados
+SELECT nombre, salario
+FROM   empleados;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Desecha las columnas no especificadas en la lista de proyección, creando una nueva relación con un subconjunto vertical de atributos.</li>
+              <li><strong>Semántica de Conjuntos vs Multiconjuntos (Bags):</strong> En la teoría matemática de Codd, $\pi$ elimina tuplas duplicadas automáticamente. En SQL estándar, por razones de rendimiento computacional, se retienen duplicados por defecto a menos que se agregue explícitamente <code>DISTINCT</code>.</li>
+              <li><strong>Reducción de I/O:</strong> Proyectar únicamente las columnas requeridas optimiza drásticamente motores columnares como DuckDB o Redshift, leyendo solo los archivos de datos pertinentes.</li>
+            </ul>
+          </div>
+
+          <!-- 3. PRODUCTO CARTESIANO (×) / CROSS JOIN -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">PRODUCTO CARTESIANO (×) / Cláusula CROSS JOIN</span>
+              <span class="keyword-entry-badge">Operador Binario Primitivo</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">Relacion_A × Relacion_B
+SELECT * FROM tabla_a CROSS JOIN tabla_b;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Combina exhaustivamente cada empleado con cada departamento existente (10 empleados × 5 deptos = 50 tuplas)
+SELECT e.nombre AS empleado, d.nombre AS departamento
+FROM   empleados e
+CROSS JOIN departamentos d;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Concatena cada tupla $t_a \in A$ con cada tupla $t_b \in B$ para formar tuplas compuestas de aridad combinada ($grado(A) + grado(B)$).</li>
+              <li><strong>Cálculo de Cardinalidad:</strong> Si $|A| = m$ y $|B| = n$, la cardinalidad resultante es estrictamente $|A \times B| = m \times n$.</li>
+              <li><strong>Peligro en Producción:</strong> Es el operador más costoso del álgebra relacional. En bases de datos grandes, ejecutarlo sin predicado satura el buffer de memoria.</li>
+            </ul>
+          </div>
+
+          <!-- 4. THETA JOIN (⋈_θ) / INNER JOIN ON -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">THETA JOIN (⋈_θ) / Cláusula INNER JOIN ... ON</span>
+              <span class="keyword-entry-badge">Operador Binario Derivado</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">Relacion_A ⋈_{predicado_θ} Relacion_B  ≡  σ_{predicado_θ}(Relacion_A × Relacion_B)
+SELECT * FROM tabla_a INNER JOIN tabla_b ON condicion_θ;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Empareja empleados con su departamento correspondiente verificando igualdad de depto_id (Equi-Join)
+SELECT e.nombre AS empleado, e.salario, d.nombre AS departamento, d.ciudad
+FROM   empleados e
+INNER JOIN departamentos d 
+        ON e.depto_id = d.depto_id;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Definición Matemática:</strong> Es formalmente la composición de un Producto Cartesiano seguido de una Selección: $\bowtie_\theta = \sigma_\theta(R \times S)$.</li>
+              <li><strong>Equi-Join:</strong> Cuando el operador de comparación $\theta$ es la igualdad ($=$), la operación recibe el nombre formal de *Equi-Join*.</li>
+              <li><strong>Optimización en Motor:</strong> Aunque algebraicamente equivale a un producto cartesiano con filtro, los motores físicos jamás calculan el producto completo; ejecutan algoritmos especializados como *Hash Joins* o *Merge Joins*.</li>
+            </ul>
+          </div>
+
+          <!-- 5. UNIÓN (∪) / Operador UNION [ALL] -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">UNIÓN (∪) / Operador UNION [ALL]</span>
+              <span class="keyword-entry-badge">Operador Binario de Conjuntos</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">Relacion_A ∪ Relacion_B
+SELECT col1, col2 FROM tabla_a
+UNION [ALL]
+SELECT col1, col2 FROM tabla_b;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Obtiene la lista unificada sin duplicados de todas las ciudades con presencia de clientes o departamentos
+SELECT ciudad FROM clientes
+UNION
+SELECT ciudad FROM departamentos;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Combina las tuplas de dos relaciones compatibles en una relación consolidada.</li>
+              <li><strong>Diferencia entre UNION y UNION ALL:</strong> <code>UNION</code> aplica un paso de ordenamiento/hashing para descartar duplicados, comportándose estrictamente como el operador de conjuntos $\cup$. <code>UNION ALL</code> conserva los duplicados y es computacionalmente mucho más veloz.</li>
+              <li><strong>Compatibilidad Obligatoria:</strong> Requiere que ambas consultas tengan el mismo número de columnas y tipos de datos equivalentes en el mismo orden posicional.</li>
+            </ul>
+          </div>
+
+          <!-- 6. DIFERENCIA (-) / EXCEPT & INTERSECCIÓN (∩) / INTERSECT -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">DIFERENCIA (-) / EXCEPT & INTERSECCIÓN (∩) / INTERSECT</span>
+              <span class="keyword-entry-badge">Operadores Binarios de Conjuntos</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">Diferencia:   Relacion_A - Relacion_B  ≡  SELECT col FROM a EXCEPT SELECT col FROM b;
+Intersección: Relacion_A ∩ Relacion_B  ≡  SELECT col FROM a INTERSECT SELECT col FROM b;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- 1. Diferencia: Ciudades con clientes PERO SIN oficinas de departamentos
+SELECT ciudad FROM clientes
+EXCEPT
+SELECT ciudad FROM departamentos;
+
+-- 2. Intersección: Ciudades que cuentan SIMULTÁNEAMENTE con clientes Y departamentos
+SELECT ciudad FROM clientes
+INTERSECT
+SELECT ciudad FROM departamentos;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>No Conmutatividad de la Diferencia:</strong> A diferencia de la unión y la intersección, el operador diferencia no es conmutativo ($A - B \neq B - A$). El orden de las tablas determina el resultado.</li>
+              <li><strong>Conmutatividad de la Intersección:</strong> La intersección satisface $A \cap B = B \cap A$.</li>
+              <li><strong>Soporte Multi-Motor:</strong> En Oracle, el operador de diferencia recibe la palabra clave histórica <code>MINUS</code>, mientras que en ANSI SQL, PostgreSQL, DuckDB y SQL Server se utiliza <code>EXCEPT</code>.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO DE CÓDIGO SQL & DESGLOSE LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL & Desglose Línea a Línea</h2>
+            <p class="subtitle">Traducción de una expresión algebraica compleja compuesta a consulta declarativa optimizada</p>
+          </div>
+        </div>
+
+        <p>
+          Analicemos la traducción formal de una expresión algebraica compuesta que combina un **Theta Join ($\bowtie$)**, una **Selección ($\sigma$)** y una **Proyección ($\pi$)**:
+        </p>
+
+        <div style="background: rgba(16, 185, 129, 0.08); border-left: 5px solid var(--accent-primary); padding: 16px 20px; border-radius: 8px; margin: 16px 0; font-family: var(--font-mono); font-size: 1.05rem; color: #064e3b;">
+          $$\pi_{\text{nombre, salario, depto}}(\sigma_{\text{salario} > 5000000 \land \text{ciudad} = \text{'Bogotá'}}(\text{empleados} \bowtie_{\text{depto\_id}} \text{departamentos}))$$
+        </div>
+
+        <pre class="th-snippet" style="margin-top: 14px;">-- Consulta SQL Declarativa equivalente:
+SELECT e.nombre AS empleado,
+       e.salario,
+       d.nombre AS departamento
+FROM   empleados e
+INNER JOIN departamentos d 
+        ON e.depto_id = d.depto_id
+WHERE  e.salario > 5000000.00
+  AND  d.ciudad = 'Bogotá';</pre>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-list-check"></i> Desglose Anatómico del Plan Relacional</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 120px;">Línea SQL</th>
+              <th style="width: 250px;">Cláusula / Operador Álgebraico</th>
+              <th>Mecánica Interna en el Motor de Base de Datos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>L1 - L3</code></td>
+              <td><code>SELECT e.nombre, e.salario, d.nombre</code><br><strong>Proyección ($\pi$)</strong></td>
+              <td>Aplica la partición vertical de atributos. Descarta columnas innecesarias como <code>jefe_id</code>, <code>fecha_ingreso</code> y <code>presupuesto</code>, reduciendo la memoria requerida para el buffer de transporte.</td>
+            </tr>
+            <tr>
+              <td><code>L4</code></td>
+              <td><code>FROM empleados e</code><br><strong>Relación Base $R_1$ + Renombramiento ($\rho$)</strong></td>
+              <td>Instancia el scan relacional sobre la tabla <code>empleados</code> y le asigna el alias corto <code>e</code> mediante el operador formal de renombramiento ($\rho_e(\text{empleados})$).</td>
+            </tr>
+            <tr>
+              <td><code>L5 - L6</code></td>
+              <td><code>INNER JOIN departamentos d ON ...</code><br><strong>Theta Join ($\bowtie_\theta$)</strong></td>
+              <td>El optimizador no ejecuta un producto cartesiano. Construye una tabla hash en memoria sobre <code>departamentos</code> y hace un barrido de <code>empleados</code> verificando la igualdad de clave foránea <code>e.depto_id = d.depto_id</code>.</td>
+            </tr>
+            <tr>
+              <td><code>L7</code></td>
+              <td><code>WHERE e.salario > 5000000.00</code><br><strong>Selección Unaria ($\sigma_1$)</strong></td>
+              <td>Predicado push-down: El optimizador evalúa este filtro antes del join o durante el escaneo para descartar tuplas que no cumplen el rango de salario.</td>
+            </tr>
+            <tr>
+              <td><code>L8</code></td>
+              <td><code>AND d.ciudad = 'Bogotá'</code><br><strong>Selección Unaria ($\sigma_2$)</strong></td>
+              <td>Predicado push-down aplicado a la tabla de departamentos, descartando las oficinas ubicadas en Cali, Medellín o Barranquilla antes de realizar la combinación.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ERD & DICCIONARIO DE DATOS FÍSICO
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario de Datos</h2>
+            <p class="subtitle">Esquema canónico de 3 entidades normalizadas implementadas en DuckDB In-Memory</p>
+          </div>
+        </div>
+
+        <p>
+          El dominio de datos de este módulo modela la estructura organizacional y comercial de la empresa: <strong>departamentos</strong>, <strong>empleados</strong> dependientes con jerarquía recursiva, y <strong>clientes</strong> para operaciones conjuntistas:
+        </p>
+
+        <div class="mermaid-box">
+          <h4>📐 Diagrama Entidad-Relación — Módulo 00: Organización & Clientes</h4>
+          <div class="mermaid">
+erDiagram
+    DEPARTAMENTOS ||--o{ EMPLEADOS : "agrupa a"
+    EMPLEADOS ||--o{ EMPLEADOS : "supervisa a (recursivo)"
+    DEPARTAMENTOS {
+        int depto_id PK "Clave primaria numérica"
+        varchar nombre "Nombre del departamento corporativo"
+        decimal presupuesto "Presupuesto anual asignado"
+        varchar ciudad "Ciudad sede de la oficina"
+    }
+    EMPLEADOS {
+        int empleado_id PK "Clave primaria de empleado"
+        varchar nombre "Nombre completo del colaborador"
+        decimal salario "Salario mensual pactado"
+        date fecha_ingreso "Fecha formal de vinculación"
+        int jefe_id FK "Llave foránea recursiva a EMPLEADOS (Permite NULL)"
+        int depto_id FK "Llave foránea hacia DEPARTAMENTOS"
+    }
+    CLIENTES {
+        int cliente_id PK "Clave primaria del cliente"
+        varchar nombre "Razón social o nombre comercial"
+        varchar ciudad "Ciudad domicilio para operaciones conjuntistas"
+        varchar categoria_cliente "Segmento: Empresarial, Individual, VIP"
+        date fecha_registro "Fecha de registro en la plataforma"
+    }
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-table-list"></i> Diccionario de Datos Físico (Especificación DuckDB / ANSI)</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricciones</th>
+              <th>Justificación en Arquitectura de Producción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>DEPARTAMENTOS</code></td>
+              <td><code>depto_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Identificador subrogado inmutable de la unidad de negocio.</td>
+            </tr>
+            <tr>
+              <td><code>DEPARTAMENTOS</code></td>
+              <td><code>presupuesto</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Tipo de coma fija exacto para finanzas (evita imprecisión de floats).</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>empleado_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Identificador único del colaborador.</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>jefe_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>NULL (FK recursiva)</code></td>
+              <td>Permite nulo para directores generales que no tienen supervisor inmediato.</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>depto_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>FOREIGN KEY</code></td>
+              <td>Garantiza integridad referencial estricta contra la tabla de departamentos.</td>
+            </tr>
+            <tr>
+              <td><code>CLIENTES</code></td>
+              <td><code>ciudad</code></td>
+              <td><code>VARCHAR</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Atributo de unión compatible para operaciones $\cup, \cap, -$ con departamentos.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Motor de Álgebra Relacional</h2>
+            <p class="subtitle">Inspecciona cómo el motor ejecuta Selección (σ), Proyección (π) y Theta Join (⋈) en memoria</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header">
+            <span class="pipeline-title"><i class="fa-solid fa-sliders"></i> Selector de Operador Álgebraico en Tiempo Real</span>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <p style="font-weight: 700; font-size: 0.9rem; color: var(--accent-dark); margin-bottom: 12px;">
+              Selecciona un operador para ver la transformación paso a paso:
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="sim-btn mod0-btn active" data-type="select">
+                <i class="fa-solid fa-filter"></i> Selección: σ(salario > 6M)
+              </button>
+              <button class="sim-btn mod0-btn" data-type="project">
+                <i class="fa-solid fa-table-columns"></i> Proyección: π(nombre, salario)
+              </button>
+              <button class="sim-btn mod0-btn" data-type="join">
+                <i class="fa-solid fa-link"></i> Equi-Join: ⋈(depto_id)
+              </button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;">
+              💡 <em>Observa la diferencia entre el filtrado horizontal de filas (Selección), el filtrado vertical de columnas (Proyección) y el emparejamiento de llaves (Join).</em>
+            </p>
+          </div>
+
+          <!-- Contenedor del Pipeline en 3 Etapas renderizado dinámicamente por app.js -->
+          <div id="mod0SimDisplay"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES & CONSIDERACIONES DE RENDIMIENTO
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones y Consideraciones de Rendimiento</h2>
+            <p class="subtitle">Errores de diseño que violan principios algebraicos y saturan los servidores</p>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 1: Cross Join accidental -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 1: Producto Cartesiano Involuntario por Sintaxis Antigua (Comas en el FROM)</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Utilizar la sintaxis SQL-89 separando tablas por comas (<code>FROM tabla1, tabla2</code>) es propenso a olvidar la condición en el <code>WHERE</code>, convirtiendo la consulta silenciosamente en un Producto Cartesiano completo.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Práctica Riesgosa (SQL-89)</span>
+<pre>-- Si olvidas el WHERE, genera producto cartesiano:
+SELECT e.nombre, d.nombre
+FROM   empleados e, departamentos d;</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Práctica Defensiva (SQL-92 Estándar)</span>
+<pre>-- Exige obligatoriamente la cláusula ON:
+SELECT e.nombre, d.nombre
+FROM   empleados e
+INNER JOIN departamentos d 
+        ON e.depto_id = d.depto_id;</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 2: Violación de orden en UNION -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 2: Asunción de Nombres en Lugar de Posición en Operaciones de Conjunto (UNION)</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            El operador <code>UNION</code> evalúa las columnas por <strong>orden posicional estricto de izquierda a derecha</strong>, no por el nombre del atributo. Si el orden difiere, se mezclarán semánticamente datos incompatibles o se generará un error de coerción de tipos.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Mezcla de Dominios Incompatibles</span>
+<pre>-- Columna 1 es ciudad, pero en la segunda consulta es id:
+SELECT ciudad, cliente_id FROM clientes
+UNION
+SELECT depto_id, ciudad FROM departamentos;</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Posicionamiento Estricto</span>
+<pre>-- Dominios 100% alineados posicionalmente:
+SELECT cliente_id AS id, ciudad FROM clientes
+UNION
+SELECT depto_id AS id, ciudad FROM departamentos;</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 3: SELECT * Masivo -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 3: Supresión de la Proyección (SELECT *) en Entornos Analíticos</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Ignorar el operador formal de proyección y escribir <code>SELECT *</code> destruye las ventajas de los motores columnares modernos (como DuckDB, Snowflake o BigQuery), obligando al motor a leer todos los bloques de almacenamiento del disco.
+          </p>
+          <div class="th-callout why" style="margin-top: 10px;">
+            <i class="fa-solid fa-lightbulb"></i>
+            <div>
+              <strong>Regla de Ingeniería:</strong> En producción, toda consulta debe especificar la lista exacta de atributos necesarios $\pi_{A_1, A_2, \dots}(R)$.
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CUADERNO EN GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Laboratorio en Google Colab con DuckDB</h2>
+            <p class="subtitle">Pon a prueba tus conocimientos con ejercicios guiados y ejecuta el cuaderno interactivo</p>
+          </div>
+        </div>
+
+        <!-- Reto 1 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 1: Selección y Proyección Combinada
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Expresa en notación matemática formal y escribe la consulta SQL para obtener los nombres y presupuestos de los departamentos ubicados en <strong>'Bogotá'</strong> que cuenten con un presupuesto igual o superior a $100.000.000$.
+          </p>
+          
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Notación Formal y Solución Comentada</summary>
+            <div class="solution-content">
+              <div style="font-family: var(--font-mono); margin-bottom: 8px; color: #064e3b; font-weight: 700;">
+                Expresión: $$\pi_{\text{nombre, presupuesto}}(\sigma_{\text{ciudad} = 'Bogotá' \land \text{presupuesto} \ge 100000000}(\text{departamentos}))$$
+              </div>
+              <pre class="th-snippet">-- Solución Reto 1:
+SELECT nombre, presupuesto
+FROM   departamentos
+WHERE  ciudad = 'Bogotá' 
+  AND  presupuesto >= 100000000.00;</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> La cláusula <code>WHERE</code> actúa como el operador selección $\sigma$ filtrando tuplas por ciudad y presupuesto; la cláusula <code>SELECT</code> actúa como el operador proyección $\pi$ conservando solo los dos atributos pedidos.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 2 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 2: Operación de Conjuntos (Unión)
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe la consulta SQL para obtener una lista unificada de todos los nombres de personas y entidades registradas en la empresa (nombres de <code>empleados</code> y nombres de <code>clientes</code>), eliminando duplicados.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Notación Formal y Solución Comentada</summary>
+            <div class="solution-content">
+              <div style="font-family: var(--font-mono); margin-bottom: 8px; color: #064e3b; font-weight: 700;">
+                Expresión: $$\pi_{\text{nombre}}(\text{empleados}) \cup \pi_{\text{nombre}}(\text{clientes})$$
+              </div>
+              <pre class="th-snippet">-- Solución Reto 2:
+SELECT nombre FROM empleados
+UNION
+SELECT nombre FROM clientes;</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Ambas consultas proyectan una sola columna de tipo VARCHAR (compatibilidad de unión garantizada) y el operador <code>UNION</code> consolida las tuplas eliminando duplicados.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 3 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 3: Diferencia de Conjuntos
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe la consulta SQL para encontrar los nombres de clientes que pertenecen a la categoría <strong>'Empresarial'</strong> PERO QUE NO están radicados en la ciudad de <strong>'Bogotá'</strong>.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Notación Formal y Solución Comentada</summary>
+            <div class="solution-content">
+              <div style="font-family: var(--font-mono); margin-bottom: 8px; color: #064e3b; font-weight: 700;">
+                Expresión: $$\pi_{\text{nombre}}(\sigma_{\text{categoria} = 'Empresarial'}(\text{clientes})) - \pi_{\text{nombre}}(\sigma_{\text{ciudad} = 'Bogotá'}(\text{clientes}))$$
+              </div>
+              <pre class="th-snippet">-- Solución Reto 3:
+SELECT nombre FROM clientes WHERE categoria_cliente = 'Empresarial'
+EXCEPT
+SELECT nombre FROM clientes WHERE ciudad = 'Bogotá';</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> El operador <code>EXCEPT</code> sustrae del primer conjunto todas las tuplas que aparecen en el segundo conjunto, garantizando que los clientes corporativos de Bogotá sean excluidos.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(16, 185, 129, 0.08); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: var(--accent-dark); margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta todos estos ejemplos en memoria sobre DuckDB, resuelve los retos interactivos y experimenta con operadores algebraicos formales directamente en tu cuaderno Colab:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_0_ALGEBREL.ipynb" download class="btn-colab" style="background: #065f46;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal General
+        </a>
+        <a href="modulo01_ddl_dml.html" class="pager-btn primary">
+          Siguiente: Módulo 01 (DDL/DML & Multi-Motor) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

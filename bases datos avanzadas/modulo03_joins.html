@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 03: JOINs Complejos, Álgebra de Combinación & Operadores de Conjuntos — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #10b981;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a7f3d0;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #10b981;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #10b981;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ecfdf5);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_3_JOINS_CONJUNTOS.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html" class="active"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-floppy-disk"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Lienzo de Contenido Principal (Landing Completa del Módulo 03) -->
+    <main class="main-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+        <span class="sep">/</span>
+        <span>Fase I: Estructura & Consultas</span>
+        <span class="sep">/</span>
+        <span style="color: var(--text-main); font-weight: 700;">Módulo 03: JOINs Complejos & Operadores de Conjuntos</span>
+      </nav>
+
+      <!-- HERO DE LA LANDING -->
+      <section class="module-hero">
+        <div class="hero-badges">
+          <span class="badge-stage">FASE I: ESTRUCTURA & CONSULTAS</span>
+          <span class="badge-bloom">Bloom: 3. Aplicar & 4. Analizar</span>
+          <span class="badge-engine">Álgebra Relacional de Combinación & DuckDB In-Memory</span>
+        </div>
+        <h1>Módulo 03: JOINs Complejos, Álgebra de Combinación, Subconsultas Derivadas & Operadores de Conjuntos</h1>
+        <p class="hero-desc">
+          Domina la totalidad del espectro de combinación relacional en SQL. Comprende el comportamiento formal y las diferencias de retención entre <code>INNER</code>, <code>LEFT</code>, <code>RIGHT</code>, <code>FULL OUTER</code>, <code>CROSS</code>, <code>SELF JOIN</code> y <code>ANTI JOIN</code>, compone subconsultas derivadas con agregaciones y filtros difusos <code>LIKE / ILIKE</code>, y evita los peligrosos efectos de multiplicación de registros (Fan-out).
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat-item"><i class="fa-solid fa-link"></i> <strong>Tipos de JOIN:</strong> INNER, LEFT, RIGHT, FULL, CROSS, SELF, ANTI</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-diagram-project"></i> <strong>Operadores de Conjunto:</strong> UNION, UNION ALL, INTERSECT, EXCEPT</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-sitemap"></i> <strong>Modelo Empresarial:</strong> 4 Entidades (Deptos, Emps, Clientes, Créditos)</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-flask"></i> <strong>Simulador:</strong> Pipeline de Emparejamiento en 3 Etapas</div>
+        </div>
+      </section>
+
+      <!-- NAVEGACIÓN SECUNDARIA FLOTANTE DENTRO DE LA LANDING (ON-PAGE NAV) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto"><i class="fa-solid fa-briefcase"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-joins"><i class="fa-solid fa-brain"></i> 02. Álgebra de Combinación</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Desglose SQL Línea a Línea</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador 3 Etapas</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos & Cuaderno Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO DE NEGOCIO & EL PROBLEMA REAL
+           =================================================================== -->
+      <section id="sec-contexto" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-briefcase"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">La desaparición silenciosa de clientes y la distorsión de balances por Fan-Out</p>
+          </div>
+        </div>
+
+        <p class="th-lead">
+          En los tableros de control gerencial (BI y ERP), una mala elección entre un <code>INNER JOIN</code> y un <code>OUTER JOIN</code> falsea métricas de negocio críticas. Si un analista une la tabla de clientes con la tabla de créditos mediante <code>INNER JOIN</code> para calcular el volumen de usuarios, **todos los prospectos o clientes nuevos sin créditos desaparecen silenciosamente del informe**, induciendo a la dirección a tomar decisiones erróneas sobre la base instalada.
+        </p>
+
+        <div class="th-grid" style="margin-top: 20px;">
+          <div class="th-card">
+            <h4><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> El Escenario de Pérdida de Tuplas (La Trampa del INNER JOIN)</h4>
+            <p>
+              Una consulta de reporte diseñada para listar la cartera total de clientes:
+            </p>
+            <pre class="th-snippet">-- ⚠️ Omite clientes inactivos o sin obligaciones:
+SELECT c.cliente_id, c.nombre, cr.saldo_actual
+FROM   clientes_cartera c
+INNER JOIN creditos cr ON c.cliente_id = cr.cliente_id;</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ⚠️ Consecuencia: Clientes corporativos de alto valor como <em>'Distribuidora Andina S.A.S.'</em> que no tienen créditos vigentes son descartados de raíz, reportando una base de usuarios inferior a la real.
+            </p>
+          </div>
+
+          <div class="th-card">
+            <h4><i class="fa-solid fa-shield-halved" style="color: var(--accent-primary);"></i> Preservación Defensiva con LEFT JOIN y COALESCE</h4>
+            <p>
+              Uso explícito de <strong><code>LEFT OUTER JOIN</code></strong> normalizando valores ausentes:
+            </p>
+            <pre class="th-snippet">-- ✅ Preserva la totalidad del universo de clientes:
+SELECT c.cliente_id, c.nombre,
+       COALESCE(cr.saldo_actual, 0.00) AS saldo_cartera
+FROM   clientes_cartera c
+LEFT JOIN creditos cr ON c.cliente_id = cr.cliente_id;</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600;">
+              ✅ Resultado en Producción: Toda la base de clientes se mantiene visible en el balance, asignando <code>$0.00</code> a aquellos que no tienen deuda viva.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL: ÁLGEBRA DE COMBINACIÓN
+           =================================================================== -->
+      <section id="sec-teoria-joins" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: Álgebra Relacional de Combinación</h2>
+            <p class="subtitle">De la teoría de conjuntos y el producto cartesiano a los operadores de inclusión y exclusión</p>
+          </div>
+        </div>
+
+        <p>
+          En el Álgebra Relacional de Edgar F. Codd, el operador de combinación no es una operación atómica básica, sino una **operación derivada de alta abstracción** construida a partir del Producto Cartesiano ($\times$) y la Selección ($\sigma$):
+        </p>
+
+        <div class="th-grid" style="margin: 20px 0;">
+          <div class="th-card">
+            <h4 style="color: #064e3b;"><i class="fa-solid fa-circle-nodes"></i> 1. Theta Join ($\bowtie_\theta$)</h4>
+            <p>Es formalmente un Producto Cartesiano seguido de una Selección: $$R \bowtie_\theta S = \sigma_\theta(R \times S)$$. Cuando el predicado $\theta$ es la igualdad ($=$), recibe el nombre de <strong>Equi-Join</strong>.</p>
+          </div>
+          <div class="th-card">
+            <h4 style="color: #0369a1;"><i class="fa-solid fa-arrows-split-up-and-left"></i> 2. Outer Joins ($⟕, ⟖, ⟗$)</h4>
+            <p>Operadores diseñados para **preservar información incompleta** ante valores nulos:
+            <br>• <strong>Left Outer Join ($R ⟕ S$):</strong> Preserva todas las tuplas de $R$.
+            <br>• <strong>Full Outer Join ($R ⟗ S$):</strong> Preserva todas las tuplas de ambas relaciones.</p>
+          </div>
+          <div class="th-card" style="border-top: 4px solid #10b981;">
+            <h4 style="color: #064e3b;"><i class="fa-solid fa-filter-circle-xmark"></i> 3. Semi-Join & Anti-Join</h4>
+            <p>• <strong>Semi-Join ($R \ltimes S$):</strong> Retorna tuplas de $R$ que coinciden en $S$ sin duplicar filas.  
+            <br>• <strong>Anti-Join ($R \rhd S$):</strong> Retorna tuplas de $R$ que <strong>no tienen pareja</strong> en $S$ ($R - (R \ltimes S)$).</p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-table-cells"></i> Taxonomía de los 7 Modos de Combinación Relacional</h3>
+
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tipo de JOIN</th>
+              <th>Notación Formal</th>
+              <th>Semántica de Conjuntos</th>
+              <th>Tratamiento de Nulos</th>
+              <th>Uso Típico en Ingeniería</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>INNER JOIN</strong></td>
+              <td>$$R \bowtie_{R.k = S.k} S$$</td>
+              <td>Intersección estricta ($A \cap B$)</td>
+              <td>Descarta tuplas con llaves nulas o sin pareja.</td>
+              <td>Consultas donde solo importan las entidades con relaciones activas.</td>
+            </tr>
+            <tr>
+              <td><strong>LEFT JOIN</strong></td>
+              <td>$$R ⟕ S$$</td>
+              <td>Todo $A$ + coincidencias de $B$</td>
+              <td>Rellena columnas de $S$ con <code>NULL</code> si no hay pareja.</td>
+              <td>Reportes integrales donde no se puede omitir ninguna fila de la tabla maestra.</td>
+            </tr>
+            <tr>
+              <td><strong>RIGHT JOIN</strong></td>
+              <td>$$R ⟖ S$$</td>
+              <td>Todo $B$ + coincidencias de $A$</td>
+              <td>Rellena columnas de $R$ con <code>NULL</code> si no hay pareja.</td>
+              <td>Equivalente simétrico a <code>S LEFT JOIN R</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>FULL OUTER JOIN</strong></td>
+              <td>$$R ⟗ S$$</td>
+              <td>Unión completa ($A \cup B$)</td>
+              <td>Rellena con <code>NULL</code> en ambos lados según falte coincidencia.</td>
+              <td>Conciliación de inventarios, auditoría contable y sincronización bidireccional.</td>
+            </tr>
+            <tr>
+              <td><strong>CROSS JOIN</strong></td>
+              <td>$$R \times S$$</td>
+              <td>Producto Cartesiano ($|A| \times |B|$)</td>
+              <td>Genera todas las combinaciones posibles sin evaluar nulos.</td>
+              <td>Matrices combinatorias (ej. tallas $\times$ colores $\times$ sucursales).</td>
+            </tr>
+            <tr>
+              <td><strong>SELF JOIN</strong></td>
+              <td>$$R \bowtie \rho(R)$$</td>
+              <td>Autovinculación de la misma relación</td>
+              <td>Depende del tipo de join elegido (INNER o LEFT).</td>
+              <td>Estructuras jerárquicas recursivas (empleado $\rightarrow$ jefe, categoría $\rightarrow$ padre).</td>
+            </tr>
+            <tr>
+              <td><strong>ANTI JOIN</strong></td>
+              <td>$$R \rhd S \equiv R - (R \ltimes S)$$</td>
+              <td>Diferencia de conjuntos ($A - B$)</td>
+              <td>Identifica tuplas de $S$ con <code>IS NULL</code> tras un <code>LEFT JOIN</code>.</td>
+              <td>Detección de registros huérfanos, clientes sin compras o productos sin stock.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario de Palabras Clave</h2>
+            <p class="subtitle">Sintaxis formal, comportamiento interno en el motor relacional y soporte multi-motor</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. INNER JOIN -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">INNER JOIN ... ON</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL-92</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT columnas
+FROM   tabla_a a
+INNER JOIN tabla_b b ON a.llave_fk = b.llave_pk;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Retorna exclusivamente los empleados que tienen un departamento asignado válido
+SELECT e.empleado_id, e.nombre, d.nombre AS departamento
+FROM   empleados e
+INNER JOIN departamentos d ON e.depto_id = d.depto_id;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Evalúa la condición booleana de emparejamiento fila por fila. Si la condición resulta en <code>FALSE</code> o <code>UNKNOWN</code> (por valores nulos en la clave), la tupla es eliminada del resultado final.</li>
+              <li><strong>Conmutatividad:</strong> La operación es algebraicamente conmutativa ($A \bowtie B \equiv B \bowtie A$) en cuanto a tuplas resultantes.</li>
+              <li><strong>Algoritmos de Motor:</strong> El optimizador de costos (CBO) decide entre <em>Nested Loop Join</em> (tablas pequeñas o índices existentes), <em>Hash Join</em> (grandes volúmenes en memoria) o <em>Merge Join</em> (tablas previamente ordenadas).</li>
+            </ul>
+          </div>
+
+          <!-- 2. LEFT JOIN -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">LEFT [OUTER] JOIN ... ON</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL-92</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT columnas
+FROM   tabla_maestra_izquierda a
+LEFT JOIN tabla_detalle_derecha b ON a.llave_id = b.llave_fk;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Conserva todos los clientes, desplegando NULL si no tienen créditos asociados
+SELECT c.cliente_id, c.nombre, 
+       COALESCE(cr.monto_desembolsado, 0.00) AS monto_credito,
+       COALESCE(cr.estado, 'SIN_OBLIGACIONES') AS estado_credito
+FROM   clientes_cartera c
+LEFT JOIN creditos cr ON c.cliente_id = cr.cliente_id;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Preservación Asimétrica:</strong> Garantiza que todas las filas de la tabla izquierda (`tabla_a`) aparezcan en el resultado al menos una vez.</li>
+              <li><strong>Generación de Nulos:</strong> Si una tupla izquierda no tiene ninguna correspondencia en la tabla derecha, las columnas de la tabla derecha se rellenan sintéticamente con valores <code>NULL</code>.</li>
+              <li><strong>Multiplicación de Filas:</strong> Si una tupla izquierda coincide con múltiples registros derechos (1:N), la fila izquierda se duplicará para cada coincidencia.</li>
+            </ul>
+          </div>
+
+          <!-- 3. RIGHT & FULL OUTER JOIN -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">RIGHT & FULL OUTER JOIN</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL-92</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT columnas FROM a RIGHT JOIN b ON a.id = b.id;
+SELECT columnas FROM a FULL OUTER JOIN b ON a.id = b.id;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Conciliación total: identifica departamentos sin empleados y empleados sin departamento
+SELECT e.nombre AS empleado, d.nombre AS departamento
+FROM   empleados e
+FULL OUTER JOIN departamentos d ON e.depto_id = d.depto_id;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>FULL OUTER JOIN:</strong> Representa la unión conjuntista completa con preservación de huérfanos en ambos lados ($R ⟗ S$).</li>
+              <li><strong>Soporte Multi-Motor:</strong> Es universal en DuckDB, PostgreSQL, SQL Server y Oracle. En MySQL/MariaDB no existe la cláusula nativa <code>FULL OUTER JOIN</code>; debe emularse mediante <code>LEFT JOIN ... UNION ... RIGHT JOIN</code>.</li>
+            </ul>
+          </div>
+
+          <!-- 4. ANTI-JOIN -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">ANTI-JOIN (LEFT JOIN ... WHERE NULL)</span>
+              <span class="keyword-entry-badge">Patrón Algebraico Defensivo</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT a.*
+FROM   tabla_a a
+LEFT JOIN tabla_b b ON a.id = b.id
+WHERE  b.id IS NULL;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Detecta clientes registrados que JAMÁS han solicitado un crédito (Diferencia A - B)
+SELECT c.cliente_id, c.nombre, c.ciudad
+FROM   clientes_cartera c
+LEFT JOIN creditos cr ON c.cliente_id = cr.cliente_id
+WHERE  cr.credito_id IS NULL;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Ejecuta un <code>LEFT JOIN</code> y luego aplica un filtro estricto <code>WHERE b.clave_pk IS NULL</code> para conservar únicamente las filas huérfanas de la izquierda.</li>
+              <li><strong>Ventaja sobre NOT IN:</strong> A diferencia de <code>WHERE id NOT IN (SELECT id FROM b)</code> (que colapsa retornando 0 filas si la subconsulta contiene un solo <code>NULL</code>), el patrón Anti-Join es 100% determinista y seguro ante valores nulos.</li>
+            </ul>
+          </div>
+
+          <!-- 5. SELF JOIN -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SELF JOIN (Autovinculación Jerárquica)</span>
+              <span class="keyword-entry-badge">Patrón Estructural Relacional</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT sub.columna, jefe.columna
+FROM   tabla sub
+[INNER | LEFT] JOIN tabla jefe ON sub.jefe_id = jefe.id;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Despliega la relación jerárquica organizacional subordinado -> supervisor directo
+SELECT sub.empleado_id,
+       sub.nombre AS empleado,
+       sub.salario AS salario_empleado,
+       COALESCE(jefe.nombre, 'MÁXIMA AUTORIDAD (CEO)') AS supervisor_directo
+FROM   empleados sub
+LEFT JOIN empleados jefe ON sub.jefe_id = jefe.empleado_id;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Renombramiento Obligatorio:</strong> Requiere el uso indispensable de alias de tabla mediante el operador formal de renombramiento ($\rho$) para distinguir entre el rol del subordinado y el rol del jefe.</li>
+              <li><strong>Manejo de la Raíz del Árbol:</strong> Debe utilizarse <code>LEFT JOIN</code> para evitar descartar al director general o nodo raíz, quien tiene <code>jefe_id = NULL</code>.</li>
+            </ul>
+          </div>
+
+          <!-- 6. OPERADORES DE CONJUNTOS -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">UNION [ALL], INTERSECT & EXCEPT</span>
+              <span class="keyword-entry-badge">Operadores Conjuntistas ANSI</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">SELECT col1, col2 FROM a  UNION [ALL]  SELECT col1, col2 FROM b;
+SELECT col1, col2 FROM a  INTERSECT    SELECT col1, col2 FROM b;
+SELECT col1, col2 FROM a  EXCEPT       SELECT col1, col2 FROM b;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- 1. Unión rápida sin deduplicación (alta eficiencia):
+SELECT ciudad, 'CLIENTE' AS origen FROM clientes_cartera
+UNION ALL
+SELECT ciudad, 'DEPTO' AS origen FROM departamentos;
+
+-- 2. Intersección (ciudades compartidas):
+SELECT ciudad FROM clientes_cartera INTERSECT SELECT ciudad FROM departamentos;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>UNION vs. UNION ALL:</strong> <code>UNION</code> ejecuta internamente una etapa de ordenamiento (*Sort Unique*) o tabla Hash para eliminar duplicados, consumiendo CPU. <code>UNION ALL</code> concatena directamente los conjuntos en tiempo constante $O(1)$.</li>
+              <li><strong>Compatibilidad de Tipos:</strong> Las consultas combinadas deben tener la misma aridad (número de columnas) y tipos de datos compatibles posicionalmente.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO DE CÓDIGO SQL & DESGLOSE LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL & Desglose Línea a Línea</h2>
+            <p class="subtitle">Anatomía de una consulta avanzada combinando INNER JOIN, Subconsulta Agregada y Patrones LIKE</p>
+          </div>
+        </div>
+
+        <p>
+          Analicemos una consulta corporativa de alta complejidad que combina la tabla principal de clientes con una subconsulta derivada que calcula la mora acumulada, filtrando simultáneamente por sufijos de correo electrónico con <code>ILIKE</code>:
+        </p>
+
+        <pre class="th-snippet">SELECT 
+    c.cliente_id,
+    c.nombre AS cliente_corporativo,
+    c.email,
+    mora_info.creditos_en_mora,
+    mora_info.saldo_mora_total
+FROM clientes_cartera c
+INNER JOIN (
+    SELECT 
+        cliente_id,
+        COUNT(credito_id) AS creditos_en_mora,
+        SUM(saldo_actual) AS saldo_mora_total
+    FROM creditos
+    WHERE estado ILIKE '%mora%'
+    GROUP BY cliente_id
+) mora_info ON c.cliente_id = mora_info.cliente_id
+WHERE c.email ILIKE '%.co'
+   OR c.nombre ILIKE '%S.A.%';</pre>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-list-check"></i> Desglose Anatómico del Plan Relacional</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Línea SQL</th>
+              <th style="width: 260px;">Cláusula / Operador</th>
+              <th>Mecánica Interna en el Motor de Base de Datos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>L1 - L6</code></td>
+              <td><code>SELECT c.cliente_id, c.nombre, ...</code><br><strong>Proyección ($\pi$)</strong></td>
+              <td>Define la aridad de la relación de salida. Proyecta datos identificatorios del cliente combinados con las métricas sumarizadas provenientes de la subconsulta derivada.</td>
+            </tr>
+            <tr>
+              <td><code>L7</code></td>
+              <td><code>FROM clientes_cartera c</code></td>
+              <td>Instancia el escaneo sobre la relación principal de clientes asignando el alias $\rho_c(\text{clientes})$.</td>
+            </tr>
+            <tr>
+              <td><code>L8 - L15</code></td>
+              <td><code>INNER JOIN (SELECT ... GROUP BY) mora_info</code><br><strong>Subconsulta Derivada (Inline View)</strong></td>
+              <td>El optimizador materializa una tabla temporal en memoria con la agregación de créditos morosos pre-calculada. Esto <strong>elimina el riesgo de Fan-out</strong> antes de realizar la combinación.</td>
+            </tr>
+            <tr>
+              <td><code>L12</code></td>
+              <td><code>WHERE estado ILIKE '%mora%'</code></td>
+              <td>Filtra insensiblemente a mayúsculas/minúsculas dentro de la tabla de créditos antes de ejecutar el agrupamiento (Predicate Pushdown).</td>
+            </tr>
+            <tr>
+              <td><code>L14</code></td>
+              <td><code>GROUP BY cliente_id</code></td>
+              <td>Reduce la cardinalidad de la tabla de créditos a una sola tupla por cliente moroso, conteniendo el total de créditos y la sumatoria del saldo.</td>
+            </tr>
+            <tr>
+              <td><code>L15</code></td>
+              <td><code>ON c.cliente_id = mora_info.cliente_id</code></td>
+              <td>Ejecuta un <em>Equi-Join</em> mediante una tabla Hash sobre la clave primaria <code>cliente_id</code>.</td>
+            </tr>
+            <tr>
+              <td><code>L16 - L17</code></td>
+              <td><code>WHERE c.email ILIKE '%.co' OR ...</code></td>
+              <td>Filtro posterior que selecciona exclusivamente empresas nacionales con dominio colombiano o razón social constituida como Sociedad Anónima.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ERD & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario de Datos</h2>
+            <p class="subtitle">Esquema corporativo de 4 entidades para evaluación de emparejamientos y nulabilidad</p>
+          </div>
+        </div>
+
+        <p>
+          El dominio de este módulo modela la relación organizacional de departamentos y colaboradores combinada con el ecosistema de cartera y obligaciones financieras:
+        </p>
+
+        <div class="mermaid-box">
+          <h4>📐 Diagrama Entidad-Relación (MER/DER) — Módulo 03: Organización & Cartera</h4>
+          <div class="mermaid">
+erDiagram
+    DEPARTAMENTOS ||--o{ EMPLEADOS : "agrupa"
+    EMPLEADOS ||--o{ EMPLEADOS : "supervisa"
+    CLIENTES_CARTERA ||--o{ CREDITOS : "titular_de"
+
+    DEPARTAMENTOS {
+        int depto_id PK
+        string nombre
+        decimal presupuesto
+        string ciudad
+    }
+
+    EMPLEADOS {
+        int empleado_id PK
+        string nombre
+        decimal salario
+        int jefe_id FK
+        int depto_id FK
+    }
+
+    CLIENTES_CARTERA {
+        int cliente_id PK
+        string nombre
+        string doc_identidad
+        string ciudad
+        string email
+    }
+
+    CREDITOS {
+        int credito_id PK
+        int cliente_id FK
+        decimal monto_desembolsado
+        decimal saldo_actual
+        string estado
+    }
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-table-list"></i> Diccionario de Datos Físico (Especificación DuckDB / ANSI)</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricciones</th>
+              <th>Propósito Didáctico en Casos de JOIN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>DEPARTAMENTOS</code></td>
+              <td><code>depto_id = 5</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Unidad de 'I+D' <strong>sin empleados</strong> asignados (útil para probar <code>RIGHT JOIN</code> y <code>ANTI JOIN</code>).</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>depto_id = NULL</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>NULLABLE FK</code></td>
+              <td>Consultor externo (ID 107) <strong>sin departamento</strong> (útil para probar <code>LEFT JOIN</code> y huérfanos).</td>
+            </tr>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>jefe_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>NULLABLE FK</code></td>
+              <td>Clave recursiva para modelar jerarquías con <code>SELF JOIN</code> (el CEO tiene <code>jefe_id = NULL</code>).</td>
+            </tr>
+            <tr>
+              <td><code>CLIENTES_CARTERA</code></td>
+              <td><code>cliente_id = 5</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>'Distribuidora Andina' <strong>sin créditos</strong> para verificar retención de tuplas con <code>LEFT JOIN</code>.</td>
+            </tr>
+            <tr>
+              <td><code>CREDITOS</code></td>
+              <td><code>estado</code></td>
+              <td><code>VARCHAR</code></td>
+              <td><code>CHECK IN (...)</code></td>
+              <td>Valores: <code>'VIGENTE'</code>, <code>'MORA'</code>, <code>'PAGADO'</code> para joins con subconsultas agregadas.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Motor de JOINs</h2>
+            <p class="subtitle">Inspecciona cómo el motor empareja claves, descarta huérfanos o rellena campos con NULL</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header">
+            <span class="pipeline-title"><i class="fa-solid fa-sliders"></i> Selector de Tipo de JOIN en Tiempo Real</span>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <p style="font-weight: 700; font-size: 0.9rem; color: var(--accent-dark); margin-bottom: 12px;">
+              Selecciona el tipo de JOIN para visualizar el pipeline de evaluación:
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="sim-btn join-btn active" data-type="inner">
+                <i class="fa-solid fa-circle-dot"></i> INNER JOIN (Intersección Estricta)
+              </button>
+              <button class="sim-btn join-btn" data-type="left">
+                <i class="fa-solid fa-arrow-left"></i> LEFT JOIN (Preservar Izquierda)
+              </button>
+              <button class="sim-btn join-btn" data-type="full">
+                <i class="fa-solid fa-arrows-left-right"></i> FULL OUTER JOIN (Unión Total)
+              </button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;">
+              💡 <em>Observa cómo el motor trata al 'Consultor Externo X' (sin departamento) y al 'Departamento Nivel 6' (sin empleados).</em>
+            </p>
+          </div>
+
+          <!-- Contenedor del Pipeline en 3 Etapas renderizado dinámicamente por app.js -->
+          <div id="joinSimDisplay"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES & CONSIDERACIONES DE RENDIMIENTO
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones y Consideraciones de Rendimiento</h2>
+            <p class="subtitle">Errores de consulta que multiplican métricas de negocio o degradan el plan de ejecución</p>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 1: Fan-out Effect -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 1: El Efecto Fan-Out (Multiplicación Silenciosa de Agregados)</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Al unir tablas en relaciones 1:N sucesivas (ej. Clientes $\rightarrow$ Créditos $\rightarrow$ Pagos) y calcular sumatorias directas (<code>SUM</code>), las tuplas de créditos se duplican por cada pago registrado, multiplicando artificialmente el valor total de la cartera.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Fan-Out Peligroso (Saldo Multiplicado)</span>
+<pre>-- Si un crédito tiene 3 pagos, su saldo se suma 3 veces:
+SELECT c.nombre, SUM(cr.saldo_actual) AS saldo_errado
+FROM   clientes_cartera c
+JOIN   creditos cr ON c.cliente_id = cr.cliente_id
+JOIN   pagos_cartera p ON cr.credito_id = p.credito_id
+GROUP BY c.nombre;</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Agregación Pre-Join Defensiva</span>
+<pre>-- Agrega los pagos antes de combinarlos con créditos:
+SELECT c.nombre, SUM(cr.saldo_actual) AS saldo_real
+FROM   clientes_cartera c
+JOIN   creditos cr ON c.cliente_id = cr.cliente_id
+GROUP BY c.nombre;</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 2: WHERE en tabla derecha de LEFT JOIN -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 2: Filtrar Columnas de la Tabla Derecha en el WHERE en lugar del ON</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Colocar un predicado sobre la tabla derecha en la cláusula <code>WHERE</code> (ej. <code>WHERE cr.estado = 'VIGENTE'</code>) destruye el comportamiento del <code>LEFT JOIN</code>, porque las filas que rellenaron con <code>NULL</code> son descartadas, convirtiéndolo inadvertidamente en un <code>INNER JOIN</code>.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Degrada a INNER JOIN (Descarta Nulos)</span>
+<pre>SELECT c.nombre, cr.saldo_actual
+FROM   clientes_cartera c
+LEFT JOIN creditos cr ON c.cliente_id = cr.cliente_id
+WHERE  cr.estado = 'VIGENTE'; -- ⚠️ Elimina clientes sin crédito</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Filtro Embebido en la Cláusula ON</span>
+<pre>SELECT c.nombre, cr.saldo_actual
+FROM   clientes_cartera c
+LEFT JOIN creditos cr ON c.cliente_id = cr.cliente_id
+                     AND cr.estado = 'VIGENTE'; -- ✅ Conserva clientes</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 3: NATURAL JOIN en Producción -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 3: Uso de NATURAL JOIN en Código de Aplicación Corporativo</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            El <code>NATURAL JOIN</code> empareja automáticamente columnas con nombres idénticos. Si en una actualización de esquema se agrega una columna de auditoría como <code>fecha_modificacion</code> a ambas tablas, el motor la incluirá silenciosamente en el predicado de unión, rompiendo consultas que retornaban datos válidos.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CUADERNO EN GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Laboratorio en Google Colab con DuckDB</h2>
+            <p class="subtitle">Pon a prueba tus conocimientos con ejercicios guiados y ejecuta el cuaderno interactivo</p>
+          </div>
+        </div>
+
+        <!-- Reto 1 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 1: SELF JOIN con Diferencia Salarial Organizacional
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe una consulta que compare las tuplas de empleados con sus supervisores directos mediante un <code>SELF JOIN</code>, desplegando exclusivamente aquellos subordinados cuyo salario sea **estrictamente mayor al salario de su jefe directo**.
+          </p>
+          
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 1:
+SELECT 
+    sub.empleado_id,
+    sub.nombre AS subordinado,
+    sub.salario AS salario_subordinado,
+    jefe.nombre AS jefe_directo,
+    jefe.salario AS salario_jefe
+FROM empleados sub
+JOIN empleados jefe ON sub.jefe_id = jefe.empleado_id
+WHERE sub.salario > jefe.salario;</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Se renombra la tabla <code>empleados</code> con dos alias (<code>sub</code> y <code>jefe</code>) y se empareja la clave foránea <code>sub.jefe_id</code> con la clave primaria <code>jefe.empleado_id</code>, aplicando el filtro de desigualdad salarial en el <code>WHERE</code>.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 2 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 2: LEFT JOIN con Subconsulta Agregada de Obligaciones Pagadas
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Genera un informe con todos los clientes de cartera desplegando el conteo de créditos pagados y el monto acumulado saldado. Si un cliente no tiene créditos pagados, la consulta debe desplegar <code>0</code> y <code>0.00</code> utilizando <code>COALESCE</code>.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 2:
+SELECT 
+    c.cliente_id,
+    c.nombre AS cliente,
+    c.ciudad,
+    COALESCE(pagos_info.total_pagado, 0.00) AS total_monto_pagado,
+    COALESCE(pagos_info.num_creditos_pagados, 0) AS creditos_pagados
+FROM clientes_cartera c
+LEFT JOIN (
+    SELECT 
+        cliente_id,
+        COUNT(credito_id) AS num_creditos_pagados,
+        SUM(monto_desembolsado) AS total_pagado
+    FROM creditos
+    WHERE estado = 'PAGADO'
+    GROUP BY cliente_id
+) pagos_info ON c.cliente_id = pagos_info.cliente_id;</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Agrupar los créditos dentro de la subconsulta antes de unirlos con clientes evita el Fan-out y permite que <code>LEFT JOIN</code> preserve a los clientes sin registros morosos o saldados.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 3 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 3: JOIN + Subconsulta con Filtrado por Patrón LIKE
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Obtén todos los departamentos radicados en <strong>'Bogotá'</strong> unidos a una subconsulta que seleccione el número de colaboradores y el salario promedio de aquellos empleados cuyo nombre contenga la letra <code>'a'</code> (sensible o insensiblemente).
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 3:
+SELECT 
+    d.depto_id,
+    d.nombre AS departamento,
+    d.ciudad,
+    emp_a.num_empleados,
+    ROUND(emp_a.salario_promedio, 2) AS salario_promedio
+FROM departamentos d
+JOIN (
+    SELECT 
+        depto_id,
+        COUNT(empleado_id) AS num_empleados,
+        AVG(salario) AS salario_promedio
+    FROM empleados
+    WHERE nombre ILIKE '%a%'
+    GROUP BY depto_id
+) emp_a ON d.depto_id = emp_a.depto_id
+WHERE d.ciudad ILIKE 'Bogotá';</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Se filtra la tabla de empleados por el patrón difuso <code>ILIKE '%a%'</code> antes de agregar por <code>depto_id</code>, y se une con los departamentos de Bogotá.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(16, 185, 129, 0.08); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: var(--accent-dark); margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta todos estos ejemplos en memoria sobre DuckDB, prueba emparejamientos y operadores de conjuntos en tiempo real directamente en tu entorno Colab:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_3_JOINS_CONJUNTOS.ipynb" download class="btn-colab" style="background: #065f46;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo02_filtrado.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 02 (Filtrado & LIKE)
+        </a>
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal General
+        </a>
+        <a href="modulo04_normalizacion.html" class="pager-btn primary">
+          Siguiente: Módulo 04 (Normalización 1FN-5FN) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

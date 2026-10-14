@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 08: Optimización de Consultas (EXPLAIN CBO), Índices B-Tree & Manipulación de Datos JSON — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #4f46e5;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #312e81;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a5b4fc;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0e7ff;
+      color: #3730a3;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #4f46e5;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #4f46e5;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #e0e7ff);
+    }
+
+    .btn-explain-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-explain-toggle.active {
+      background: #4f46e5 !important;
+      color: #ffffff !important;
+      border-color: #4f46e5 !important;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_8_OPTIM_JSON.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-file-contract"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html" class="active"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Contenido Central Principal -->
+    <main class="main-content">
+
+      <!-- Hero Banner del Módulo -->
+      <section class="module-hero" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);">
+        <div class="hero-badge-wrap">
+          <span class="hero-badge" style="background: rgba(224, 231, 255, 0.2); color: #e0e7ff;"><i class="fa-solid fa-layer-group"></i> FASE IV: ANALÍTICA & OPTIMIZACIÓN</span>
+          <span class="hero-subbadge" style="background: #e0e7ff; color: #3730a3;">CBO, B-Tree & Semi-Structured JSON</span>
+        </div>
+        <h1 class="hero-title">Módulo 08: Optimización de Consultas (EXPLAIN CBO), Índices B-Tree & Manipulación de Datos JSON</h1>
+        <p class="hero-lead">
+          Del modelo matemático de costes de Patricia Selinger (System R) y el análisis de planes físicos con <code>EXPLAIN ANALYZE</code> a la arquitectura balanceada de índices B-Tree y la coexistencia relacional-NoSQL con documentos JSON nativos en DuckDB.
+        </p>
+
+        <div class="hero-meta-bar">
+          <div class="meta-item"><i class="fa-solid fa-calculator"></i> Patricia Selinger & Goetz Graefe</div>
+          <div class="meta-item"><i class="fa-solid fa-network-wired"></i> B-Tree Index Scan ($O(\log N)$)</div>
+          <div class="meta-item"><i class="fa-solid fa-file-code"></i> JSON Híbrido Relacional (ANSI 2016)</div>
+          <div class="meta-item"><i class="fa-solid fa-microchip"></i> DuckDB Vectorized Pipeline</div>
+        </div>
+      </section>
+
+      <!-- Barra de Navegación Secundaria Interna (Scrollspy) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto-optimizacion" class="active"><i class="fa-solid fa-gauge-high"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-optimizacion"><i class="fa-solid fa-brain"></i> 02. Cimiento Formal (Selinger)</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Laboratorio SQL</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador CBO</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos en Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO EMPRESARIAL & EL PROBLEMA EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-contexto-optimizacion" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#e0e7ff; color:#4338ca;"><i class="fa-solid fa-gauge-high"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">La degradación por escala: cómo una consulta de 15 milisegundos en desarrollo se convierte en un colapso de 45 segundos en producción</p>
+          </div>
+        </div>
+
+        <p>
+          En los entornos de producción reales de <strong>Empresa CUN</strong> y cualquier arquitectura corporativa moderna, el volumen de datos cambia cualitativamente el comportamiento del motor SQL. Una consulta que en un ambiente local de prueba con 1,000 registros responde instantáneamente, puede saturar la CPU, vaciar el búfer pool de memoria RAM y bloquear las transacciones concurrentes cuando la tabla alcanza 10,000,000 de filas.
+        </p>
+
+        <div class="th-grid">
+          <div class="th-card" style="border-top: 4px solid #ef4444;">
+            <h4 style="color: #991b1b;"><i class="fa-solid fa-circle-xmark"></i> El Enfoque Ingenuo: La Base de Datos como "Caja Negra"</h4>
+            <p>
+              Desarrolladores sin formación avanzada en bases de datos suelen aplicar soluciones intuitivas pero contraproducentes:
+            </p>
+            <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-main); line-height: 1.5; margin-bottom: 10px;">
+              <li><strong>Crear índices a todas las columnas a ciegas:</strong> Cada índice penaliza drásticamente las operaciones <code>INSERT</code>, <code>UPDATE</code> y <code>DELETE</code>, cuadruplicando el espacio en disco.</li>
+              <li><strong>Ignorar el plan de ejecución:</strong> Desconocer si el motor está ejecutando un <code>Seq Scan</code> (lectura secuencial de millones de bloques) o un <code>Index Scan</code>.</li>
+              <li><strong>Almacenamiento NoSQL descuidado ("JSON Dump"):</strong> Guardar entidades relacionales enteras en cadenas JSON sin tipos ni restricciones, perdiendo indexación, estadísticas e integridad referencial.</li>
+            </ul>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              💥 Resultado en Producción: Saturación del canal de I/O de disco, colas de espera en los procesadores y caídas por Out-Of-Memory (OOM).
+            </p>
+          </div>
+
+          <div class="th-card" style="border-top: 4px solid #4f46e5;">
+            <h4 style="color: #3730a3;"><i class="fa-solid fa-shield-halved"></i> La Disciplina CBO: Diagnóstico Científico & Modelo Híbrido</h4>
+            <p>
+              El Ingeniero de Datos Senior y el Arquitecto Relacional aplican metodología cuantitativa:
+            </p>
+            <ul style="padding-left: 18px; font-size: 0.88rem; color: var(--text-main); line-height: 1.5; margin-bottom: 10px;">
+              <li><strong>Auditoría con EXPLAIN ANALYZE:</strong> Comparar el costo estimado de la fase de planificación frente al tiempo real de CPU y páginas de I/O leídas.</li>
+              <li><strong>Diseño Estratégico de Índices B-Tree:</strong> Crear índices compuestos respetando la regla del prefijo izquierdo para lograr lecturas logarítmicas $O(\log N)$.</li>
+              <li><strong>Arquitectura Híbrida Relacional-JSON:</strong> Mantener la estructura transaccional pura (PK, FK, salarios, fechas) en columnas normalizadas y modelar atributos dinámicos polimórficos en documentos JSON con operadores nativos tipados.</li>
+            </ul>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #4f46e5; font-weight: 600;">
+              ⚡ Beneficio en Producción: Consultas sub-milisegundas deterministas, ahorro del 99% de lecturas de disco y retención del Buffer Pool.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL
+           =================================================================== -->
+      <section id="sec-teoria-optimizacion" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#e0e7ff; color:#4338ca;"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: CBO de Selinger, Complejidad B-Tree & Álgebra JSON</h2>
+            <p class="subtitle">Formulación matemática del Cost-Based Optimizer, selectividad de predicados, árboles balanceados y semántica semiestructurada</p>
+          </div>
+        </div>
+
+        <p>
+          En 1979, <strong>Patricia Selinger</strong> y el equipo de IBM System R sentaron las bases matemáticas del <strong>Optimizador Basado en Costes (CBO)</strong>, perfeccionado posteriormente por <strong>Goetz Graefe</strong> con los frameworks Volcano y Cascades (adoptados por PostgreSQL, DuckDB y SQL Server).
+        </p>
+
+        <div class="concept-callout" style="border-left: 4px solid #4f46e5; background: rgba(79, 70, 229, 0.05); padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="color: #3730a3; margin-bottom: 8px;"><i class="fa-solid fa-square-root-variable"></i> Función Formal de Coste del Optimizador Relacional</h4>
+          <p>
+            Dado un espacio de planes de ejecución lógicamente equivalentes $\{P_1, P_2, \dots, P_k\}$, el CBO selecciona el plan físico $P^*$ que minimiza la función escalar de costo estimado:
+          </p>
+          $$P^* = \arg\min_{P} \Big( W_{\text{I/O}} \cdot N_{\text{páginas\_leídas}}(P) + W_{\text{CPU}} \cdot N_{\text{tuplas\_evaluadas}}(P) + W_{\text{CPU\_op}} \cdot N_{\text{operaciones\_algorítmicas}}(P) \Big)$$
+          <p style="margin-top: 10px;">
+            Donde $W_{\text{I/O}}$ pondera el acceso a almacenamiento persistente (históricamente $\approx 1.0$ para disco rotacional o $0.25$ para SSD NVMe) y $W_{\text{CPU}}$ pondera la evaluación de predicados en memoria RAM ($\approx 0.01$).
+          </p>
+        </div>
+
+        <h3>1. Estimación de Cardinalidad y Selectividad de Predicados ($\sigma$)</h3>
+        <p>
+          Para calcular el número esperado de tuplas resultantes $|E|$ que fluirán a través de los operadores del árbol de ejecución, el motor utiliza fórmulas de selectividad probabilística basadas en catálogos de metadatos estadísticos (histogramas equi-width y equi-depth):
+        </p>
+
+        <div class="table-responsive">
+          <table class="table-formal">
+            <thead>
+              <tr>
+                <th>Tipo de Predicado</th>
+                <th>Fórmula Teórica de Selectividad ($S$)</th>
+                <th>Cardinalidad Estimada ($|E|$)</th>
+                <th>Supuesto Matemático Subyacente</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Igualdad Puntual:</strong><br><code>WHERE columna = const</code></td>
+                <td>$$S = \frac{1}{|V(\text{columna}, R)|}$$</td>
+                <td>$$|E| = |R| \times \frac{1}{|V(\text{columna}, R)|}$$</td>
+                <td>Distribución uniforme de valores y ausencia de sesgo extremo (valores distintos $V$).</td>
+              </tr>
+              <tr>
+                <td><strong>Rango de Desigualdad:</strong><br><code>WHERE columna > const</code></td>
+                <td>$$S = \frac{\max(\text{col}) - \text{const}}{\max(\text{col}) - \min(\text{col})}$$</td>
+                <td>$$|E| = |R| \times S$$</td>
+                <td>Densidad lineal continua entre los extremos estadísticos $\min$ y $\max$.</td>
+              </tr>
+              <tr>
+                <td><strong>Conjunción (AND):</strong><br><code>WHERE P1 AND P2</code></td>
+                <td>$$S = S(P_1) \times S(P_2)$$</td>
+                <td>$$|E| = |R| \times S(P_1) \times S(P_2)$$</td>
+                <td>Independencia estadística entre los atributos (Teorema de Bayes).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top: 32px;">2. Topología y Complejidad del Índice B-Tree (Bayer & McCreight)</h3>
+        <p>
+          El índice B-Tree (o variante B+Tree) es la estructura de almacenamiento balanceada por excelencia en motores relacionales. En un árbol de orden $m$ con $N$ tuplas:
+        </p>
+        <ul class="th-features-list">
+          <li><strong>Altura Acotada:</strong> La altura máxima está estrictamente acotada por $h \le \left\lceil \log_{\lceil m/2 \rceil} \left( \frac{N+1}{2} \right) \right\rceil$. Para $10,000,000$ de filas y un tamaño de página estándar de 8 KB ($m \approx 500$), la altura del árbol es de solo <strong>3 niveles</strong>.</li>
+          <li><strong>Búsqueda en $O(\log N)$ I/O:</strong> Localizar cualquier registro requiere recorrer únicamente $h$ páginas de disco desde la raíz hasta las hojas.</li>
+          <li><strong>Lecturas de Rango Secuenciales:</strong> Las páginas hoja están interconectadas mediante una lista doblemente enlazada, permitiendo recorrer rangos ordenados (ej. <code>WHERE salario BETWEEN 5M AND 8M</code>) con costo lineal sobre el subconjunto.</li>
+        </ul>
+
+        <h3 style="margin-top: 32px;">3. Integración de Estructuras Semiestructuradas (JSON ANSI SQL:2016)</h3>
+        <p>
+          El estándar ANSI SQL:2016 incorporó formalmente los tipos y operadores para documentos semiestructurados JSON. Matemáticamente, un documento JSON $\mathcal{J}$ es un árbol jerárquico tipado:
+        </p>
+        $$\mathcal{J} = \langle K, V \rangle \quad \text{donde } V \in \{\text{String}, \text{Number}, \text{Boolean}, \text{Null}, \text{Array}, \text{Object}\}$$
+        <p>
+          En DuckDB y PostgreSQL, la interacción con documentos JSON preserva el modelo relacional a través de dos mecanismos clave:
+        </p>
+        <ol style="padding-left: 20px; font-size: 0.92rem; line-height: 1.7; color: var(--text-main);">
+          <li><strong>Operadores de Proyección y Extracción de Tipos:</strong> El operador flecha simple <code>-></code> extrae el sub-objeto reteniendo el tipo <code>JSON</code>, mientras que el operador flecha doble <code>->></code> desenrolla el nodo convirtiéndolo a texto escalar nativo (<code>VARCHAR</code>), permitiendo conversiones de tipo directas (<code>CAST(especificaciones->>'cores' AS INT)</code>).</li>
+          <li><strong>Operador de Desempaquetado Relacional (Unnesting):</strong> La función evaluada por tabla <code>UNNEST()</code> actúa como un transformador homomórfico que proyecta una colección interna de cardinalidad $K$ hacia $K$ tuplas relacionales independientes de primer orden.</li>
+        </ol>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE (DISPOSICIÓN VERTICAL ESTRICTA)
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#e0e7ff; color:#4338ca;"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario Anatómico de Palabras Clave</h2>
+            <p class="subtitle">Estructura estricta vertical (Término → Sintaxis → Ejemplo → Detalles Técnicos a 100% de ancho sin columnas ensanduchadas)</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. EXPLAIN & EXPLAIN ANALYZE -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">EXPLAIN & EXPLAIN ANALYZE</span>
+              <span class="keyword-entry-badge">Diagnóstico Físico</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal</div>
+            <pre class="keyword-syntax-box">EXPLAIN [ANALYZE] &lt;sentencia_sql&gt;;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">EXPLAIN ANALYZE
+SELECT e.nombre, d.nombre AS depto, e.salario
+FROM empleados e
+JOIN departamentos d ON e.depto_id = d.depto_id
+WHERE e.salario > 6000000;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Estimación Teórica (EXPLAIN solo):</strong> El optimizador genera el árbol de operadores físicos con el coste estimado, cardinalidad prevista y memoria calculada, <em>sin ejecutar realmente la consulta</em>. Seguro para auditar consultas destructivas en producción.</li>
+              <li><strong>Ejecución Real (EXPLAIN ANALYZE):</strong> El motor <em>ejecuta fácticamente la consulta</em>, midiendo tiempos reales de CPU en milisegundos, número exacto de filas producidas por cada nodo y lecturas de bloques de memoria/disco.</li>
+              <li><strong>Detección de Malas Estimaciones:</strong> Si la cardinalidad estimada difiere por varios órdenes de magnitud respecto a la cardinalidad real (ej. estimó 10 filas pero devolvió 1,000,000), las estadísticas del motor están obsoletas y requieren <code>ANALYZE</code>.</li>
+            </ul>
+          </div>
+
+          <!-- 2. COST-BASED OPTIMIZER (CBO) -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">COST-BASED OPTIMIZER (CBO)</span>
+              <span class="keyword-entry-badge">Motor de Inferencia</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Componentes del Flujo del Optimizador</div>
+            <pre class="keyword-syntax-box">SQL Text ──▶ Parser/Lexer ──▶ Logical Plan ──▶ Rewriter ──▶ Optimizer (CBO) ──▶ Physical Plan ──▶ Execution Engine</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (DuckDB)</div>
+            <pre class="keyword-example-box">-- Forzar inspección de transformaciones lógicas vs físicas en DuckDB:
+PRAGMA explain_output = 'all';
+EXPLAIN SELECT * FROM pedidos WHERE total > 20000000;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Empuje de Predicados (Predicate Pushdown):</strong> El CBO empuja las condiciones del <code>WHERE</code> lo más abajo posible en el árbol relacional, filtrando antes de ejecutar los costosos JOINs.</li>
+              <li><strong>Reordenamiento Óptimo de JOINs:</strong> Evalúa las permutaciones de uniones entre múltiples tablas para unir primero las tablas que produzcan la menor cantidad de tuplas intermedias.</li>
+              <li><strong>Selección Algorítmica Dinámica:</strong> Escoge automáticamente entre Hash Join, Merge Join o Nested Loop basándose en el tamaño de las tablas y la disponibilidad de índices.</li>
+            </ul>
+          </div>
+
+          <!-- 3. SEQ SCAN vs INDEX SCAN -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SEQ SCAN vs INDEX SCAN</span>
+              <span class="keyword-entry-badge">Algoritmos de Acceso</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Mecanismo de Lectura Física</div>
+            <pre class="keyword-syntax-box">SEQ SCAN:   Bloque 0 ──▶ Bloque 1 ──▶ Bloque 2 ──▶ ... ──▶ Bloque N  (Costo O(N))
+INDEX SCAN: Raíz B-Tree ──▶ Nodo Interno ──▶ Hoja Específica ──▶ Puntero a Tupla (Costo O(log N))</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">-- Búsqueda puntual acelerada por índice B-Tree:
+SELECT * FROM empleados WHERE empleado_id = 104; -- Index Scan en PK O(1..log N)
+
+-- Búsqueda sin índice en columna de texto libre:
+SELECT * FROM clientes WHERE categoria_cliente = 'VIP'; -- Seq Scan O(N)</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Cuándo gana el Seq Scan:</strong> Si una consulta recupera más del 15%-25% de todas las filas de la tabla, el optimizador descartará el índice deliberadamente y usará Seq Scan, porque las lecturas secuenciales contiguas de disco son más rápidas que saltar aleatoriamente por punteros de índice.</li>
+              <li><strong>Index-Only Scan:</strong> Si todas las columnas solicitadas en el <code>SELECT</code> ya están contenidas dentro del propio índice B-Tree, el motor lee exclusivamente el índice sin tocar los bloques de datos de la tabla (rendimiento extremo).</li>
+            </ul>
+          </div>
+
+          <!-- 4. HASH JOIN vs NESTED LOOP vs MERGE JOIN -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">HASH JOIN vs NESTED LOOP vs MERGE JOIN</span>
+              <span class="keyword-entry-badge">Algoritmos Físicos de JOIN</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Complejidad Temporal y Espacial Comparativa</div>
+            <pre class="keyword-syntax-box">NESTED LOOP: Tiempo O(N * M), Espacio O(1)      ──▶ Ideal para tablas muy pequeñas o con índice en tabla interna
+HASH JOIN:   Tiempo O(N + M), Espacio O(min(N,M)) ──▶ El estándar en DW / OLAP para tablas grandes no ordenadas
+MERGE JOIN:  Tiempo O(N log N + M log M), Espacio O(1) ──▶ Óptimo cuando ambos conjuntos ya están ordenados por la clave</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">-- DuckDB construye una tabla Hash en memoria de la tabla más pequeña (departamentos)
+-- y escanea secuencialmente la tabla grande (empleados) en tiempo lineal O(N + M):
+SELECT e.nombre, d.nombre 
+FROM empleados e 
+JOIN departamentos d ON e.depto_id = d.depto_id;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Fase Build y Fase Probe en Hash Join:</strong> En la fase <em>Build</em>, el motor lee la relación menor y crea una tabla hash en memoria. En la fase <em>Probe</em>, escanea la relación mayor y busca coincidencias por hash en $O(1)$ amortizado.</li>
+              <li><strong>Peligro de Hash Spill:</strong> Si la tabla menor no cabe en la memoria RAM asignada al buffer pool, el motor debe particionar y volcar a disco (*Grace Hash Join*), degradando el rendimiento.</li>
+            </ul>
+          </div>
+
+          <!-- 5. CREATE INDEX & PREFIJO IZQUIERDO -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">CREATE INDEX & REGLA DEL PREFIJO IZQUIERDO</span>
+              <span class="keyword-entry-badge">Estructuras B-Tree</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal de Creación de Índices</div>
+            <pre class="keyword-syntax-box">CREATE [UNIQUE] INDEX &lt;nombre_indice&gt; ON &lt;tabla&gt; (&lt;col1&gt; [ASC|DESC], &lt;col2&gt; [ASC|DESC], ...);</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">-- Índice compuesto optimizado para filtros departamentales ordenados por salario:
+CREATE INDEX idx_emp_depto_salario ON empleados (depto_id, salario DESC);
+
+-- ✅ APROVECHA EL ÍNDICE (usa el prefijo izquierdo 'depto_id'):
+SELECT * FROM empleados WHERE depto_id = 1 AND salario > 5000000;
+SELECT * FROM empleados WHERE depto_id = 1;
+
+-- ❌ INUTILIZA EL ÍNDICE (omite el prefijo izquierdo 'depto_id'):
+SELECT * FROM empleados WHERE salario > 5000000; -- Forzará Seq Scan</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Regla de Oro del Prefijo Izquierdo:</strong> Un índice compuesto sobre $(A, B, C)$ solo puede acelerar consultas que filtren por $(A)$, por $(A, B)$ o por $(A, B, C)$. No puede ser utilizado si el predicado filtra únicamente por $(B)$ o por $(C)$.</li>
+              <li><strong>Costo de Mantenimiento en DML:</strong> Cada índice añadido penaliza el tiempo de <code>INSERT</code> y <code>UPDATE</code>, pues el motor debe realizar divisiones de nodos (*Node Splits*) en el B-Tree.</li>
+            </ul>
+          </div>
+
+          <!-- 6. JSON_EXTRACT / ->> -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">JSON_EXTRACT / ->> (Extracción y Tipado)</span>
+              <span class="keyword-entry-badge">JSON Relacional</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Operadores de Acceso a Nodos JSON</div>
+            <pre class="keyword-syntax-box">&lt;col_json&gt; -> 'clave'        ──▶ Retorna el nodo conservando tipo JSON (con comillas)
+&lt;col_json&gt; ->> 'clave'       ──▶ Retorna el nodo desescapado como TEXT/VARCHAR
+json_extract(&lt;col&gt;, '$.ruta') ──▶ Función estándar ANSI con ruta JSONPath</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (Empresa CUN)</div>
+            <pre class="keyword-example-box">SELECT nombre, precio,
+       especificaciones->>'cores' AS cores_texto,
+       CAST(especificaciones->>'ram_gb' AS INT) AS ram_gigabytes,
+       especificaciones->'gpu' AS gpu_objeto_json
+FROM productos
+WHERE CAST(especificaciones->>'ram_gb' AS INT) >= 32;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Diferencia Crítica entre <code>-></code> y <code>->></code>:</strong> <code>especificaciones->'cores'</code> devuelve <code>"64"</code> (tipo JSON literal), mientras que <code>especificaciones->>'cores'</code> devuelve <code>64</code> (texto listo para ser casteado a número o comparado).</li>
+              <li><strong>Extracción Robusta de Nulos:</strong> Si una clave no existe en el documento JSON, el operador retorna <code>NULL</code> de forma segura sin arrojar un error de ejecución en tiempo de consulta.</li>
+            </ul>
+          </div>
+
+          <!-- 7. UNNEST() / JSON_EACH -->
+          <div class="keyword-entry-block">
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">UNNEST() / JSON_EACH (Aplanamiento Relacional)</span>
+              <span class="keyword-entry-badge">Table-Valued Function</span>
+            </div>
+            
+            <div class="keyword-section-label"><i class="fa-solid fa-terminal"></i> Sintaxis Formal de Desempaquetado</div>
+            <pre class="keyword-syntax-box">SELECT ... FROM &lt;tabla&gt;, UNNEST(&lt;col_array_o_json&gt;) AS elemento;
+-- O mediante funciones específicas de pares clave-valor:
+SELECT ... FROM &lt;tabla&gt;, json_each(&lt;col_json&gt;);</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> Ejemplo en Producción (DuckDB)</div>
+            <pre class="keyword-example-box">-- Extraer e iterar sobre todas las claves dinámicas del JSON de cada producto:
+SELECT p.producto_id, p.nombre, k.key AS propiedad, k.value AS valor_configurado
+FROM productos p,
+     json_each(p.especificaciones) AS k
+ORDER BY p.producto_id, k.key;</pre>
+
+            <div class="keyword-section-label"><i class="fa-solid fa-circle-info"></i> Detalles de Implementación & Reglas del Motor</div>
+            <ul class="keyword-details-list">
+              <li><strong>Multiplicación Homomórfica de Filas:</strong> Si un documento JSON contiene un array de 5 elementos, <code>UNNEST</code> generará 5 filas individuales, multiplicando el registro padre por cada elemento del array.</li>
+              <li><strong>Puente NoSQL-Relacional:</strong> Permite utilizar funciones de agregación tradicionales (<code>COUNT</code>, <code>GROUP BY</code>, <code>HAVING</code>) directamente sobre datos anidados semiestructurados.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO SQL & DESGLOSE ANATÓMICO LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#e0e7ff; color:#4338ca;"><i class="fa-solid fa-flask-vial"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL & Desglose Anatómico Línea a Línea</h2>
+            <p class="subtitle">Cuatro consultas de ingeniería de datos y optimización física analizadas paso a paso</p>
+          </div>
+        </div>
+
+        <!-- Consulta 1 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="color: #3730a3; margin-bottom: 8px;">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Consulta 1: Diagnóstico de Plan Físico y Costes con EXPLAIN ANALYZE
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Inspeccionar los operadores físicos, el algoritmo de JOIN elegido y los tiempos de CPU en una consulta multicriterio sobre empleados y departamentos.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+EXPLAIN ANALYZE
+SELECT 
+    e.nombre AS empleado,
+    d.nombre AS departamento,
+    e.salario
+FROM empleados e
+JOIN departamentos d ON e.depto_id = d.depto_id
+WHERE e.salario >= 6000000.00
+ORDER BY e.salario DESC;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>EXPLAIN ANALYZE</code>: Instruye al compilador de DuckDB a ejecutar materialmente el plan físico y reportar el grafo de ejecución con telemetría de milisegundos reales.</li>
+            <li><code>SELECT e.nombre, d.nombre, e.salario</code>: Proyección final de atributos. El motor aplica eliminación de columnas redundantes (*Projection Pruning*) para no mover columnas no usadas en memoria.</li>
+            <li><code>FROM empleados e JOIN departamentos d ON e.depto_id = d.depto_id</code>: El CBO identifica a <code>departamentos</code> (5 filas) como la relación menor y construye una tabla Hash en RAM, evaluando a <code>empleados</code> en un <strong>Hash Join</strong> lineal.</li>
+            <li><code>WHERE e.salario >= 6000000.00</code>: <strong>Predicate Pushdown:</strong> El filtro de salario se aplica directamente en el operador de escaneo de <code>empleados</code> <em>antes</em> de entrar al operador de Hash Join, reduciendo las tuplas a unir.</li>
+            <li><code>ORDER BY e.salario DESC</code>: Se ejecuta mediante un operador de ordenamiento en memoria (*Top-N Sort*) al final del pipeline de ejecución.</li>
+          </ol>
+        </div>
+
+        <!-- Consulta 2 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="color: #3730a3; margin-bottom: 8px;">
+            <i class="fa-solid fa-bolt"></i> Consulta 2: Creación de Índice Compuesto B-Tree & Index Range Scan
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Diseñar una estructura de acceso acelerado para acelerar consultas de nómina departamental respetando la regla del prefijo izquierdo.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+-- 1. Creación del índice compuesto balanceado
+CREATE INDEX idx_empleados_depto_salario 
+ON empleados (depto_id, salario DESC);
+
+-- 2. Consulta de alta selectividad que activa Index Range Scan
+SELECT empleado_id, nombre, salario
+FROM empleados
+WHERE depto_id = 1 
+  AND salario >= 6000000.00;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>CREATE INDEX idx_empleados_depto_salario</code>: Registra una nueva estructura de árbol B+Tree en el catálogo de metadatos.</li>
+            <li><code>ON empleados (depto_id, salario DESC)</code>: Define una clave compuesta de ordenamiento. Primero segmenta por <code>depto_id</code> y, para cada departamento, mantiene los salarios ordenados de forma descendente en las páginas hoja.</li>
+            <li><code>WHERE depto_id = 1</code>: Cumple la regla del <strong>Prefijo Izquierdo</strong>: el motor salta directamente a la rama del departamento 1 en $O(\log N)$.</li>
+            <li><code>AND salario >= 6000000.00</code>: Recorre secuencialmente las hojas enlazadas del B-Tree deteniéndose tan pronto como el salario baja de $6.0M, sin necesidad de leer todas las demás tuplas de la empresa.</li>
+          </ol>
+        </div>
+
+        <!-- Consulta 3 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+          <h3 style="color: #3730a3; margin-bottom: 8px;">
+            <i class="fa-solid fa-code"></i> Consulta 3: Extracción Tipada y Filtrado Numérico sobre Documentos JSON
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Consultar atributos semiestructurados dentro de la columna <code>especificaciones</code> en la tabla <code>productos</code> combinando texto plano y números enteros.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+SELECT 
+    producto_id,
+    nombre,
+    categoria,
+    precio,
+    especificaciones->>'pantalla' AS pantalla_resolucion,
+    CAST(especificaciones->>'cores' AS INT) AS procesador_cores,
+    CAST(especificaciones->>'ram_gb' AS INT) AS memoria_ram_gb
+FROM productos
+WHERE especificaciones->>'ram_gb' IS NOT NULL
+  AND CAST(especificaciones->>'ram_gb' AS INT) >= 32
+ORDER BY precio DESC;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>especificaciones->>'pantalla'</code>: El operador flecha doble extrae el valor de la clave 'pantalla' desescapando las comillas JSON y convirtiéndolo a texto plano nativo.</li>
+            <li><code>CAST(especificaciones->>'cores' AS INT)</code>: Convierte la cadena extraída en un entero formal para habilitar operaciones aritméticas y agregaciones.</li>
+            <li><code>WHERE especificaciones->>'ram_gb' IS NOT NULL</code>: Filtro de existencia defensivo. Evita fallos de tipado en productos que carecen de especificación de memoria RAM (ej. monitores o switches).</li>
+            <li><code>AND CAST(...) >= 32</code>: Filtro comparativo cuantitativo que actúa en tiempo real sobre el documento JSON semiestructurado.</li>
+          </ol>
+        </div>
+
+        <!-- Consulta 4 -->
+        <div class="sql-lab-block" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; margin-bottom: 12px;">
+          <h3 style="color: #3730a3; margin-bottom: 8px;">
+            <i class="fa-solid fa-table-cells-large"></i> Consulta 4: Desempaquetado de Arrays JSON a Filas Relacionales con UNNEST
+          </h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 16px;">
+            Aplanar todas las claves y propiedades dinámicas de los documentos JSON para generar un reporte tabular normalizado sin conocer el esquema de antemano.
+          </p>
+
+          <pre class="th-snippet" style="background: #0f172a; color: #f8fafc; padding: 18px; border-radius: 8px; font-family: 'Fira Code', monospace; font-size: 0.92rem; line-height: 1.6;">
+SELECT 
+    p.producto_id,
+    p.nombre AS producto,
+    p.categoria,
+    e.key AS propiedad_tecnica,
+    e.value AS valor_configurado
+FROM productos p,
+     json_each(p.especificaciones) AS e
+WHERE p.categoria IN ('Infraestructura', 'Hardware')
+ORDER BY p.producto_id, e.key;</pre>
+
+          <h4 style="margin-top: 18px; margin-bottom: 10px; font-size: 0.95rem; color: var(--text-main);">
+            <i class="fa-solid fa-microscope"></i> Desglose Quirúrgico Línea a Línea:
+          </h4>
+          <ol style="padding-left: 20px; font-size: 0.9rem; line-height: 1.7; color: var(--text-main);">
+            <li><code>FROM productos p, json_each(p.especificaciones) AS e</code>: Realiza una unión lateral de función valorada en tabla (Table-Valued Function). Por cada tupla de <code>productos</code>, <code>json_each</code> itera sobre todas las parejas clave-valor del JSON.</li>
+            <li><code>e.key AS propiedad_tecnica</code>: Proyecta la clave del atributo (ej. <code>'cores'</code>, <code>'ram_gb'</code>, <code>'ssd_tb'</code>, <code>'gpu'</code>) como una columna de texto relacional estándar.</li>
+            <li><code>e.value AS valor_configurado</code>: Proyecta el valor asociado como una fila independiente.</li>
+            <li><code>WHERE p.categoria IN (...)</code>: Restringe el aplanamiento a las categorías con hardware computacional, demostrando la integración transparente de filtros relacionales con funciones JSON.</li>
+          </ol>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ENTIDAD-RELACIÓN (MERMAID) & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#e0e7ff; color:#4338ca;"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario Físico de Optimización</h2>
+            <p class="subtitle">Arquitectura del esquema Empresa CUN con detalle de tipos, claves e índices recomendados</p>
+          </div>
+        </div>
+
+        <p>
+          El siguiente diagrama ilustra las 6 entidades del modelo relacional integral, destacando la presencia del atributo semiestructurado <code>especificaciones</code> en la tabla <code>PRODUCTOS</code> y las claves de alto tráfico para indexación:
+        </p>
+
+        <!-- Diagrama Mermaid 100% Compatible 9.4.3 -->
+        <div class="mermaid-wrap" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 28px;">
+          <div class="mermaid">
+erDiagram
+    DEPARTAMENTOS ||--o{ EMPLEADOS : asigna
+    CLIENTES ||--o{ PEDIDOS : genera
+    EMPLEADOS ||--o{ PEDIDOS : gestiona
+    PEDIDOS ||--|{ DETALLE_PEDIDOS : contiene
+    PRODUCTOS ||--o{ DETALLE_PEDIDOS : incluye
+
+    DEPARTAMENTOS {
+        int depto_id PK
+        string nombre
+        decimal presupuesto
+        string ciudad
+    }
+
+    EMPLEADOS {
+        int empleado_id PK
+        string nombre
+        decimal salario
+        date fecha_ingreso
+        int jefe_id FK
+        int depto_id FK
+    }
+
+    CLIENTES {
+        int cliente_id PK
+        string nombre
+        string ciudad
+        string categoria_cliente
+        date fecha_registro
+    }
+
+    PRODUCTOS {
+        int producto_id PK
+        string nombre
+        string categoria
+        decimal precio
+        int stock
+        string especificaciones
+    }
+
+    PEDIDOS {
+        int pedido_id PK
+        int cliente_id FK
+        int empleado_id FK
+        date fecha_pedido
+        string estado
+        decimal total
+    }
+
+    DETALLE_PEDIDOS {
+        int detalle_id PK
+        int pedido_id FK
+        int producto_id FK
+        int cantidad
+        decimal precio_unitario
+    }
+          </div>
+        </div>
+
+        <!-- Diccionario Físico de Optimización -->
+        <h3 style="margin-top: 24px; margin-bottom: 14px;">Diccionario Físico & Recomendaciones de Indexación</h3>
+        <table class="table-formal">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Selectividad & Cardinalidad</th>
+              <th>Estrategia de Indexación Óptima</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>EMPLEADOS</code></td>
+              <td><code>(depto_id, salario)</code></td>
+              <td><code>INT, DECIMAL(15,2)</code></td>
+              <td><strong>Alta Selectividad Compuesta:</strong> 5 departamentos y distribución salarial continua.</td>
+              <td><strong>Índice B-Tree Compuesto:</strong> <code>CREATE INDEX idx_emp_depto_sal ON empleados(depto_id, salario DESC)</code> para Index Range Scan inmediato.</td>
+            </tr>
+            <tr>
+              <td><code>PEDIDOS</code></td>
+              <td><code>fecha_pedido</code></td>
+              <td><code>DATE</code></td>
+              <td><strong>Alta Variabilidad Temporal:</strong> Eje cronológico de búsqueda de pedidos.</td>
+              <td><strong>Índice B-Tree Unario:</strong> Acelera filtros por año/mes y ordenamientos en Running Totals (evita costosos Sorts en memoria).</td>
+            </tr>
+            <tr>
+              <td><code>PEDIDOS</code></td>
+              <td><code>estado</code></td>
+              <td><code>VARCHAR</code></td>
+              <td><strong>Baja Cardinalidad (3 valores):</strong> <code>'Completado'</code>, <code>'Procesando'</code>, <code>'Pendiente'</code>.</td>
+              <td><strong>Evitar Índice B-Tree Global:</strong> Usar un <strong>Índice Parcial</strong>: <code>CREATE INDEX idx_pedidos_pend ON pedidos(pedido_id) WHERE estado = 'Pendiente'</code>.</td>
+            </tr>
+            <tr>
+              <td><code>PRODUCTOS</code></td>
+              <td><code>especificaciones</code></td>
+              <td><code>JSON (VARCHAR)</code></td>
+              <td><strong>Semiestructurado Polimórfico:</strong> Documentos dinámicos variables por tipo de hardware.</td>
+              <td><strong>Extracción con Columnas Generadas (Generated Columns):</strong> Crear columna virtual <code>ram_gb AS (CAST(especificaciones->>'ram_gb' AS INT))</code> e indexarla.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#e0e7ff; color:#4338ca;"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Comparador de Planes CBO</h2>
+            <p class="subtitle">Conmuta entre la ejecución sin índice (Seq Scan) y con índice B-Tree para analizar el coste de I/O y latencia</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <span class="pipeline-title"><i class="fa-solid fa-sliders"></i> Comparativa de Plan de Ejecución Físico</span>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button id="btnExplainNoIdx" class="btn-explain-toggle active">
+                <i class="fa-solid fa-triangle-exclamation"></i> 1. Plan SIN Índice (Full Seq Scan)
+              </button>
+              <button id="btnExplainWithIdx" class="btn-explain-toggle">
+                <i class="fa-solid fa-bolt"></i> 2. Plan CON Índice (B-Tree Index Scan)
+              </button>
+            </div>
+          </div>
+
+          <!-- Contenedor inyectado dinámicamente por app.js -->
+          <div id="mod8ExplainDisplay" style="margin-top: 18px;"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES DE PRODUCCIÓN & SOLUCIÓN DEFENSIVA
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones de Optimización & Solución Defensiva</h2>
+            <p class="subtitle">Los 4 errores críticos que inutilizan índices B-Tree y saturan bases de datos en producción</p>
+          </div>
+        </div>
+
+        <div class="antipattern-grid">
+          
+          <!-- Anti-patrón 1 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 1</div>
+            <h4>Inutilización del Índice por Funciones en WHERE (Non-Sargable Queries)</h4>
+            <p class="antipattern-desc">
+              Aplicar funciones escalares o transformaciones sobre la columna indexada en el predicado:
+            </p>
+            <pre class="th-snippet">-- ❌ EL B-TREE QUEDA COMPLETAMENTE INUTILIZADO:
+SELECT * FROM empleados WHERE UPPER(nombre) = 'CARLOS MENDOZA';
+SELECT * FROM pedidos WHERE EXTRACT(YEAR FROM fecha_pedido) = 2024;
+SELECT * FROM empleados WHERE salario * 1.10 > 7000000;
+-- 💥 El motor debe evaluar la función para cada fila: FULL TABLE SCAN.</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                Escribir predicados <strong>SARGable</strong> (Search-Argument-Able) dejando la columna aislada, o crear un <strong>Índice Basado en Funciones</strong> (Functional Index):
+              </p>
+              <pre class="th-snippet" style="background: #064e3b; color: #ecfdf5;">-- ✅ PREDICADO SARGABLE DIRECTO (Acepta B-Tree):
+SELECT * FROM pedidos 
+WHERE fecha_pedido >= '2024-01-01' AND fecha_pedido < '2025-01-01';
+
+-- O bien, crear un índice funcional específico:
+CREATE INDEX idx_emp_upper_nombre ON empleados (UPPER(nombre));</pre>
+            </div>
+          </div>
+
+          <!-- Anti-patrón 2 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 2</div>
+            <h4>Index Bloat en Columnas de Baja Cardinalidad (Selectividad Débil)</h4>
+            <p class="antipattern-desc">
+              Crear índices B-Tree estándar sobre columnas con solo 2 o 3 valores posibles (ej. <code>estado</code> con 'Completado' en el 95% de los registros):
+            </p>
+            <pre class="th-snippet">-- ⚠️ ÍNDICE INEFICAZ (El CBO lo descartará para el 95% de los casos):
+CREATE INDEX idx_pedidos_estado ON pedidos (estado);
+SELECT * FROM pedidos WHERE estado = 'Completado'; -- Usa Seq Scan igual</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                Utilizar <strong>Índices Parciales (Filtered Indexes)</strong> para indexar exclusivamente la minoría crítica de alta selectividad:
+              </p>
+              <pre class="th-snippet" style="background: #064e3b; color: #ecfdf5;">-- ✅ ÍNDICE PARCIAL: Ocupa 98% menos espacio y se usa siempre
+CREATE INDEX idx_pedidos_pendientes 
+ON pedidos (pedido_id) 
+WHERE estado = 'Pendiente';</pre>
+            </div>
+          </div>
+
+          <!-- Anti-patrón 3 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 3</div>
+            <h4>El Anti-Patrón "JSON Dump" (Abandono del Modelo Relacional)</h4>
+            <p class="antipattern-desc">
+              Almacenar relaciones completas, claves foráneas y montos monetarios críticos dentro de un blob JSON sin normalizar:
+            </p>
+            <pre class="th-snippet">-- ❌ MALA PRÁCTICA DE DISEÑO:
+CREATE TABLE clientes_nosql (
+    id INT,
+    datos_completos JSON -- '{"nombre":"...", "pedidos":[{"id":1, "total":...}]}'
+);
+-- 💥 Pérdida de integridad referencial, bloqueos y consultas imposibles de optimizar.</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                Adoptar el <strong>Patrón Híbrido Relacional-NoSQL</strong>: Claves primarias, foráneas, montos numéricos y fechas se normalizan en columnas SQL clásicas; únicamente metadatos dinámicos y polimórficos se confinan a JSON.
+              </p>
+            </div>
+          </div>
+
+          <!-- Anti-patrón 4 -->
+          <div class="antipattern-card">
+            <div class="antipattern-badge"><i class="fa-solid fa-bug"></i> ANTI-PATRÓN 4</div>
+            <h4>Omitir la Actualización de Estadísticas del Optimizador (ANALYZE)</h4>
+            <p class="antipattern-desc">
+              Cargar millones de filas mediante procesos batch de ETL y continuar ejecutando consultas sin refrescar los metadatos estadísticos:
+            </p>
+            <pre class="th-snippet">-- 💥 CBO CON METADATOS OBSOLETOS:
+-- El optimizador cree que la tabla tiene 100 filas y elige un Nested Loop.
+-- La tabla ahora tiene 2,000,000 filas ──▶ La consulta tarda 2 horas.</pre>
+            <div class="antipattern-solution">
+              <h5><i class="fa-solid fa-check-circle"></i> Solución Arquitectónica Defensiva:</h5>
+              <p>
+                Ejecutar la instrucción <code>ANALYZE</code> inmediatamente después de cargas masivas de datos para recalcular los histogramas de distribución:
+              </p>
+              <pre class="th-snippet" style="background: #064e3b; color: #ecfdf5;">-- ✅ ACTUALIZACIÓN ESTADÍSTICA OBLIGATORIA POST-ETL:
+ANALYZE empleados;
+ANALYZE pedidos;</pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CONEXIÓN CON GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background:#e0e7ff; color:#4338ca;"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Conexión con Cuaderno DuckDB / Google Colab</h2>
+            <p class="subtitle">Pon a prueba tus habilidades de optimización física y manipulación JSON en el entorno interactivo</p>
+          </div>
+        </div>
+
+        <div class="challenge-box">
+          <div class="challenge-header">
+            <span class="challenge-tag">RETO 1: AUDITORÍA CON EXPLAIN</span>
+            <h4>Analizar el Plan de Ejecución de Ventas por Ciudad de Clientes</h4>
+          </div>
+          <p>
+            Ejecuta <code>EXPLAIN</code> sobre una consulta que una <code>pedidos</code> con <code>clientes</code> filtrando por la ciudad de 'Bogotá'. Identifica el algoritmo de JOIN seleccionado por DuckDB y verifica si el filtro de ciudad se aplicó como *Predicate Pushdown*.
+          </p>
+          <details style="margin-top: 12px; background: var(--bg-card); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <summary style="font-weight: 700; cursor: pointer; color: #4338ca;">Ver Solución Recomendada</summary>
+            <pre class="th-snippet" style="margin-top: 10px; background: #0f172a; color: #f8fafc;">EXPLAIN
+SELECT c.nombre AS cliente, c.ciudad, p.pedido_id, p.total
+FROM pedidos p
+JOIN clientes c ON p.cliente_id = c.cliente_id
+WHERE c.ciudad = 'Bogotá'
+ORDER BY p.total DESC;</pre>
+          </details>
+        </div>
+
+        <div class="challenge-box" style="margin-top: 20px;">
+          <div class="challenge-header">
+            <span class="challenge-tag">RETO 2: EXTRACCIÓN Y AGREGACIÓN JSON</span>
+            <h4>Calcular el Precio Promedio de Productos con más de 16 GB de RAM</h4>
+          </div>
+          <p>
+            Escribe una consulta que acceda a la columna <code>especificaciones</code> en <code>productos</code>, extraiga la clave <code>'ram_gb'</code>, la castee a entero y calcule el precio promedio y el conteo de productos que cuenten con 32 o más gigabytes de memoria RAM.
+          </p>
+          <details style="margin-top: 12px; background: var(--bg-card); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <summary style="font-weight: 700; cursor: pointer; color: #4338ca;">Ver Solución Recomendada</summary>
+            <pre class="th-snippet" style="margin-top: 10px; background: #0f172a; color: #f8fafc;">SELECT 
+    COUNT(*) AS cantidad_equipos,
+    ROUND(AVG(precio), 2) AS precio_promedio,
+    MIN(precio) AS precio_minimo,
+    MAX(precio) AS precio_maximo
+FROM productos
+WHERE especificaciones->>'ram_gb' IS NOT NULL
+  AND CAST(especificaciones->>'ram_gb' AS INT) >= 32;</pre>
+          </details>
+        </div>
+
+        <div class="challenge-box" style="margin-top: 20px;">
+          <div class="challenge-header">
+            <span class="challenge-tag">RETO 3: APLANAMIENTO TABULAR CON JSON_EACH</span>
+            <h4>Construir una Matriz de Especificaciones Técnicas por Producto</h4>
+          </div>
+          <p>
+            Utilizando la función <code>json_each</code>, genera un listado normalizado para el producto 'Servidor Cloud Enterprise X1' que enumere cada una de sus especificaciones técnicas (cores, ram_gb, ssd_tb) en filas separadas.
+          </p>
+          <details style="margin-top: 12px; background: var(--bg-card); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <summary style="font-weight: 700; cursor: pointer; color: #4338ca;">Ver Solución Recomendada</summary>
+            <pre class="th-snippet" style="margin-top: 10px; background: #0f172a; color: #f8fafc;">SELECT 
+    p.nombre AS servidor,
+    j.key AS componente,
+    j.value AS valor_configurado
+FROM productos p,
+     json_each(p.especificaciones) AS j
+WHERE p.nombre LIKE '%Servidor Cloud%'
+ORDER BY j.key;</pre>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(79, 70, 229, 0.08); border: 2px solid #4f46e5; border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: #3730a3; margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta diagnósticos reales con EXPLAIN, diseña índices B-Tree y manipula documentos JSON nativos en memoria sobre DuckDB:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_8_OPTIM_JSON.ipynb" download class="btn-colab" style="background: #3730a3;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab" style="background: #4f46e5;">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo07_analitica.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 07 (Window Functions & CTEs)
+        </a>
+        <a href="index.html" class="pager-btn primary" style="background: #3730a3; border-color: #3730a3;">
+          <i class="fa-solid fa-graduation-cap"></i> Finalizar y Volver al Portal General
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

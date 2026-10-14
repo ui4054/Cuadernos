@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 04: Normalización de Bases de Datos (1FN a 5FN & BCNF) — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #10b981;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a7f3d0;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #10b981;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #10b981;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ecfdf5);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_4_NORMALIZACION.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html" class="active"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-file-contract"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Contenido Central Principal -->
+    <main class="main-content">
+
+      <!-- Hero Banner del Módulo -->
+      <section class="module-hero">
+        <div class="hero-badge-wrap">
+          <span class="hero-badge"><i class="fa-solid fa-layer-group"></i> FASE II: DISEÑO ESTRUCTURAL & INTEGRIDAD RELACIONAL</span>
+          <span class="hero-subbadge">Normalización Formal</span>
+        </div>
+        <h1 class="hero-title">Módulo 04: Normalización de Bases de Datos (1FN a 5FN & BCNF)</h1>
+        <p class="hero-lead">
+          De la tabla plana sucia con anomalías catastróficas al esquema formal desacoplado: eliminación rigurosa de dependencias parciales, transitivas, multivaluadas y de unión sin pérdida de información.
+        </p>
+
+        <div class="hero-meta-bar">
+          <div class="meta-item"><i class="fa-solid fa-feather"></i> Edgar F. Codd (1970–1972)</div>
+          <div class="meta-item"><i class="fa-solid fa-shield-halved"></i> Boyce-Codd (BCNF)</div>
+          <div class="meta-item"><i class="fa-solid fa-code-fork"></i> Ronald Fagin (4FN & 5FN)</div>
+          <div class="meta-item"><i class="fa-solid fa-bolt"></i> DuckDB 100% In-Memory</div>
+        </div>
+      </section>
+
+      <!-- Barra de Navegación Secundaria Interna (Scrollspy) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto-anomalias" class="active"><i class="fa-solid fa-triangle-exclamation"></i> 01. Contexto & Anomalías</a>
+        <a href="#sec-teoria-formal"><i class="fa-solid fa-brain"></i> 02. Cimiento Formal (FDs)</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Laboratorio DDL</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador Visual</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos en Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO EMPRESARIAL & EL PROBLEMA EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-contexto-anomalias" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-building-columns"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">La trampa de la 'tabla plana' desnormalizada y el costo catastrófico de las anomalías operativas</p>
+          </div>
+        </div>
+
+        <p>
+          En etapas tempranas de desarrollo, es común que aplicaciones o planillas de cálculo consoliden múltiples conceptos de negocio en una única <strong>tabla plana o sábana desnormalizada (UNF — Unnormalized Form)</strong>. Bajo una apariencia engañosa de simplicidad, esta estructura engendra una degradación sistemática de la integridad referencial y causa fallas operativas severas.
+        </p>
+
+        <div class="th-grid">
+          <div class="th-card" style="border-top: 4px solid #ef4444;">
+            <h4 style="color: #991b1b;"><i class="fa-solid fa-file-excel"></i> Esquema Desnormalizado en UNF (Tabla Plana Sucia)</h4>
+            <p>
+              Una sola tabla almacena matrículas, estudiantes, cursos, facultades y decanos:
+            </p>
+            <pre class="th-snippet">-- ⚠️ Tabla con listas no atómicas y dependencias mezcladas:
+CREATE TABLE matriculas_unf (
+    estudiante_id   INT,
+    nombre          VARCHAR,
+    ciudad          VARCHAR,
+    cursos_lista    VARCHAR, -- 'SQL Avanzado, Python AI'
+    carrera         VARCHAR,
+    facultad        VARCHAR,
+    decano          VARCHAR
+);</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ❌ Consecuencia: No se puede registrar una nueva carrera sin matricular al menos a un estudiante, y actualizar el decano requiere modificar miles de filas redundantes.
+            </p>
+          </div>
+
+          <div class="th-card" style="border-top: 4px solid var(--accent-primary);">
+            <h4 style="color: var(--accent-dark);"><i class="fa-solid fa-shield-halved"></i> Esquema Normalizado en 3FN / BCNF</h4>
+            <p>
+              Desacoplamiento formal en entidades independientes con claves primarias y foráneas:
+            </p>
+            <pre class="th-snippet">-- ✅ Separación de responsabilidades relacionales:
+CREATE TABLE facultades   (facultad_id INT PK, decano VARCHAR);
+CREATE TABLE carreras     (carrera_id INT PK, fac_id INT FK);
+CREATE TABLE estudiantes  (estudiante_id INT PK, carrera_id INT FK);
+CREATE TABLE inscripciones(estudiante_id INT FK, curso_id INT FK,
+                           PRIMARY KEY(estudiante_id, curso_id));</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600;">
+              ✅ Resultado en Producción: Cada hecho se registra en exactamente un solo lugar. Integridad garantizada y costos de actualización constantes $O(1)$.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 28px;"><i class="fa-solid fa-radiation"></i> Las 3 Anomalías Catastróficas de los Esquemas No Normalizados</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 200px;">Tipo de Anomalía</th>
+              <th style="width: 280px;">Manifestación Operativa</th>
+              <th>Impacto Crítico en Producción & Solución Relacional</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color: #ef4444;"><i class="fa-solid fa-circle-plus"></i> Anomalía de Inserción</strong></td>
+              <td>Imposibilidad de registrar una entidad de negocio válida sin asociarle obligatoriamente datos secundarios inexistentes.</td>
+              <td>No se puede dar de alta la carrera <em>'Inteligencia Artificial'</em> si aún no tiene alumnos matriculados, porque la clave primaria compuesta rechaza nulos. <strong>Solución:</strong> Aislar la entidad <code>carreras</code> en su propia tabla con clave primaria propia.</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #f59e0b;"><i class="fa-solid fa-pen-to-square"></i> Anomalía de Actualización</strong></td>
+              <td>La modificación de un dato atómico exige actualizar cientos o miles de tuplas repetidas a lo largo de la base de datos.</td>
+              <td>Si el decano cambia de apellido, una consulta <code>UPDATE</code> que falle a mitad del proceso deja la base de datos con dos decanos diferentes para la misma facultad (inconsistencia de lectura). <strong>Solución:</strong> Guardar el decano una única vez en la tabla <code>facultades</code>.</td>
+            </tr>
+            <tr>
+              <td><strong style="color: #dc2626;"><i class="fa-solid fa-trash-can"></i> Anomalía de Borrado</strong></td>
+              <td>La eliminación de un registro transaccional arrastra silenciosamente la existencia de información maestra de la organización.</td>
+              <td>Si el único estudiante matriculado en <em>'Redes & Cloud'</em> se retira y se borra su fila, <strong>se borra de la existencia el registro de la carrera y su facultad</strong>. <strong>Solución:</strong> Mantener tablas maestras independientes de las tablas de relación transaccional.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL: DEPENDENCIAS & AXIOMAS
+           =================================================================== -->
+      <section id="sec-teoria-formal" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: Dependencias Funcionales & Axiomas de Armstrong</h2>
+            <p class="subtitle">La formalización matemática de Edgar F. Codd y William W. Armstrong para la descomposición relacional</p>
+          </div>
+        </div>
+
+        <p>
+          La normalización no es un criterio estético subjetivo, sino una disciplina matemática rigurosa fundamentada en la teoría de **Dependencias Funcionales** sobre el Álgebra Relacional:
+        </p>
+
+        <div class="th-card" style="margin: 20px 0; background: rgba(16, 185, 129, 0.05); border-left: 5px solid #10b981;">
+          <h4 style="color: #064e3b; margin-bottom: 8px;"><i class="fa-solid fa-square-root-variable"></i> Definición Formal de Dependencia Funcional (FD)</h4>
+          <p style="font-size: 0.95rem; line-height: 1.7;">
+            Sea una relación $R$ con un conjunto de atributos $U$. Se dice que un conjunto de atributos $Y \subseteq U$ tiene una <strong>Dependencia Funcional</strong> respecto a $X \subseteq U$ (denotado como $X \rightarrow Y$) si y solo si para cada par de tuplas $t_1, t_2 \in R$:
+          </p>
+          <div style="font-size: 1.15rem; text-align: center; margin: 12px 0; color: #064e3b; font-weight: 700;">
+            $$\forall t_1, t_2 \in R, \quad \big(t_1[X] = t_2[X]\big) \implies \big(t_1[Y] = t_2[Y]\big)$$
+          </div>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+            <em>Interpretación:</em> El valor de $X$ determina unívocamente el valor de $Y$. Si dos filas coinciden en $X$, están obligadas matemáticamente a coincidir en $Y$.
+          </p>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 28px;"><i class="fa-solid fa-compass-drafting"></i> Los 3 Axiomas Fundamentales de Armstrong</h3>
+        <p>
+          En 1974, William W. Armstrong demostró que cualquier conjunto de dependencias funcionales verdaderas puede derivarse mediante un sistema formal deductivo **sólido y completo**:
+        </p>
+
+        <div class="th-grid" style="margin: 18px 0;">
+          <div class="th-card">
+            <h4 style="color: #064e3b;"><i class="fa-solid fa-rotate-left"></i> 1. Reflexividad</h4>
+            <p>Si $Y \subseteq X$, entonces se cumple trivialmente que:</p>
+            <div style="text-align: center; margin: 8px 0; font-size: 1.1rem; color: #064e3b;">$$X \rightarrow Y$$</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Ejemplo: <code>(id_estudiante, carrera) -> id_estudiante</code>.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #0369a1;"><i class="fa-solid fa-arrow-up-right-dots"></i> 2. Aumento</h4>
+            <p>Si $X \rightarrow Y$ y se agrega un atributo arbitrario $Z$, entonces:</p>
+            <div style="text-align: center; margin: 8px 0; font-size: 1.1rem; color: #0369a1;">$$XZ \rightarrow YZ$$</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">La determinación funcional se preserva al expandir el contexto.</p>
+          </div>
+
+          <div class="th-card">
+            <h4 style="color: #047857;"><i class="fa-solid fa-route"></i> 3. Transitividad</h4>
+            <p>Si $X \rightarrow Y$ y simultáneamente $Y \rightarrow Z$, entonces:</p>
+            <div style="text-align: center; margin: 8px 0; font-size: 1.1rem; color: #047857;">$$X \rightarrow Z$$</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Es la causa raíz que la 3FN se encarga de aislar y resolver.</p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-stairs"></i> Escalera de las 6 Formas Normales (1FN a 5FN & BCNF)</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Forma Normal</th>
+              <th>Condición Teórica Necesaria</th>
+              <th>Problema / Dependencia que Elimina</th>
+              <th>Mecanismo de Descomposición</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1FN</strong></td>
+              <td>Todos los dominios contienen únicamente valores atómicos; sin grupos repetitivos.</td>
+              <td>Listas multivaluadas en una sola celda (ej. <code>'SQL, Python'</code>) y columnas duplicadas (<code>tel_1, tel_2</code>).</td>
+              <td>Desglose de listas en múltiples filas con clave compuesta unívoca.</td>
+            </tr>
+            <tr>
+              <td><strong>2FN</strong></td>
+              <td>Está en 1FN y ningún atributo no clave depende de un subconjunto propio de la clave primaria.</td>
+              <td><strong>Dependencias Parciales:</strong> Atributos que solo dependen de una parte de la clave compuesta.</td>
+              <td>Separación de la entidad principal de las entidades de detalle 1:N.</td>
+            </tr>
+            <tr>
+              <td><strong>3FN</strong></td>
+              <td>Está en 2FN y ningún atributo no clave depende transitivamente de la clave primaria.</td>
+              <td><strong>Dependencias Transitivas ($X \rightarrow Y \rightarrow Z$):</strong> Datos de terceros embebidos en la tabla.</td>
+              <td>Extracción de atributos intermedios a una tabla catálogo independiente con FK.</td>
+            </tr>
+            <tr>
+              <td><strong>BCNF</strong></td>
+              <td>Para toda dependencia funcional $X \rightarrow Y$ no trivial, $X$ debe ser estrictamente una <strong>Superclave</strong>.</td>
+              <td>Anomalías sutiles cuando existen múltiples claves candidatas compuestas superpuestas.</td>
+              <td>Descomposición de determinantes que no son superclaves en tablas separadas.</td>
+            </tr>
+            <tr>
+              <td><strong>4FN</strong></td>
+              <td>Está en BCNF y no existen <strong>Dependencias Multivaluadas Independientes ($X \twoheadrightarrow Y$)</strong>.</td>
+              <td>Explosión combinatoria (producto cartesiano espurio) entre colecciones ortogonales (ej. Habilidades e Idiomas).</td>
+              <td>Bifurcación en 2 tablas binarias independientes asociadas a la entidad padre.</td>
+            </tr>
+            <tr>
+              <td><strong>5FN (PJNF)</strong></td>
+              <td>Toda <strong>Dependencia de Unión ($JD(*(R_1, ..., R_n))$)</strong> está implícita por las claves candidatas.</td>
+              <td>Restricciones cíclicas en relaciones ternarias (o n-arias) que generan <em>tuplas fantasma</em> al reconstruirse.</td>
+              <td>Descomposición en $N$ proyecciones simétricas con reconstrucción sin pérdidas (*Lossless Join*).</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE (DISPOSICIÓN VERTICAL ESTRICTA)
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario de Palabras Clave</h2>
+            <p class="subtitle">Conceptos formales, definiciones matemáticas y sintaxis DDL para normalización relacional</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. DEPENDENCIA FUNCIONAL -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">DEPENDENCIA FUNCIONAL (X -> Y)</span>
+              <span class="keyword-entry-badge">Fundamento Matemático</span>
+            </div>
+
+            <!-- 2. SINTAXIS / DEFINICIÓN -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> DEFINICIÓN FORMAL:</div>
+            <pre class="keyword-syntax-box">X -> Y  <=>  Para todo par de tuplas (t1, t2), si t1[X] = t2[X] entonces t1[Y] = t2[Y].
+Donde X es el 'Determinante' e Y es el 'Dependiente'.</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- El documento de identidad determina unívocamente el nombre del cliente:
+-- cedula_id -> (nombre, fecha_nacimiento, ciudad_residencia)
+CREATE TABLE clientes (
+    cedula_id INT PRIMARY KEY,
+    nombre VARCHAR NOT NULL,
+    ciudad_residencia VARCHAR NOT NULL
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Determinante:</strong> El conjunto de atributos a la izquierda de la flecha que fija sin ambigüedad el valor del dependiente.</li>
+              <li><strong>Dependencia Trivial:</strong> Ocurre cuando el dependiente ya forma parte del determinante ($X \rightarrow Y$ con $Y \subseteq X$). No aporta restricciones semánticas nuevas.</li>
+              <li><strong>Cierre de Atributos ($X^+$):</strong> El conjunto total de atributos funcionalmente determinados por $X$ bajo los axiomas de Armstrong. Si $X^+ = U$ (todo el universo de columnas), entonces $X$ es una <em>Superclave</em>.</li>
+            </ul>
+          </div>
+
+          <!-- 2. PRIMERA FORMA NORMAL (1FN) -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">PRIMERA FORMA NORMAL (1FN - ATOMICIDAD)</span>
+              <span class="keyword-entry-badge">Regla de Dominio</span>
+            </div>
+
+            <!-- 2. SINTAXIS / DEFINICIÓN -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> DEFINICIÓN FORMAL:</div>
+            <pre class="keyword-syntax-box">Una relación R está en 1FN si y solo si todos los atributos subyacentes contienen valores atómicos
+e indivisibles pertenecientes a un dominio simple. Se prohíben arreglos, tuplas o conjuntos en una celda.</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- ❌ INCORRECTO (Viola 1FN por celda con múltiples valores):
+-- INSERT INTO estudiantes VALUES (101, 'Carlos Mendoza', 'SQL, Python, Cloud');
+
+-- ✅ CORRECTO EN 1FN (Cada fila representa un único hecho atómico):
+CREATE TABLE estudiante_cursos_1fn (
+    estudiante_id INT,
+    curso_nombre VARCHAR,
+    PRIMARY KEY (estudiante_id, curso_nombre)
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Atomicidad Relacional:</strong> Cada intersección fila-columna almacena un único valor escalar indivisible según la semántica del dominio.</li>
+              <li><strong>Eliminación de Grupos Repetitivos:</strong> Prohíbe matrices horizontales artificiales (<code>telefono_1, telefono_2, telefono_3</code>).</li>
+              <li><strong>Efecto Colateral Didáctico:</strong> Al pasar de listas a filas atómicas con clave compuesta, se duplican los atributos descriptivos del estudiante en múltiples filas, dando origen a la necesidad de la 2FN.</li>
+            </ul>
+          </div>
+
+          <!-- 3. SEGUNDA FORMA NORMAL (2FN) -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">SEGUNDA FORMA NORMAL (2FN - DEPENDENCIA COMPLETA)</span>
+              <span class="keyword-entry-badge">Regla de Clave Compuesta</span>
+            </div>
+
+            <!-- 2. SINTAXIS / DEFINICIÓN -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> DEFINICIÓN FORMAL:</div>
+            <pre class="keyword-syntax-box">Una relación R está en 2FN si está en 1FN y ningún atributo no primo (que no forma parte de ninguna clave)
+depende funcionalmente de un subconjunto propio de cualquier clave candidata.</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Descomposición de la clave compuesta (estudiante_id, curso_id):
+-- El nombre del estudiante solo depende de estudiante_id (dependencia parcial).
+
+-- 1. Tabla de la Entidad Maestra:
+CREATE TABLE estudiantes (estudiante_id INT PRIMARY KEY, nombre VARCHAR);
+
+-- 2. Tabla de la Relación Muchos a Muchos:
+CREATE TABLE inscripciones (
+    estudiante_id INT REFERENCES estudiantes(estudiante_id),
+    curso_id INT REFERENCES cursos(curso_id),
+    fecha_inscripcion DATE NOT NULL,
+    PRIMARY KEY (estudiante_id, curso_id)
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Aplicabilidad:</strong> Si la clave primaria de una tabla es simple (un solo atributo escalar), la tabla está automáticamente en 2FN una vez alcanzada la 1FN.</li>
+              <li><strong>Dependencia Funcional Parcial:</strong> Ocurre cuando un atributo $A$ depende solo de una parte de la clave compuesta ($X_1 \subset X$ tal que $X_1 \rightarrow A$).</li>
+              <li><strong>Solución Estructural:</strong> Los atributos parciales se trasladan a una nueva tabla donde su determinante es la clave primaria completa.</li>
+            </ul>
+          </div>
+
+          <!-- 4. TERCERA FORMA NORMAL (3FN) -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">TERCERA FORMA NORMAL (3FN - NO TRANSITIVIDAD)</span>
+              <span class="keyword-entry-badge">Regla de Desacoplamiento</span>
+            </div>
+
+            <!-- 2. SINTAXIS / DEFINICIÓN -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> DEFINICIÓN FORMAL:</div>
+            <pre class="keyword-syntax-box">Una relación R está en 3FN si está en 2FN y ningún atributo no primo depende transitivamente
+de la clave primaria: X -> Y -> Z (donde Y no es superclave ni clave candidata).</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- En estudiantes: estudiante_id -> carrera_id -> nombre_carrera (Transitiva)
+-- Separamos la carrera en su propia relación:
+
+CREATE TABLE carreras (
+    carrera_id INT PRIMARY KEY,
+    nombre_carrera VARCHAR NOT NULL
+);
+
+CREATE TABLE estudiantes (
+    estudiante_id INT PRIMARY KEY,
+    nombre VARCHAR NOT NULL,
+    carrera_id INT REFERENCES carreras(carrera_id)
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>El Lema Clásico:</strong> "Todo atributo debe depender de la clave, de toda la clave, y de nada más que de la clave (con la ayuda de Codd)".</li>
+              <li><strong>Eliminación de Redundancia:</strong> Impide que si 500 estudiantes pertenecen a la carrera 'Ing. Sistemas', el nombre de la carrera se almacene 500 veces.</li>
+              <li><strong>Preservación de Dependencias:</strong> La 3FN garantiza siempre una descomposición sin pérdidas (*Lossless*) que a la vez preserva todas las dependencias funcionales originales.</li>
+            </ul>
+          </div>
+
+          <!-- 5. FORMA NORMAL DE BOYCE-CODD (BCNF) -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">FORMA NORMAL DE BOYCE-CODD (BCNF)</span>
+              <span class="keyword-entry-badge">Superclave Estricta</span>
+            </div>
+
+            <!-- 2. SINTAXIS / DEFINICIÓN -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> DEFINICIÓN FORMAL:</div>
+            <pre class="keyword-syntax-box">Una relación R está en BCNF si y solo si para cada Dependencia Funcional no trivial X -> Y,
+el determinante X es estrictamente una SUPERCLAVE de R.</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- Si en asesorias(estudiante_id, materia, profesor):
+-- profesor -> materia, pero 'profesor' NO es superclave de la tabla completa.
+-- BCNF exige descomponer en:
+CREATE TABLE profesor_materia (
+    profesor_id INT PRIMARY KEY,
+    materia_id INT NOT NULL
+);
+CREATE TABLE estudiante_profesor (
+    estudiante_id INT,
+    profesor_id INT REFERENCES profesor_materia(profesor_id),
+    PRIMARY KEY (estudiante_id, profesor_id)
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Superación de la 3FN:</strong> Toda relación en BCNF está automáticamente en 3FN, pero no toda relación en 3FN cumple BCNF (ocurre cuando hay claves candidatas compuestas superpuestas).</li>
+              <li><strong>Compromiso Teórico:</strong> En raros casos, transformar un esquema a BCNF puede perder la capacidad de verificar ciertas dependencias funcionales mediante simples restricciones de clave foránea.</li>
+            </ul>
+          </div>
+
+          <!-- 6. CUARTA Y QUINTA FORMA NORMAL (4FN & 5FN) -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">4FN & 5FN (MULTIVALUADOS & UNION DE PROYECCIONES)</span>
+              <span class="keyword-entry-badge">Fagin & PJNF</span>
+            </div>
+
+            <!-- 2. SINTAXIS / DEFINICIÓN -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> DEFINICIÓN FORMAL:</div>
+            <pre class="keyword-syntax-box">4FN: Elimina Dependencias Multivaluadas Independientes (MVD: X ->> Y).
+5FN (PJNF): Asegura que la tabla no puede descomponerse en proyecciones más pequeñas
+que generen tuplas espurias al reconstruirse mediante JOINs naturales: * (R1, R2, ..., Rn).</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO EN SQL:</div>
+            <pre class="keyword-example-box">-- 4FN: Separar Habilidades e Idiomas del Estudiante para evitar Producto Cartesiano:
+CREATE TABLE estudiante_habilidades (estudiante_id INT, habilidad VARCHAR, PRIMARY KEY(estudiante_id, habilidad));
+CREATE TABLE estudiante_idiomas     (estudiante_id INT, idioma VARCHAR, PRIMARY KEY(estudiante_id, idioma));
+
+-- 5FN: Descomposición ternaria cíclica simétrica (Vendedor, Cliente, Marca):
+CREATE TABLE vendedor_marcas   (vendedor_id INT, marca VARCHAR, PRIMARY KEY(vendedor_id, marca));
+CREATE TABLE cliente_marcas    (cliente_id INT, marca VARCHAR, PRIMARY KEY(cliente_id, marca));
+CREATE TABLE vendedor_clientes (vendedor_id INT, cliente_id INT, PRIMARY KEY(vendedor_id, cliente_id));</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Explosión Combinatoria:</strong> Si un empleado tiene 4 habilidades y habla 3 idiomas, guardarlos juntos en una tabla 3FN genera $4 \times 3 = 12$ tuplas artificiales sin semántica real.</li>
+              <li><strong>Tuplas Espurias (Filas Fantasma):</strong> Datos que aparecen como resultado de un JOIN que no existían en el mundo real, causados por dependencias de unión no controladas.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO DDL & DESGLOSE LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL DDL & Desglose Línea a Línea</h2>
+            <p class="subtitle">Implementación ejecutable en DuckDB de la refactorización desde tabla plana a esquema normalizado</p>
+          </div>
+        </div>
+
+        <p>
+          A continuación se presenta el script corporativo completo de refactorización relacional. Observa cómo mediante <code>INSERT INTO ... SELECT DISTINCT</code> migramos una tabla sucia de matrículas a un esquema formal desacoplado en 3FN:
+        </p>
+
+        <pre class="th-snippet">-- 1. Tabla Maestra de Facultades (Elimina dependencia transitiva del decano)
+CREATE TABLE facultades_3fn (
+    facultad_id      INT PRIMARY KEY,
+    facultad_nombre  VARCHAR NOT NULL,
+    decano_facultad  VARCHAR NOT NULL
+);
+
+-- 2. Tabla de Carreras Universitarias (Relacionada 1:N con Facultades)
+CREATE TABLE carreras_3fn (
+    carrera_id       INT PRIMARY KEY,
+    carrera_nombre   VARCHAR NOT NULL,
+    facultad_id      INT NOT NULL REFERENCES facultades_3fn(facultad_id)
+);
+
+-- 3. Tabla Maestra de Estudiantes (Relacionada 1:N con Carreras)
+CREATE TABLE estudiantes_3fn (
+    estudiante_id    INT PRIMARY KEY,
+    nombre           VARCHAR NOT NULL,
+    ciudad           VARCHAR NOT NULL,
+    carrera_id       INT NOT NULL REFERENCES carreras_3fn(carrera_id)
+);
+
+-- 4. Tabla de Catálogo de Asignaturas (Atómica)
+CREATE TABLE cursos_3fn (
+    curso_id         INT PRIMARY KEY,
+    curso_nombre     VARCHAR NOT NULL UNIQUE,
+    creditos         INT CHECK (creditos > 0)
+);
+
+-- 5. Tabla de Relación N:M de Inscripciones (Clave Compuesta en 2FN/3FN)
+CREATE TABLE inscripciones_3fn (
+    estudiante_id    INT REFERENCES estudiantes_3fn(estudiante_id) ON DELETE CASCADE,
+    curso_id         INT REFERENCES cursos_3fn(curso_id) ON DELETE RESTRICT,
+    fecha_matricula  DATE NOT NULL,
+    PRIMARY KEY (estudiante_id, curso_id)
+);
+
+-- 6. Migración Segura de Datos Limpios sin Duplicación:
+INSERT INTO facultades_3fn VALUES (1, 'Facultad de Ingeniería', 'Dr. Roberto Gómez');
+INSERT INTO carreras_3fn   VALUES (10, 'Ingeniería de Sistemas', 1), (20, 'Redes & Cloud', 1);
+INSERT INTO estudiantes_3fn VALUES 
+(101, 'Carlos Mendoza', 'Bogotá', 10),
+(102, 'Ana María Gómez', 'Medellín', 10),
+(103, 'Luis Fernando Torres', 'Cali', 20);</pre>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-list-check"></i> Desglose Anatómico de las Cláusulas DDL</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Línea DDL</th>
+              <th style="width: 260px;">Cláusula / Restricción</th>
+              <th>Mecánica de Integridad en el Motor Relacional</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>L1 - L5</code></td>
+              <td><code>facultad_id INT PRIMARY KEY</code></td>
+              <td>Define la entidad independiente de facultades. El decano se vincula exclusivamente a esta entidad, impidiendo anomalías de actualización.</td>
+            </tr>
+            <tr>
+              <td><code>L7 - L11</code></td>
+              <td><code>REFERENCES facultades_3fn(facultad_id)</code></td>
+              <td>Establece la clave foránea que preserva la integridad referencial. Una carrera no puede existir huérfana de facultad.</td>
+            </tr>
+            <tr>
+              <td><code>L13 - L18</code></td>
+              <td><code>carrera_id INT REFERENCES carreras_3fn</code></td>
+              <td>Elimina la dependencia transitiva: el estudiante se vincula a su carrera ($E \rightarrow C$), y la carrera a su facultad ($C \rightarrow F$).</td>
+            </tr>
+            <tr>
+              <td><code>L20 - L24</code></td>
+              <td><code>curso_nombre VARCHAR UNIQUE</code></td>
+              <td>Asegura atomicidad y unicidad del nombre del curso en el catálogo, impidiendo duplicados en el diccionario.</td>
+            </tr>
+            <tr>
+              <td><code>L26 - L32</code></td>
+              <td><code>PRIMARY KEY (estudiante_id, curso_id)</code></td>
+              <td>Define la clave primaria compuesta de la relación N:M, garantizando que un estudiante no pueda inscribir dos veces la misma asignatura en la misma matrícula.</td>
+            </tr>
+            <tr>
+              <td><code>L27 - L28</code></td>
+              <td><code>ON DELETE CASCADE / RESTRICT</code></td>
+              <td>Reglas semánticas de integridad: si se borra un estudiante se eliminan sus inscripciones (`CASCADE`), pero no se puede borrar un curso si tiene alumnos matriculados (`RESTRICT`).</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ERD & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario de Datos Físico</h2>
+            <p class="subtitle">Arquitectura normalizada en 3FN/BCNF para gestión académica corporativa</p>
+          </div>
+        </div>
+
+        <p>
+          El esquema normalizado resultante descompone la tabla plana sucia en 5 entidades interconectadas con cardinalidades estrictas, erradicando todas las anomalías:
+        </p>
+
+        <div class="mermaid-box">
+          <h4>📐 Diagrama Entidad-Relación (MER/DER) — Esquema Normalizado 3FN</h4>
+          <div class="mermaid">
+erDiagram
+    FACULTADES ||--o{ CARRERAS : "ofrece"
+    CARRERAS ||--o{ ESTUDIANTES : "matricula"
+    ESTUDIANTES ||--o{ INSCRIPCIONES : "realiza"
+    CURSOS ||--o{ INSCRIPCIONES : "asigna"
+
+    FACULTADES {
+        int facultad_id PK
+        string facultad_nombre
+        string decano_facultad
+    }
+
+    CARRERAS {
+        int carrera_id PK
+        string carrera_nombre
+        int facultad_id FK
+    }
+
+    ESTUDIANTES {
+        int estudiante_id PK
+        string nombre
+        string ciudad
+        int carrera_id FK
+    }
+
+    CURSOS {
+        int curso_id PK
+        string curso_nombre
+        int creditos
+    }
+
+    INSCRIPCIONES {
+        int estudiante_id PK
+        int curso_id PK
+        date fecha_matricula
+    }
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-table-list"></i> Diccionario de Datos Físico (Especificación DuckDB / ANSI)</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricciones</th>
+              <th>Papel en la Normalización (1FN–5FN)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>FACULTADES</code></td>
+              <td><code>facultad_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Determinante maestro. Aísla el nombre del decano para eliminar anomalías de actualización.</td>
+            </tr>
+            <tr>
+              <td><code>CARRERAS</code></td>
+              <td><code>carrera_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Permite insertar carreras sin requerir estudiantes matriculados (erradica anomalía de inserción).</td>
+            </tr>
+            <tr>
+              <td><code>CARRERAS</code></td>
+              <td><code>facultad_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>NOT NULL, FK</code></td>
+              <td>Resuelve la dependencia transitiva estudiante $\rightarrow$ carrera $\rightarrow$ facultad.</td>
+            </tr>
+            <tr>
+              <td><code>ESTUDIANTES</code></td>
+              <td><code>estudiante_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Identificador atómico único del estudiante en cumplimiento estricto de la 1FN y 2FN.</td>
+            </tr>
+            <tr>
+              <td><code>INSCRIPCIONES</code></td>
+              <td><code>(estudiante_id, curso_id)</code></td>
+              <td><code>INT, INT</code></td>
+              <td><code>COMPOSITE PK</code></td>
+              <td>Transforma la relación muchos a muchos (N:M) en dos relaciones uno a muchos (1:N) limpias.</td>
+            </tr>
+            <tr>
+              <td><code>INSCRIPCIONES</code></td>
+              <td><code>fecha_matricula</code></td>
+              <td><code>DATE</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Atributo que depende funcionalmente de la combinación completa de ambas claves primarias (2FN).</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Proceso de Normalización</h2>
+            <p class="subtitle">Observa la transformación paso a paso desde la tabla plana hasta esquemas en 1FN, 3FN y 5FN</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header">
+            <span class="pipeline-title"><i class="fa-solid fa-sliders"></i> Selector de Forma Normal en Tiempo Real</span>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <p style="font-weight: 700; font-size: 0.9rem; color: var(--accent-dark); margin-bottom: 12px;">
+              Selecciona el estado del esquema relacional para visualizar el pipeline de refactorización:
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="sim-btn norm-btn active" data-step="unnorm">
+                <i class="fa-solid fa-file-excel"></i> 0. Tabla Plana Sucia (UNF)
+              </button>
+              <button class="sim-btn norm-btn" data-step="fn1">
+                <i class="fa-solid fa-cubes-stacked"></i> 1. Primera Forma Normal (1FN)
+              </button>
+              <button class="sim-btn norm-btn" data-step="fn3">
+                <i class="fa-solid fa-network-wired"></i> 3. Tercera Forma Normal (3FN & BCNF)
+              </button>
+              <button class="sim-btn norm-btn" data-step="fn5">
+                <i class="fa-solid fa-arrows-split-up-and-left"></i> 5. Quinta Forma Normal (5FN)
+              </button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;">
+              💡 <em>Inspecciona cómo la estructura evoluciona y cómo se erradican las anomalías de redundancia en cada fase.</em>
+            </p>
+          </div>
+
+          <!-- Contenedor del Pipeline en 3 Etapas renderizado dinámicamente por app.js -->
+          <div id="normSimDisplay"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES DE NORMALIZACIÓN EN PRODUCCIÓN
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones de Normalización & Consideraciones de Producción</h2>
+            <p class="subtitle">Errores arquitectónicos comunes: desde la sobre-normalización hasta el abuso de columnas de texto</p>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 1: Columnas Repetitivas Horizontales -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 1: Grupos Repetitivos en Columnas Horizontales (Violación Flagrante de 1FN)</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Crear columnas numeradas secuencialmente como <code>telefono_1, telefono_2, telefono_3</code> o <code>curso_1, curso_2</code> limita artificialmente la cantidad de registros por entidad, desperdicia almacenamiento con campos nulos y hace imposible indexar o consultar mediante filtros genéricos.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Esquema Rígido y Anti-Relacional</span>
+<pre>-- ⚠️ Columnas fijas que violan la 1FN:
+CREATE TABLE clientes_telefono_error (
+    cliente_id  INT PRIMARY KEY,
+    nombre      VARCHAR,
+    telefono_1  VARCHAR,
+    telefono_2  VARCHAR,
+    telefono_3  VARCHAR -- ¿Y si tiene 4 teléfonos?
+);</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Relación 1:N Flexible y Atómica</span>
+<pre>-- ✅ Tabla hija normalizada en 1FN/2FN:
+CREATE TABLE cliente_telefonos (
+    cliente_id INT REFERENCES clientes(cliente_id),
+    telefono   VARCHAR NOT NULL,
+    tipo       VARCHAR, -- 'Móvil', 'Oficina'
+    PRIMARY KEY (cliente_id, telefono)
+);</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 2: Sobre-Normalización Prematura en Sistemas OLAP -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 2: Sobre-Normalización Prematura en Data Warehouses (OLAP)</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            La normalización hasta 3FN/BCNF es imperativa en sistemas transaccionales (<strong>OLTP</strong>) para asegurar la integridad de escrituras. Sin embargo, aplicarla ciegamente en almacenes de datos y analítica (<strong>OLAP</strong>) genera modelos con decenas de tablas pequeñas que obligan a realizar JOINs excesivos, penalizando el rendimiento de lectura.
+          </p>
+          <p style="font-size: 0.88rem; color: var(--accent-dark); font-weight: 600; margin-top: 8px;">
+            💡 Solución Defensiva: En OLAP se emplean esquemas intencionalmente desnormalizados en <em>Estrella (Star Schema)</em> o <em>Copo de Nieve (Snowflake)</em>, donde la redundancia controlada en tablas de dimensiones acelera drásticamente las consultas analíticas masivas.
+          </p>
+        </div>
+
+        <!-- Anti-patrón 3: Listas Concatenadas en VARCHAR (CSV en Base de Datos) -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 3: Guardar Listas de IDs en Cadenas de Texto Separadas por Comas</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Almacenar valores como <code>'101, 102, 105'</code> en una columna de texto destruye la integridad referencial: el motor no puede verificar que los IDs existan, no se pueden crear claves foráneas y buscar un elemento requiere costosos escaneos de texto con <code>LIKE '%102%'</code> en lugar de búsquedas rápidas por índice.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CUADERNO EN GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Laboratorio en Google Colab con DuckDB</h2>
+            <p class="subtitle">Pon a prueba tus conocimientos con ejercicios guiados y ejecuta el cuaderno interactivo</p>
+          </div>
+        </div>
+
+        <!-- Reto 1 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 1: Diagnóstico y Normalización a 3FN de Facturación Comercial
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Dada la siguiente tabla desnormalizada de facturación:<br>
+            <code>facturas_unf (factura_id, fecha, cliente_nombre, ciudad_cliente, vendedor_nombre, depto_vendedor, producto_nombre, cantidad, precio)</code><br>
+            Identifica las dependencias funcionales, las dependencias parciales y las dependencias transitivas, y define la lista de entidades en 3FN necesarias para eliminar toda redundancia.
+          </p>
+          
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 1: Entidades en 3FN resultantes
+1. Clientes:     clientes(cliente_id PK, cliente_nombre, ciudad_cliente)
+2. Vendedores:   vendedores(vendedor_id PK, vendedor_nombre, depto_vendedor)
+3. Productos:    productos(producto_id PK, producto_nombre, precio_base)
+4. Facturas:     facturas(factura_id PK, fecha, cliente_id FK, vendedor_id FK)
+5. Detalle:      detalle_factura(factura_id FK, producto_id FK, cantidad, precio_unitario,
+                                 PRIMARY KEY(factura_id, producto_id))</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Se aislan las entidades maestras (Clientes, Vendedores, Productos) eliminando dependencias transitivas. El encabezado de la factura maneja la relación 1:N con clientes y vendedores, y el detalle resuelve la relación N:M con los productos en estricta 2FN y 3FN.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 2 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 2: Script SQL DDL de Creación en DuckDB con Restricciones
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe el script DDL completo en SQL (DuckDB) para implementar el esquema normalizado del Reto 1, incluyendo claves primarias, claves foráneas y una restricción <code>CHECK</code> para validar que la cantidad facturada sea estrictamente mayor a 0.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 2: Script DDL en DuckDB
+CREATE TABLE clientes_reto (
+    cliente_id INT PRIMARY KEY,
+    cliente_nombre VARCHAR NOT NULL,
+    ciudad_cliente VARCHAR NOT NULL
+);
+
+CREATE TABLE vendedores_reto (
+    vendedor_id INT PRIMARY KEY,
+    vendedor_nombre VARCHAR NOT NULL,
+    depto_vendedor VARCHAR NOT NULL
+);
+
+CREATE TABLE productos_reto (
+    producto_id INT PRIMARY KEY,
+    producto_nombre VARCHAR NOT NULL,
+    precio_base DECIMAL(12,2) NOT NULL
+);
+
+CREATE TABLE facturas_reto (
+    factura_id INT PRIMARY KEY,
+    fecha DATE NOT NULL,
+    cliente_id INT REFERENCES clientes_reto(cliente_id),
+    vendedor_id INT REFERENCES vendedores_reto(vendedor_id)
+);
+
+CREATE TABLE detalle_factura_reto (
+    factura_id INT REFERENCES facturas_reto(factura_id),
+    producto_id INT REFERENCES productos_reto(producto_id),
+    cantidad INT CHECK (cantidad > 0),
+    precio_unitario DECIMAL(12,2) NOT NULL,
+    PRIMARY KEY (factura_id, producto_id)
+);</pre>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 3 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 3: Reconstrucción Completa de Facturas con JOIN Cuádruple en 3FN
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe una consulta de proyección que reconstruya la información completa de la factura original uniendo las 5 tablas normalizadas del Reto 2, calculando el subtotal por ítem (<code>cantidad * precio_unitario</code>) sin que exista pérdida de información ni tuplas espurias.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 3: Reconstrucción relacional exacta
+SELECT 
+    f.factura_id,
+    f.fecha,
+    c.cliente_nombre,
+    c.ciudad_cliente,
+    v.vendedor_nombre,
+    p.producto_nombre,
+    df.cantidad,
+    df.precio_unitario,
+    (df.cantidad * df.precio_unitario) AS subtotal
+FROM facturas_reto f
+JOIN clientes_reto c ON f.cliente_id = c.cliente_id
+JOIN vendedores_reto v ON f.vendedor_id = v.vendedor_id
+JOIN detalle_factura_reto df ON f.factura_id = df.factura_id
+JOIN productos_reto p ON df.producto_id = p.producto_id
+ORDER BY f.factura_id, p.producto_nombre;</pre>
+            </div>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(16, 185, 129, 0.08); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: var(--accent-dark); margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta paso a paso la descomposición de la tabla plana sucia, prueba comandos <code>CREATE TABLE</code> e <code>INSERT DISTINCT</code>, y visualiza diagramas de normalización en memoria:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_4_NORMALIZACION.ipynb" download class="btn-colab" style="background: #065f46;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo03_joins.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 03 (JOINs & Conjuntos)
+        </a>
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal General
+        </a>
+        <a href="modulo05_transacciones.html" class="pager-btn primary">
+          Siguiente: Módulo 05 (Transacciones & ACID) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

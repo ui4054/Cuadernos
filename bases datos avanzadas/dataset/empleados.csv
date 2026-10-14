@@ -1,0 +1,11 @@
+empleado_id,nombre,salario,fecha_ingreso,jefe_id,depto_id
+101,Carlos Mendoza,8500000.0,2021-03-15,,1
+102,Ana María Gómez,6200000.0,2022-01-10,101,1
+103,Luis Fernando Torres,4800000.0,2023-05-20,101,1
+104,Sofía Ramírez,9000000.0,2020-11-01,,2
+105,Diego Alejandro Silva,5500000.0,2022-08-14,104,2
+106,Valentina Morales,5100000.0,2023-02-28,104,2
+107,Javier Castro,7000000.0,2019-06-12,,3
+108,Mariana López,4200000.0,2024-01-15,107,3
+109,Andrés Felipe Herrera,6500000.0,2021-09-01,,4
+110,Camila Ospina,5800000.0,2022-10-05,,5

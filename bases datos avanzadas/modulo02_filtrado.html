@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 02: Filtrado Avanzado, Lógica Trivalente & COALESCE — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #10b981;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a7f3d0;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #10b981;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #10b981;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ecfdf5);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_2_FILTRADO_LIKE.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html" class="active"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-floppy-disk"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Lienzo de Contenido Principal (Landing Completa del Módulo 02) -->
+    <main class="main-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+        <span class="sep">/</span>
+        <span>Fase I: Estructura & Consultas</span>
+        <span class="sep">/</span>
+        <span style="color: var(--text-main); font-weight: 700;">Módulo 02: Filtrado Avanzado, Lógica Trivalente & COALESCE</span>
+      </nav>
+
+      <!-- HERO DE LA LANDING -->
+      <section class="module-hero">
+        <div class="hero-badges">
+          <span class="badge-stage">FASE I: ESTRUCTURA & CONSULTAS</span>
+          <span class="badge-bloom">Bloom: 2. Aplicar & 3. Analizar</span>
+          <span class="badge-engine">Estándar ANSI SQL & DuckDB In-Memory</span>
+        </div>
+        <h1>Módulo 02: Filtrado Avanzado, Lógica Trivalente, Comodines LIKE / ILIKE & Manejo Seguro de Nulos con COALESCE</h1>
+        <p class="hero-desc">
+          Domina los mecanismos internos de evaluación booleana de tres valores (<code>TRUE</code>, <code>FALSE</code>, <code>UNKNOWN</code>), desglosa la anatomía de funciones críticas como <code>COALESCE</code> y <code>NULLIF</code>, comprende cómo las cláusulas <code>WHERE</code> descartan registros inadvertidamente en producción, y ejecuta búsquedas difusas con comodines y cláusulas de escape.
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat-item"><i class="fa-solid fa-calculator"></i> <strong>Lógica Trivalente:</strong> 3 Tablas de Verdad</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-key"></i> <strong>6 Palabras Clave:</strong> COALESCE, ILIKE, ESCAPE, NULLIF</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-diagram-project"></i> <strong>Modelo ERD:</strong> 2 Entidades Normalizadas</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-flask"></i> <strong>Simulador:</strong> Pipeline Interactivo 3 Etapas</div>
+        </div>
+      </section>
+
+      <!-- NAVEGACIÓN SECUNDARIA FLOTANTE DENTRO DE LA LANDING (ON-PAGE NAV) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto"><i class="fa-solid fa-briefcase"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-trivalente"><i class="fa-solid fa-brain"></i> 02. Lógica Trivalente</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Desglose SQL Línea a Línea</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador 3 Etapas</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos & Cuaderno Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO DE NEGOCIO & EL PROBLEMA REAL
+           =================================================================== -->
+      <section id="sec-contexto" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-briefcase"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">Impacto de filtros incompletos sobre registros con atributos opcionales</p>
+          </div>
+        </div>
+
+        <p class="th-lead">
+          En sistemas corporativos (ERP, CRM o facturación), ciertos atributos de contacto son opcionales durante el alta inicial (ej. correo electrónico o teléfono secundario). Si las consultas de extracción no contemplan explícitamente los valores ausentes, el motor relacional descarta filas válidas.
+        </p>
+
+        <div class="th-grid" style="margin-top: 20px;">
+          <div class="th-card">
+            <h4><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> Escenario de Omisión Involuntaria</h4>
+            <p>
+              Una consulta de notificación diseñada para identificar clientes cuyo correo no pertenece al dominio corporativo:
+            </p>
+            <pre class="th-snippet">SELECT cliente_id, nombre, email
+FROM   clientes
+WHERE  email NOT LIKE '%@empresa.com';</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ⚠️ Consecuencia: Las filas con <code>email = NULL</code> evalúan a <code>UNKNOWN</code> y son descartadas silenciosamente por la cláusula <code>WHERE</code>, omitiendo a los clientes sin correo registrado.
+            </p>
+          </div>
+
+          <div class="th-card">
+            <h4><i class="fa-solid fa-shield-halved" style="color: var(--accent-primary);"></i> Tratamiento Defensivo con Normalización de Nulos</h4>
+            <p>
+              Uso explícito de <strong><code>COALESCE</code></strong> para sustituir valores ausentes antes de evaluar la condición o en la proyección:
+            </p>
+            <pre class="th-snippet">-- Tratamiento defensivo con COALESCE
+SELECT cliente_id, nombre,
+       COALESCE(email, 'SIN_EMAIL_REGISTRADO') AS email_seguro
+FROM   clientes
+WHERE  COALESCE(email, '') NOT LIKE '%@empresa.com';</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600;">
+              ✅ Resultado: Todos los registros son evaluados de manera predecible y consistente.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO: LA LÓGICA TRIVALENTE (3-VALUED LOGIC)
+           =================================================================== -->
+      <section id="sec-teoria-trivalente" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: La Lógica Trivalente en SQL</h2>
+            <p class="subtitle">Fundamento matemático de Jan Łukasiewicz y Edgar F. Codd ante la presencia de valores NULL</p>
+          </div>
+        </div>
+
+        <p>
+          A diferencia de los lenguajes de programación tradicionales (como Java, C# o Python) donde las comparaciones booleanas solo pueden ser <strong>Verdaderas (<code>TRUE</code>)</strong> o <strong>Falsas (<code>FALSE</code>)</strong>, las bases de datos relacionales operan bajo una <strong>Lógica de Tres Valores (3-Valued Logic, 3VL)</strong>:
+        </p>
+
+        <div class="th-grid" style="margin: 20px 0;">
+          <div class="th-card">
+            <h4>1. TRUE (Verdadero)</h4>
+            <p>La condición se satisface con absoluta certeza matemática y relacional.</p>
+          </div>
+          <div class="th-card">
+            <h4>2. FALSE (Falso)</h4>
+            <p>La condición no se cumple con absoluta certeza matemática.</p>
+          </div>
+          <div class="th-card" style="border-top: 4px solid #f59e0b;">
+            <h4 style="color: #b45309;">3. UNKNOWN (Desconocido)</h4>
+            <p>La condición involucra un valor <code>NULL</code>, por lo que el motor relacional no puede determinar con certeza si es verdadero o falso.</p>
+          </div>
+        </div>
+
+        <div class="th-callout pitfall">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <div>
+            <strong>La Regla de Oro sobre NULL:</strong> <code>NULL</code> NO es un valor; es un <em>marcador de ausencia de dato o estado desconocido</em>. Por esta razón matemática, dos nulos nunca pueden considerarse iguales. La expresión <code>NULL = NULL</code> <strong>NO</strong> evalúa a <code>TRUE</code>; evalúa estrictamente a <strong><code>UNKNOWN</code></strong>.
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-table-cells"></i> Las 3 Tablas de Verdad Oficiales de la Lógica Trivalente SQL</h3>
+        <p>Estas son las matrices exactas con las que el optimizador y el motor de consultas resuelven cualquier expresión condicional:</p>
+
+        <div class="th-grid">
+          <!-- Tabla 1: AND -->
+          <div class="truth-table-container">
+            <h4 style="text-align: center; margin-bottom: 10px; color: var(--accent-dark);"><i class="fa-solid fa-circle-dot"></i> Operador AND (Conjunción)</h4>
+            <table class="truth-table">
+              <thead>
+                <tr><th>A \ B</th><th>TRUE</th><th>FALSE</th><th>UNKNOWN</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>TRUE</strong></td>
+                  <td><span class="val-true">TRUE</span></td>
+                  <td><span class="val-false">FALSE</span></td>
+                  <td><span class="val-unknown">UNKNOWN</span></td>
+                </tr>
+                <tr>
+                  <td><strong>FALSE</strong></td>
+                  <td><span class="val-false">FALSE</span></td>
+                  <td><span class="val-false">FALSE</span></td>
+                  <td><span class="val-false">FALSE</span></td>
+                </tr>
+                <tr>
+                  <td><strong>UNKNOWN</strong></td>
+                  <td><span class="val-unknown">UNKNOWN</span></td>
+                  <td><span class="val-false">FALSE</span></td>
+                  <td><span class="val-unknown">UNKNOWN</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="th-note" style="margin-top: 8px;"><em>Regla:</em> <code>FALSE</code> es el elemento absorbente en AND (si uno es FALSE, todo es FALSE).</p>
+          </div>
+
+          <!-- Tabla 2: OR -->
+          <div class="truth-table-container">
+            <h4 style="text-align: center; margin-bottom: 10px; color: var(--accent-dark);"><i class="fa-solid fa-circle-dot"></i> Operador OR (Disyunción)</h4>
+            <table class="truth-table">
+              <thead>
+                <tr><th>A \ B</th><th>TRUE</th><th>FALSE</th><th>UNKNOWN</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>TRUE</strong></td>
+                  <td><span class="val-true">TRUE</span></td>
+                  <td><span class="val-true">TRUE</span></td>
+                  <td><span class="val-true">TRUE</span></td>
+                </tr>
+                <tr>
+                  <td><strong>FALSE</strong></td>
+                  <td><span class="val-true">TRUE</span></td>
+                  <td><span class="val-false">FALSE</span></td>
+                  <td><span class="val-unknown">UNKNOWN</span></td>
+                </tr>
+                <tr>
+                  <td><strong>UNKNOWN</strong></td>
+                  <td><span class="val-true">TRUE</span></td>
+                  <td><span class="val-unknown">UNKNOWN</span></td>
+                  <td><span class="val-unknown">UNKNOWN</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="th-note" style="margin-top: 8px;"><em>Regla:</em> <code>TRUE</code> es el elemento dominante en OR (si uno es TRUE, todo es TRUE).</p>
+          </div>
+        </div>
+
+        <!-- Tabla 3: NOT -->
+        <div style="max-width: 500px; margin: 20px auto;">
+          <h4 style="text-align: center; margin-bottom: 10px; color: var(--accent-dark);"><i class="fa-solid fa-circle-dot"></i> Operador NOT (Negación)</h4>
+          <table class="truth-table">
+            <thead>
+              <tr><th>Valor A</th><th>NOT A</th><th>Consecuencia Didáctica</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="val-true">TRUE</span></td><td><span class="val-false">FALSE</span></td><td>Se invierte a falso.</td></tr>
+              <tr><td><span class="val-false">FALSE</span></td><td><span class="val-true">TRUE</span></td><td>Se invierte a verdadero.</td></tr>
+              <tr><td><span class="val-unknown">UNKNOWN</span></td><td><span class="val-unknown">UNKNOWN</span></td><td><strong>¡Permanece UNKNOWN! Negar lo desconocido no lo hace conocido.</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="th-callout why" style="margin-top: 24px;">
+          <i class="fa-solid fa-lightbulb"></i>
+          <div>
+            <strong>El Mecanismo de Aceptación Estricta de la Cláusula WHERE:</strong>
+            El motor SQL filtra las tuplas bajo un filtro estricto: una fila es retornada <strong>ÚNICA Y EXCLUSIVAMENTE SI su predicado evalúa a <code>TRUE</code></strong>. Si evalúa a <code>FALSE</code> o a <code>UNKNOWN</code>, la fila es descartada de forma silenciosa. Por eso, al evaluar <code>WHERE email NOT LIKE '%@...'</code> con un email nulo, la expresión evalúa a <code>NOT UNKNOWN = UNKNOWN</code>, y la fila es desechada.
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario de Palabras Clave</h2>
+            <p class="subtitle">Sintaxis, comportamiento en el motor relacional y soporte multi-motor</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. COALESCE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">COALESCE(...)</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">COALESCE(expresion_1, expresion_2, ..., expresion_n)</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Sustituye el valor NULL por un texto por defecto
+SELECT cliente_id, nombre,
+       COALESCE(email, 'SIN_CORREO_REGISTRADO') AS email_contacto
+FROM   clientes;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Evalúa los argumentos en orden secuencial de izquierda a derecha y retorna el <strong>primer valor que no sea NULL</strong>. Si todos los argumentos son NULL, retorna NULL.</li>
+              <li><strong>Cortocircuito (Short-Circuit):</strong> Se detiene inmediatamente al encontrar el primer argumento válido, sin evaluar las expresiones restantes (ahorrando tiempo de CPU y subconsultas).</li>
+              <li><strong>Compatibilidad Multi-Motor:</strong> Es universal en DuckDB, PostgreSQL, Oracle, Microsoft SQL Server y MariaDB/MySQL.</li>
+            </ul>
+          </div>
+
+          <!-- 2. IS NULL / IS NOT NULL -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">IS NULL / IS NOT NULL</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">columna IS NULL
+columna IS NOT NULL</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Filtra de forma estricta los clientes que no tienen teléfono registrado
+SELECT cliente_id, nombre, ciudad
+FROM   clientes
+WHERE  telefono IS NULL;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Determinismo Booleano:</strong> Es el operador relacional estricto para comprobar ausencia de datos. Siempre evalúa a <code>TRUE</code> o <code>FALSE</code> (a diferencia de <code>= NULL</code> que resulta en <code>UNKNOWN</code>).</li>
+              <li><strong>Anti-patrón de Producción:</strong> Nunca escribas <code>columna = NULL</code> o <code>columna != NULL</code>. Esas condiciones evalúan a <code>UNKNOWN</code> y son descartadas silenciosamente por la cláusula <code>WHERE</code>.</li>
+              <li><strong>Indexación:</strong> PostgreSQL y SQL Server indexan valores nulos en árboles B-Tree; en Oracle tradicional, el árbol B-Tree omite filas donde todas las columnas indexadas son nulas.</li>
+            </ul>
+          </div>
+
+          <!-- 3. LIKE / ILIKE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">LIKE / ILIKE</span>
+              <span class="keyword-entry-badge">ANSI & Extensiones</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">columna [NOT] LIKE 'patron'     -- Sensible a mayúsculas/minúsculas (Estándar ANSI)
+columna [NOT] ILIKE 'patron'    -- Insensible a mayúsculas (DuckDB y PostgreSQL)</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Busca clientes cuyo nombre contenga 'Tech' en cualquier posición y con cualquier combinación de mayúsculas
+SELECT cliente_id, nombre, ciudad
+FROM   clientes
+WHERE  nombre ILIKE '%Tech%';</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Comodín <code>%</code> (Porcentaje):</strong> Coincide con <strong>cero o más caracteres</strong> cualesquiera.</li>
+              <li><strong>Comodín <code>_</code> (Guion bajo):</strong> Coincide con <strong>exactamente un único carácter</strong> en dicha posición.</li>
+              <li><strong>Sensibilidad a Mayúsculas:</strong> <code>LIKE</code> es sensible a mayúsculas en el estándar ANSI. <code>ILIKE</code> es la variante nativa insensible en DuckDB y PostgreSQL.</li>
+              <li><strong>Otros Motores:</strong> En SQL Server depende de la colación (CI = Case Insensitive); en Oracle o MySQL se utiliza <code>LOWER(columna) LIKE LOWER('patron')</code> o expresiones regulares.</li>
+            </ul>
+          </div>
+
+          <!-- 4. ESCAPE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">ESCAPE</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">columna LIKE 'patron_con_escape' ESCAPE 'caracter_escape'</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Busca productos que tengan un descuento literal del 15% (no como comodín)
+SELECT factura_id, descripcion_item
+FROM   facturacion
+WHERE  descripcion_item LIKE '%15\%%' ESCAPE '\';</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Neutraliza la función especial de los comodines <code>%</code> o <code>_</code> para buscar el símbolo de forma literal en la base de datos.</li>
+              <li><strong>Carácter de Escape:</strong> Cualquier carácter (frecuentemente <code>\</code> o <code>!</code>) puede definirse como escape para preceder al símbolo buscado.</li>
+            </ul>
+          </div>
+
+          <!-- 5. NULLIF -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">NULLIF(a, b)</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">NULLIF(expresion_1, expresion_2)</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Previene el error de división por cero convirtiendo 0 en NULL
+SELECT venta_id, monto_total,
+       monto_total / NULLIF(cuotas_pactadas, 0) AS valor_cuota_seguro
+FROM   ventas;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica:</strong> Compara dos expresiones y <strong>retorna NULL si ambas son iguales</strong>; si son diferentes, retorna la primera expresión (<code>expresion_1</code>).</li>
+              <li><strong>Uso Crítico:</strong> Previene excepciones fatales por división entre cero y permite normalizar cadenas de texto vacías en valores <code>NULL</code> (<code>NULLIF(col, '')</code>).</li>
+            </ul>
+          </div>
+
+          <!-- 6. BETWEEN & IN -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">BETWEEN & IN</span>
+              <span class="keyword-entry-badge">Estándar ANSI SQL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">columna BETWEEN limite_inferior AND limite_superior
+columna IN (valor_1, valor_2, ..., valor_n)</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Filtra clientes en un rango de fechas y pertenecientes a ciudades clave
+SELECT cliente_id, nombre, ciudad, fecha_registro
+FROM   clientes
+WHERE  ciudad IN ('Bogotá', 'Medellín', 'Cali')
+  AND  fecha_registro BETWEEN '2026-01-01' AND '2026-06-30';</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong><code>BETWEEN</code>:</strong> Evalúa un rango continuo <strong>inclusivo</strong> en ambos extremos ($limite\_inf \le x \le limite\_sup$).</li>
+              <li><strong><code>IN</code>:</strong> Evalúa pertenencia a una lista de valores discretos (equivalente a disyunciones con <code>OR</code>).</li>
+              <li><strong>Precaución con <code>NOT IN</code>:</strong> Nunca utilices <code>NOT IN</code> ante subconsultas que contengan al menos un <code>NULL</code>, pues evaluará a <code>UNKNOWN</code> y descartará todos los registros (retornando 0 filas).</li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Tabla Comparativa Multi-Motor de Funciones de Nulos -->
+        <h3 class="th-title" style="margin-top: 36px;"><i class="fa-solid fa-scale-balanced"></i> Matriz de Funciones para Valores Nulos entre Motores SQL</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Función / Propósito</th>
+              <th>Estándar ANSI (DuckDB / Postgres)</th>
+              <th>Microsoft SQL Server / Azure SQL</th>
+              <th>Oracle Database</th>
+              <th>MariaDB / MySQL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Primer valor no nulo</strong></td>
+              <td><code>COALESCE(a, b, ...)</code></td>
+              <td><code>COALESCE(a, b)</code> / <code>ISNULL(a, b)</code></td>
+              <td><code>COALESCE(a, b)</code> / <code>NVL(a, b)</code></td>
+              <td><code>COALESCE(a, b)</code> / <code>IFNULL(a, b)</code></td>
+            </tr>
+            <tr>
+              <td><strong>Retornar NULL si son iguales</strong></td>
+              <td><code>NULLIF(a, b)</code></td>
+              <td><code>NULLIF(a, b)</code></td>
+              <td><code>NULLIF(a, b)</code></td>
+              <td><code>NULLIF(a, b)</code></td>
+            </tr>
+            <tr>
+              <td><strong>Búsqueda insensible (Case-Insensitive)</strong></td>
+              <td><code>col ILIKE 'patrón'</code></td>
+              <td><code>col LIKE 'patrón'</code> (Collation CI)</td>
+              <td><code>REGEXP_LIKE(col, 'patrón', 'i')</code></td>
+              <td><code>col LIKE 'patrón'</code> (Collation CI)</td>
+            </tr>
+            <tr>
+              <td><strong>Búsqueda con caracteres comodín</strong></td>
+              <td><code>LIKE '...\%%' ESCAPE '\'</code></td>
+              <td><code>LIKE '...\%%' ESCAPE '\'</code> o <code>LIKE '%[%]%'</code></td>
+              <td><code>LIKE '...\%%' ESCAPE '\'</code></td>
+              <td><code>LIKE '...\%%' ESCAPE '\'</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO SQL CON ANÁLISIS ANATÓMICO LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL: Consultas Reales con Desglose Línea por Línea</h2>
+            <p class="subtitle">Análisis anatómico de cómo el motor de base de datos compila y ejecuta cada instrucción</p>
+          </div>
+        </div>
+
+        <!-- Consulta 1: COALESCE + ILIKE -->
+        <h3 class="th-title"><i class="fa-solid fa-terminal"></i> Consulta 1: Normalización de Contacto y Filtrado Multicriterio Insensible</h3>
+        <p>
+          Esta consulta limpia los nulos en la proyección, protege la cláusula <code>WHERE</code> contra la lógica trivalente y ejecuta búsquedas difusas:
+        </p>
+
+        <div class="code-breakdown-wrapper">
+          <div class="code-breakdown-header">
+            <span><i class="fa-solid fa-file-code"></i> consulta_clientes_defensiva.sql</span>
+            <span>Motor: DuckDB & ANSI SQL</span>
+          </div>
+
+          <!-- Línea 1 -->
+          <div class="breakdown-row">
+            <div class="breakdown-line-num">LÍNEA 1</div>
+            <div class="breakdown-code">SELECT cliente_id, nombre,</div>
+            <div class="breakdown-explanation">
+              <strong>Proyección de Atributos Clave:</strong>
+              Extrae el identificador único entero (PK) y la razón social o nombre completo del cliente desde el búfer de memoria.
+            </div>
+          </div>
+
+          <!-- Línea 2 -->
+          <div class="breakdown-row">
+            <div class="breakdown-line-num">LÍNEA 2</div>
+            <div class="breakdown-code">       COALESCE(email, 'SIN_EMAIL_REGISTRADO') AS email_contacto,</div>
+            <div class="breakdown-explanation">
+              <strong>Protección y Reemplazo de Nulos con COALESCE:</strong>
+              Evalúa la columna <code>email</code>. Si el valor es no nulo, lo entrega intacto; si es <code>NULL</code>, lo sustituye de inmediato por el texto literal <code>'SIN_EMAIL_REGISTRADO'</code> con el alias <code>email_contacto</code>, evitando que capas de frontend reciban punteros nulos.
+            </div>
+          </div>
+
+          <!-- Línea 3 -->
+          <div class="breakdown-row">
+            <div class="breakdown-line-num">LÍNEA 3</div>
+            <div class="breakdown-code">       ciudad, categoria</div>
+            <div class="breakdown-explanation">
+              <strong>Columnas de Segmentación:</strong>
+              Proyecta la ciudad geográfica y la categoría de fidelidad del cliente (VIP, Empresarial, Individual) para agregaciones posteriores.
+            </div>
+          </div>
+
+          <!-- Línea 4 -->
+          <div class="breakdown-row">
+            <div class="breakdown-line-num">LÍNEA 4</div>
+            <div class="breakdown-code">FROM   clientes</div>
+            <div class="breakdown-explanation">
+              <strong>Declaración del Conjunto Base:</strong>
+              Primer paso en el orden lógico de procesamiento: el motor localiza la tabla relacional <code>clientes</code> y carga sus punteros de página.
+            </div>
+          </div>
+
+          <!-- Línea 5 -->
+          <div class="breakdown-row">
+            <div class="breakdown-line-num">LÍNEA 5</div>
+            <div class="breakdown-code">WHERE  (nombre ILIKE '%Tech%' OR ciudad = 'Bogotá')</div>
+            <div class="breakdown-explanation">
+              <strong>Filtro Difuso y de Igualdad Exacta:</strong>
+              Usa <code>ILIKE '%Tech%'</code> para capturar cualquier variación sin importar mayúsculas ("tech", "TECH", "Tech Solutions") en cualquier posición del texto. Los paréntesis aíslan la disyunción con la ciudad de Bogotá.
+            </div>
+          </div>
+
+          <!-- Línea 6 -->
+          <div class="breakdown-row">
+            <div class="breakdown-line-num">LÍNEA 6</div>
+            <div class="breakdown-code">  AND  COALESCE(email, '') NOT ILIKE '%.gov.co'</div>
+            <div class="breakdown-explanation">
+              <strong>Exclusión Defensiva sin Pérdida de Nulos:</strong>
+              Aplica <code>COALESCE(email, '')</code>. Si el email fuera nulo, se convierte en cadena vacía <code>''</code>. Como <code>''</code> no termina en <code>.gov.co</code>, la condición evalúa estrictamente a <strong><code>TRUE</code></strong>, permitiendo que los clientes sin email se conserven en el resultado.
+            </div>
+          </div>
+
+          <!-- Línea 7 -->
+          <div class="breakdown-row">
+            <div class="breakdown-line-num">LÍNEA 7</div>
+            <div class="breakdown-code">ORDER BY nombre ASC;</div>
+            <div class="breakdown-explanation">
+              <strong>Ordenamiento Final:</strong>
+              Último paso lógico: ordena las tuplas resultantes alfabéticamente en orden ascendente según el nombre del cliente.
+            </div>
+          </div>
+        </div>
+
+        <!-- Consulta 2: Cláusula ESCAPE -->
+        <h3 class="th-title" style="margin-top: 36px;"><i class="fa-solid fa-terminal"></i> Consulta 2: Búsqueda de Descuentos con Porcentajes Literales usando ESCAPE</h3>
+        <p>
+          En este escenario, necesitamos encontrar productos o facturas con un descuento especial del <code>15%</code> donde el signo <code>%</code> no debe comportarse como comodín:
+        </p>
+
+        <pre class="th-snippet">-- Búsqueda de cadenas que contienen literalmente el símbolo de porcentaje (%)
+SELECT factura_id, cliente_id, descripcion_item, porcentaje_descuento
+FROM   facturacion
+WHERE  descripcion_item LIKE '%15\%%' ESCAPE '\';</pre>
+
+        <div class="th-callout tip" style="margin-top: 12px;">
+          <i class="fa-solid fa-circle-info"></i>
+          <div>
+            <strong>Mecánica del Parser SQL:</strong> El motor lee la secuencia <code>\%</code>. Al estar configurado <code>ESCAPE '\'</code>, despoja al <code>%</code> de su significado de comodín múltiple y busca el carácter ASCII 37 exacto precedido por el número 15.
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ENTIDAD-RELACIÓN (ERD) & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación (ERD) & Diccionario de Datos Físico</h2>
+            <p class="subtitle">Estructura normalizada de datos para pruebas de filtrado, comodines y tratamiento de nulos</p>
+          </div>
+        </div>
+
+        <p>
+          El dominio de datos de este módulo modela la relación entre clientes empresariales/particulares y sus canales de contacto asociados en un directorio corporativo:
+        </p>
+
+        <div class="mermaid-box">
+          <h4>📐 Diagrama Entidad-Relación — Módulo 02: Clientes & Directorio de Contactos</h4>
+          <div class="mermaid">
+erDiagram
+    CLIENTES ||--o{ DIRECTORIO_CONTACTOS : "registra canales de"
+    CLIENTES {
+        int cliente_id PK "Identificador único entero autoincremental"
+        varchar nombre "Razón social o nombre completo del cliente"
+        varchar ciudad "Ciudad sede o residencia principal"
+        varchar categoria "Segmento comercial: VIP, Empresarial, Individual"
+        timestamp fecha_registro "Marca de tiempo de alta del cliente"
+    }
+    DIRECTORIO_CONTACTOS {
+        int contacto_id PK "Identificador único del medio de contacto"
+        int cliente_id FK "Llave foránea vinculada a CLIENTES"
+        varchar email "Correo electrónico corporativo (Permite NULL)"
+        varchar telefono "Número de contacto telefónico (Permite NULL)"
+        varchar canal_preferido "Canal preferido: Email, WhatsApp, Teléfono"
+    }
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-table-list"></i> Diccionario de Datos Físico (Especificación DuckDB / ANSI)</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricciones</th>
+              <th>Justificación en Arquitectura de Producción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>CLIENTES</code></td>
+              <td><code>cliente_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>PRIMARY KEY</code></td>
+              <td>Llave primaria subrogada no nula y única.</td>
+            </tr>
+            <tr>
+              <td><code>CLIENTES</code></td>
+              <td><code>nombre</code></td>
+              <td><code>VARCHAR(150)</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Nombre obligatorio para emitir facturación electrónica.</td>
+            </tr>
+            <tr>
+              <td><code>CLIENTES</code></td>
+              <td><code>ciudad</code></td>
+              <td><code>VARCHAR(80)</code></td>
+              <td><code>NOT NULL</code></td>
+              <td>Ubicación geográfica para reportes de jurisdicción territorial.</td>
+            </tr>
+            <tr>
+              <td><code>CLIENTES</code></td>
+              <td><code>categoria</code></td>
+              <td><code>VARCHAR(20)</code></td>
+              <td><code>CHECK IN (...)</code></td>
+              <td>Restringe los valores a: <code>'VIP'</code>, <code>'Empresarial'</code>, <code>'Individual'</code>.</td>
+            </tr>
+            <tr>
+              <td><code>DIRECTORIO_CONTACTOS</code></td>
+              <td><code>email</code></td>
+              <td><code>VARCHAR(120)</code></td>
+              <td><code>NULL (Opcional)</code></td>
+              <td>Permite nulos porque no todos los clientes disponen de correo corporativo.</td>
+            </tr>
+            <tr>
+              <td><code>DIRECTORIO_CONTACTOS</code></td>
+              <td><code>telefono</code></td>
+              <td><code>VARCHAR(30)</code></td>
+              <td><code>NULL (Opcional)</code></td>
+              <td>Canal alternativo opcional para contacto telefónico.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO EN 3 ETAPAS
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo en 3 Etapas: Motor LIKE / ILIKE</h2>
+            <p class="subtitle">Inspecciona cómo el motor de bases de datos procesa comodines y filtra filas en memoria</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header">
+            <span class="pipeline-title"><i class="fa-solid fa-terminal"></i> Evaluador de Expresiones y Comodines en Tiempo Real</span>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <label for="likeInput" style="font-weight: 700; font-size: 0.9rem; color: var(--accent-dark); display:block; margin-bottom: 8px;">
+              Escribe un patrón de búsqueda difusa (Usa <code>%</code> para comodín múltiple y <code>_</code> para carácter único):
+            </label>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="likeInput" value="%Tech%" placeholder="Ej: %Tech%, %Bogot%, Juan%, %.com" style="flex:1; min-width: 250px; padding: 10px 16px; border: 2px solid var(--accent-primary); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.95rem; background: var(--bg-secondary); color: var(--text-main);">
+              <div style="display: flex; gap: 6px;">
+                <button class="sim-btn" onclick="document.getElementById('likeInput').value='%Tech%'; document.getElementById('likeInput').dispatchEvent(new Event('input'));">%Tech%</button>
+                <button class="sim-btn" onclick="document.getElementById('likeInput').value='Bogot%'; document.getElementById('likeInput').dispatchEvent(new Event('input'));">Bogot%</button>
+                <button class="sim-btn" onclick="document.getElementById('likeInput').value='_a%'; document.getElementById('likeInput').dispatchEvent(new Event('input'));">_a%</button>
+                <button class="sim-btn" onclick="document.getElementById('likeInput').value='%Valle%'; document.getElementById('likeInput').dispatchEvent(new Event('input'));">%Valle%</button>
+              </div>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 8px;">
+              💡 <em>Prueba escribir <code>_a%</code> para buscar clientes o ciudades cuya segunda letra sea estrictamente una "a".</em>
+            </p>
+          </div>
+
+          <!-- Contenedor del Pipeline en 3 Etapas renderizado por app.js -->
+          <div id="likeResults"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES & CONSIDERACIONES DE RENDIMIENTO
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones y Consideraciones de Rendimiento</h2>
+            <p class="subtitle">Prácticas que degradan el plan de ejecución o alteran el resultado lógico esperado</p>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 1: Index Suppression -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 1: Supresión de Índices B-Tree (Pérdida de SARGability) por Funciones en el WHERE</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Al envolver una columna indexada dentro de una función (como <code>LOWER(columna)</code> o <code>COALESCE(columna, ...)</code>), el optimizador no puede utilizar la estructura ordenada del árbol y se ve forzado a ejecutar un <strong>Full Table Scan</strong>, evaluando la función fila por fila.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Consulta No SARGable (Table Scan)</span>
+<pre>-- Inhabilita el índice sobre la columna email:
+SELECT * 
+FROM   clientes 
+WHERE  COALESCE(email, '') = 'carlos@empresa.com';</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Consulta SARGable (Index Seek / Scan)</span>
+<pre>-- Permite al optimizador utilizar el índice:
+SELECT * 
+FROM   clientes 
+WHERE  email = 'carlos@empresa.com' 
+  AND  email IS NOT NULL;</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 2: Comodín inicial % -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 2: Búsquedas con Comodín Prefijo (%termino)</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Un índice B-Tree estándar ordena las cadenas desde el primer carácter. Un filtro como <code>LIKE 'Tech%'</code> aprovecha un <em>Index Range Scan</em> eficiente. Por el contrario, <code>LIKE '%Tech'</code> requiere recorrer todas las páginas hoja del índice o de la tabla.
+          </p>
+          <div class="th-callout why" style="margin-top: 10px;">
+            <i class="fa-solid fa-lightbulb"></i>
+            <div>
+              <strong>Recomendación en Grandes Volúmenes:</strong> Para búsquedas arbitrarias en textos extensos, implementar índices de texto completo (Full-Text Search, GIN o trigramas).
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 3: La trampa de NOT IN -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 3: Evaluación de NOT IN frente a Conjuntos con Valores NULL</span>
+          </div>
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Comportamiento Inesperado (0 Filas)</span>
+<pre>-- Si un solo registro en jerarquia tiene padre_id NULL,
+-- la comparación evalúa a UNKNOWN y retorna 0 filas:
+SELECT * FROM clientes
+WHERE  cliente_id NOT IN (
+    SELECT padre_id FROM jerarquia
+);</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Alternativa Segura (NOT EXISTS)</span>
+<pre>-- Robusto ante presencia de valores NULL:
+SELECT c.* FROM clientes c
+WHERE  NOT EXISTS (
+    SELECT 1 FROM jerarquia j 
+    WHERE  j.padre_id = c.cliente_id
+);</pre>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CUADERNO EN GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Laboratorio en Google Colab con DuckDB</h2>
+            <p class="subtitle">Pon a prueba tus conocimientos con ejercicios guiados y ejecuta el cuaderno interactivo</p>
+          </div>
+        </div>
+
+        <!-- Reto 1 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 1: Limpieza de Clientes para Campaña de Marketing
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Se requiere generar una lista de clientes de la ciudad de <strong>'Cali'</strong> o <strong>'Medellín'</strong>, asegurando que si no tienen teléfono registrado, se despliegue el texto <code>'SOLICITAR_NUMERO'</code>. Además, se deben excluir aquellos clientes cuyo nombre contenga la palabra <code>'Gutiérrez'</code> sin importar si fue escrita en mayúsculas o minúsculas.
+          </p>
+          
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Sugerida Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 1:
+SELECT cliente_id, nombre, ciudad,
+       COALESCE(telefono, 'SOLICITAR_NUMERO') AS telefono_gestion
+FROM   clientes
+WHERE  ciudad IN ('Cali', 'Medellín')
+  AND  nombre NOT ILIKE '%Gutiérrez%';</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Usamos <code>IN ('Cali', 'Medellín')</code> para agrupar las ciudades, <code>COALESCE</code> para reemplazar los teléfonos nulos sin perder tuplas, y <code>NOT ILIKE</code> para excluir insensiblemente el apellido.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 2 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 2: Cálculo Seguro de Saldo Promedio con Prevención de División por Cero
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe una consulta que calcule el saldo promedio por transacción (<code>monto_total / transacciones_activas</code>) garantizando que si <code>transacciones_activas</code> es igual a 0, la consulta <strong>no se rompa con un error de división por cero</strong> y entregue <code>0.00</code>.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución Sugerida Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 2 con NULLIF y COALESCE combinados:
+SELECT cliente_id, monto_total, transacciones_activas,
+       COALESCE(
+           monto_total / NULLIF(transacciones_activas, 0), 
+           0.00
+       ) AS saldo_promedio_seguro
+FROM   cartera_clientes;</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> <code>NULLIF(transacciones_activas, 0)</code> transforma los ceros en <code>NULL</code>. Como cualquier número dividido entre NULL da NULL, la operación no arroja error. Luego, el <code>COALESCE</code> exterior captura ese NULL y lo convierte limpiamente en <code>0.00</code>.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(16, 185, 129, 0.08); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: var(--accent-dark); margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta todos estos ejemplos en memoria sobre DuckDB, resuelve los retos interactivos y experimenta con planes de ejecución reales dentro de tu entorno Colab:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_2_FILTRADO_LIKE.ipynb" download class="btn-colab" style="background: #065f46;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo01_ddl_dml.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 01 (DDL/DML & Multi-Motor)
+        </a>
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal
+        </a>
+        <a href="modulo03_joins.html" class="pager-btn primary">
+          Siguiente: Módulo 03 (JOINs & Conjuntos) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>

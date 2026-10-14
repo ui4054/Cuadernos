@@ -1,0 +1,7 @@
+producto_id,nombre,categoria,precio,stock,especificaciones
+301,Servidor Cloud Enterprise X1,Infraestructura,12500000.0,15,"{""cores"": 64, ""ram_gb"": 256, ""ssd_tb"": 4}"
+302,Laptop Pro Developer 16,Hardware,8200000.0,30,"{""pantalla"": ""16 in"", ""ram_gb"": 32, ""gpu"": ""RTX 4070""}"
+303,Licencia Base de Datos Pro,Software,4500000.0,100,"{""usuarios"": 50, ""soporte"": ""24/7"", ""tipo"": ""Anual""}"
+304,Switch Administrable 48P,Redes,3100000.0,25,"{""puertos"": 48, ""poe"": true, ""velocidad_gbps"": 10}"
+305,Monitor Ultrawide 34 IPS,Periféricos,2400000.0,45,"{""resolucion"": ""3440x1440"", ""hz"": 144}"
+306,Router Industrial VPN,Redes,1850000.0,20,"{""puertos"": 8, ""vpn_throughput"": ""1Gbps""}"

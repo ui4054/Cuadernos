@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 01: DDL, DML, Restricciones de Integridad & Matriz Multi-Motor — Bases de Datos Avanzadas</title>
+  
+  <!-- CSS del Sistema de Diseño Unificado -->
+  <link rel="stylesheet" href="css/styles.css?v=20261010_5">
+  
+  <style>
+    /* Disposición Vertical Estricta para el Glosario de Palabras Clave: Término -> Sintaxis -> Ejemplo -> Detalles */
+    .keyword-list {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 28px !important;
+      width: 100% !important;
+      margin: 24px 0 !important;
+    }
+    .keyword-entry-block {
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-left: 6px solid #10b981;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+      display: flex !important;
+      flex-direction: column !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      margin-bottom: 24px;
+    }
+    .keyword-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color, #e2e8f0);
+    }
+    .keyword-entry-title {
+      font-family: 'Fira Code', monospace;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #064e3b;
+    }
+    [data-theme="dark"] .keyword-entry-title {
+      color: #a7f3d0;
+    }
+    .keyword-entry-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .keyword-section-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted, #4b5563);
+      letter-spacing: 0.05em;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .keyword-syntax-box {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.92rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.5;
+      margin: 0 0 14px 0;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-example-box {
+      background: #1e293b;
+      color: #f1f5f9;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.55;
+      margin: 0 0 14px 0;
+      border-left: 4px solid #10b981;
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .keyword-details-list {
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .keyword-details-list li {
+      font-size: 0.92rem;
+      color: var(--text-main, #1f2937);
+      line-height: 1.6;
+      padding-left: 20px;
+      position: relative;
+    }
+    .keyword-details-list li::before {
+      content: "•";
+      color: #10b981;
+      font-weight: 900;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 4px;
+      top: -2px;
+    }
+    [data-theme="dark"] .keyword-details-list li {
+      color: var(--text-main, #ecfdf5);
+    }
+  </style>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- KaTeX CSS & JS Engine -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Mermaid JS Diagram Engine (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <!-- Motor JS de la Aplicación -->
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+
+  <!-- 1. Cabecera Superior (Top Header) -->
+  <header class="top-header">
+    <div class="brand-logo">
+      <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+        <i class="fa-solid fa-database"></i>
+        <span>Bases de Datos Avanzadas</span>
+      </a>
+      <span class="badge-tech">DuckDB & Colab</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="cuadernos/DBADV_1_DDL_DML_BASICO.ipynb" download class="btn-colab-nav" title="Descargar Cuaderno Jupyter">
+        <i class="fa-solid fa-download"></i> Descargar .ipynb
+      </a>
+      <a href="https://colab.research.google.com/" target="_blank" class="btn-colab-nav">
+        <i class="fa-solid fa-rocket"></i> Abrir en Colab
+      </a>
+      <button id="themeToggleBtn" class="btn-theme-toggle" title="Cambiar Tema (Claro/Oscuro)">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. Layout Principal -->
+  <div class="layout-wrapper">
+
+    <!-- 2A. Menú Lateral Fijo (Sidebar) -->
+    <aside class="sidebar">
+      <div class="sidebar-category">PORTAL PRINCIPAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="index.html"><i class="fa-solid fa-house"></i> Inicio & Índice General</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE 0: FUNDAMENTOS MATEMÁTICOS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo00_algebra.html"><i class="fa-solid fa-square-root-variable"></i> 00. Álgebra & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE I: ESTRUCTURA & CONSULTAS</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo01_ddl_dml.html" class="active"><i class="fa-solid fa-table"></i> 01. DDL/DML & Multi-Motor</a>
+        </li>
+        <li>
+          <a href="modulo02_filtrado.html"><i class="fa-solid fa-filter"></i> 02. Filtrado & LIKE</a>
+        </li>
+        <li>
+          <a href="modulo03_joins.html"><i class="fa-solid fa-link"></i> 03. JOINs & Conjuntos</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE II: DISEÑO ESTRUCTURAL</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo04_normalizacion.html"><i class="fa-solid fa-sitemap"></i> 04. Normalización (1FN-5FN)</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE III: PERSISTENCIA & AGREGACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo05_transacciones.html"><i class="fa-solid fa-floppy-disk"></i> 05. DML & Transacciones</a>
+        </li>
+        <li>
+          <a href="modulo06_agregacion.html"><i class="fa-solid fa-chart-pie"></i> 06. Agregación & Subconsultas</a>
+        </li>
+      </ul>
+
+      <div class="sidebar-category">FASE IV: ANALÍTICA & OPTIMIZACIÓN</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="modulo07_analitica.html"><i class="fa-solid fa-table-columns"></i> 07. Window Functions & CTEs</a>
+        </li>
+        <li>
+          <a href="modulo08_optimizacion.html"><i class="fa-solid fa-bolt"></i> 08. Optimización & JSON</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 2B. Lienzo de Contenido Principal (Landing Completa del Módulo 01) -->
+    <main class="main-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb-nav">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+        <span class="sep">/</span>
+        <span>Fase I: Estructura & Consultas</span>
+        <span class="sep">/</span>
+        <span style="color: var(--text-main); font-weight: 700;">Módulo 01: DDL, DML & Matriz Multi-Motor</span>
+      </nav>
+
+      <!-- HERO DE LA LANDING -->
+      <section class="module-hero">
+        <div class="hero-badges">
+          <span class="badge-stage">FASE I: ESTRUCTURA & CONSULTAS</span>
+          <span class="badge-bloom">Bloom: 2. Aplicar & 3. Diseñar</span>
+          <span class="badge-engine">Multi-Engine ANSI SQL (DuckDB, Postgres, Oracle, SQL Server)</span>
+        </div>
+        <h1>Módulo 01: DDL, DML, Restricciones de Integridad & Matriz Multi-Motor Empresarial</h1>
+        <p class="hero-desc">
+          Domina la definición y mutación formal del esquema relacional en sistemas financieros de misión crítica. Modela relaciones 1:N y N:M con tablas asociativas, implementa restricciones de dominio y referenciales (<code>PK</code>, <code>FK</code>, <code>UNIQUE</code>, <code>CHECK</code>, <code>DEFAULT</code>), y compara las diferencias de tipos de datos entre 6 motores relacionales corporativos.
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat-item"><i class="fa-solid fa-shield-halved"></i> <strong>Restricciones:</strong> PK, FK, CHECK, DEFAULT, UNIQUE</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-server"></i> <strong>6 Motores:</strong> DuckDB, Postgres, SQL Server, Oracle, MySQL, Informix</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-diagram-project"></i> <strong>Modelo Cartera:</strong> 5 Entidades (1:N y N:M)</div>
+          <div class="hero-stat-item"><i class="fa-solid fa-flask"></i> <strong>Simulador:</strong> Matriz Comparativa Interactiva en Tiempo Real</div>
+        </div>
+      </section>
+
+      <!-- NAVEGACIÓN SECUNDARIA FLOTANTE DENTRO DE LA LANDING (ON-PAGE NAV) -->
+      <nav class="on-page-nav">
+        <a href="#sec-contexto"><i class="fa-solid fa-briefcase"></i> 01. Contexto & Problema</a>
+        <a href="#sec-teoria-ddl-dml"><i class="fa-solid fa-brain"></i> 02. Fundamento DDL/DML & Motores</a>
+        <a href="#sec-glosario-keywords"><i class="fa-solid fa-book-bookmark"></i> 03. Glosario de Palabras Clave</a>
+        <a href="#sec-laboratorio-sql"><i class="fa-solid fa-code"></i> 04. Desglose SQL Línea a Línea</a>
+        <a href="#sec-erd-modelo"><i class="fa-solid fa-sitemap"></i> 05. Modelo ERD & Diccionario</a>
+        <a href="#sec-simulador"><i class="fa-solid fa-play"></i> 06. Simulador Multi-Motor</a>
+        <a href="#sec-antipatrones"><i class="fa-solid fa-triangle-exclamation"></i> 07. Anti-Patrones</a>
+        <a href="#sec-retos-colab"><i class="fa-solid fa-trophy"></i> 08. Retos & Cuaderno Colab</a>
+      </nav>
+
+      <!-- ===================================================================
+           SECCIÓN 1: CONTEXTO DE NEGOCIO & EL PROBLEMA REAL
+           =================================================================== -->
+      <section id="sec-contexto" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-briefcase"></i></div>
+          <div>
+            <h2>01. Contexto Empresarial & El Problema en Producción</h2>
+            <p class="subtitle">Desastres financieros provocados por tipos de datos inexactos y ausencia de restricciones</p>
+          </div>
+        </div>
+
+        <p class="th-lead">
+          En sistemas de <strong>Cartera de Créditos, Banca y Cobranzas</strong>, una base de datos mal diseñada en su capa DDL transfiere la responsabilidad de integridad al código de la aplicación. Cuando fallan las validaciones del frontend o se ejecutan importaciones masivas (ETL), la base de datos almacena saldos negativos, tasas absurdas o pierde transacciones históricas completas.
+        </p>
+
+        <div class="th-grid" style="margin-top: 20px;">
+          <div class="th-card">
+            <h4><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> El Error de Coma Flotante y Borrado Huérfano</h4>
+            <p>
+              Un desarrollador define el saldo del crédito como <code>FLOAT</code> en lugar de <code>DECIMAL</code> y omite la restricción <code>CHECK</code> en el saldo:
+            </p>
+            <pre class="th-snippet">-- DDL Deficiente en Producción:
+CREATE TABLE creditos_inseguros (
+    credito_id INT PRIMARY KEY,
+    saldo FLOAT,             -- ⚠️ Error de coma flotante IEEE 754
+    tasa_interes FLOAT       -- ⚠️ Permite valores negativos
+);</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: #ef4444; font-weight: 600;">
+              ⚠️ Consecuencia Contable: La suma de cuotas con <code>FLOAT</code> acumula descuadres de centavos ($0.0000000004$) imposibles de conciliar ante revisoría fiscal. Además, sin <code>CHECK</code>, un script con bug ingresa saldos negativos de $-\$5.000.000$ corrompiendo la cartera.
+            </p>
+          </div>
+
+          <div class="th-card">
+            <h4><i class="fa-solid fa-shield-halved" style="color: var(--accent-primary);"></i> DDL Defensivo con Tipos Exactos e Integridad Referencial</h4>
+            <p>
+              Definición matemática estricta con <code>DECIMAL(p,s)</code>, restricciones de dominio <code>CHECK</code> y control de borrado:
+            </p>
+            <pre class="th-snippet">-- DDL Defensivo de Misión Crítica:
+CREATE TABLE creditos (
+    credito_id INT PRIMARY KEY,
+    saldo_actual DECIMAL(15,2) CHECK (saldo_actual >= 0),
+    tasa_interes DECIMAL(5,2) CHECK (tasa_interes >= 0),
+    estado VARCHAR CHECK (estado IN ('VIGENTE','MORA','PAGADO'))
+);</pre>
+            <p style="margin-top: 10px; font-size: 0.88rem; color: var(--accent-dark); font-weight: 600;">
+              ✅ Resultado en Producción: Cualquier intento de ingresar saldos incoherentes es rechazado en microsegundos por el motor con un <code>Constraint Error</code>, garantizando consistencia absoluta independientemente de la aplicación cliente.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 2: CIMIENTO TEÓRICO FORMAL
+           =================================================================== -->
+      <section id="sec-teoria-ddl-dml" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h2>02. Cimiento Teórico Formal: Sublenguajes SQL & Cardinalidades</h2>
+            <p class="subtitle">Taxonomía de comandos, integridad de entidad, referencial y resolución de relaciones N:M</p>
+          </div>
+        </div>
+
+        <p>
+          El lenguaje SQL no es monolítico; está estructurado formalmente en **sublenguajes funcionales** según modifiquen los metadatos del catálogo, las tuplas en disco, o los permisos de acceso:
+        </p>
+
+        <div class="th-grid" style="margin: 20px 0;">
+          <div class="th-card">
+            <h4 style="color: #064e3b;"><i class="fa-solid fa-cube"></i> 1. DDL (Data Definition Language)</h4>
+            <p>Comandos que alteran la estructura del esquema relacional en el catálogo del sistema: <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>TRUNCATE</code>. Modifican metadatos y asignación de páginas.</p>
+          </div>
+          <div class="th-card">
+            <h4 style="color: #0369a1;"><i class="fa-solid fa-pen-to-square"></i> 2. DML (Data Manipulation Language)</h4>
+            <p>Comandos que mutan el conjunto de tuplas persistidas dentro de las tablas: <code>INSERT INTO</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>MERGE</code>. Operan bajo garantías transaccionales ACID.</p>
+          </div>
+          <div class="th-card" style="border-top: 4px solid #10b981;">
+            <h4 style="color: #064e3b;"><i class="fa-solid fa-magnifying-glass"></i> 3. DQL, DCL & TCL</h4>
+            <p><strong>DQL:</strong> <code>SELECT</code> (lectura y proyección).<br><strong>DCL:</strong> <code>GRANT</code>, <code>REVOKE</code> (control de privilegios).<br><strong>TCL:</strong> <code>COMMIT</code>, <code>ROLLBACK</code>, <code>SAVEPOINT</code> (transaccionalidad).</p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-arrows-split-up-and-left"></i> Cardinalidades Relacionales & Tablas Rompe-Relación (1:N vs N:M)</h3>
+        <p>
+          En el modelado relacional, las entidades se conectan mediante reglas de cardinalidad estrictas:
+        </p>
+
+        <div class="th-grid" style="margin: 16px 0;">
+          <div class="th-card">
+            <h4>Relación 1:N (Uno a Muchos)</h4>
+            <p>
+              Un cliente puede solicitar múltiples créditos ($N$). En el modelo relacional físico, la <strong>clave primaria del lado 1 (<code>cliente_id</code>) migra como Clave Foránea (<code>FK</code>)</strong> hacia la tabla hija <code>creditos</code>.
+            </p>
+          </div>
+          <div class="th-card" style="border-left: 4px solid #f59e0b;">
+            <h4 style="color: #b45309;">Relación N:M (Muchos a Muchos) & Tabla Asociativa</h4>
+            <p>
+              Un crédito puede tener múltiples garantías (ej. Hipoteca + Fiador), y una garantía de alto valor puede amparar múltiples créditos. <strong>Las relaciones N:M no pueden implementarse directamente</strong> en bases relacionales sin violar la 1FN. Se requiere una <strong>Tabla Asociativa / Rompe-Relación (<code>credito_garantias</code>)</strong> con Clave Primaria Compuesta <code>(credito_id, garantia_id)</code>.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 32px;"><i class="fa-solid fa-table-cells"></i> Matriz Comparativa Empresarial de Tipos de Datos (6 Motores SQL)</h3>
+        <p>Sintaxis y tipos físicos equivalentes para especificaciones DDL multiplataforma:</p>
+
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Característica</th>
+              <th>DuckDB (In-Memory)</th>
+              <th>PostgreSQL</th>
+              <th>SQL Server / Azure SQL</th>
+              <th>Oracle Database</th>
+              <th>MariaDB / MySQL</th>
+              <th>IBM Informix</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Autoincremental (PK)</strong></td>
+              <td><code>BIGINT</code> / <code>SEQUENCE</code></td>
+              <td><code>GENERATED ALWAYS AS IDENTITY</code></td>
+              <td><code>INT IDENTITY(1,1)</code></td>
+              <td><code>NUMBER GENERATED AS IDENTITY</code></td>
+              <td><code>INT AUTO_INCREMENT</code></td>
+              <td><code>SERIAL</code> / <code>SERIAL8</code></td>
+            </tr>
+            <tr>
+              <td><strong>Cadenas Variables</strong></td>
+              <td><code>VARCHAR</code></td>
+              <td><code>VARCHAR(n)</code> / <code>TEXT</code></td>
+              <td><code>VARCHAR(n)</code> / <code>NVARCHAR(n)</code></td>
+              <td><code>VARCHAR2(n)</code></td>
+              <td><code>VARCHAR(n)</code> / <code>TEXT</code></td>
+              <td><code>VARCHAR(n)</code> / <code>LVARCHAR</code></td>
+            </tr>
+            <tr>
+              <td><strong>Moneda / Precisión Fija</strong></td>
+              <td><code>DECIMAL(p,s)</code></td>
+              <td><code>NUMERIC(p,s)</code> / <code>DECIMAL</code></td>
+              <td><code>DECIMAL(p,s)</code> / <code>MONEY</code></td>
+              <td><code>NUMBER(p,s)</code></td>
+              <td><code>DECIMAL(p,s)</code></td>
+              <td><code>MONEY(p,s)</code> / <code>DECIMAL</code></td>
+            </tr>
+            <tr>
+              <td><strong>Marca de Tiempo</strong></td>
+              <td><code>TIMESTAMP</code></td>
+              <td><code>TIMESTAMPTZ</code></td>
+              <td><code>DATETIME2</code></td>
+              <td><code>TIMESTAMP</code> / <code>DATE</code></td>
+              <td><code>DATETIME</code> / <code>TIMESTAMP</code></td>
+              <td><code>DATETIME YEAR TO SECOND</code></td>
+            </tr>
+            <tr>
+              <td><strong>Documentos JSON</strong></td>
+              <td><code>JSON</code></td>
+              <td><code>JSONB</code> (Binario indexable)</td>
+              <td><code>JSON</code> / <code>OPENJSON()</code></td>
+              <td><code>JSON</code> / <code>CLOB</code></td>
+              <td><code>JSON</code></td>
+              <td><code>BSON</code> / <code>JSON</code></td>
+            </tr>
+            <tr>
+              <td><strong>Sintaxis Upsert</strong></td>
+              <td><code>INSERT ... ON CONFLICT</code></td>
+              <td><code>INSERT ... ON CONFLICT</code></td>
+              <td><code>MERGE INTO ...</code></td>
+              <td><code>MERGE INTO ...</code></td>
+              <td><code>INSERT ... ON DUPLICATE KEY</code></td>
+              <td><code>MERGE INTO ...</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 3: GLOSARIO DE PALABRAS CLAVE
+           =================================================================== -->
+      <section id="sec-glosario-keywords" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-book-bookmark"></i></div>
+          <div>
+            <h2>03. Glosario de Palabras Clave</h2>
+            <p class="subtitle">Sintaxis formal, comportamiento interno en el catálogo y soporte multi-motor</p>
+          </div>
+        </div>
+
+        <div class="keyword-list">
+
+          <!-- 1. CREATE TABLE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">CREATE TABLE</span>
+              <span class="keyword-entry-badge">Sublenguaje DDL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">CREATE TABLE [IF NOT EXISTS] nombre_tabla (
+    columna_1 tipo_dato [restricciones_columna],
+    columna_2 tipo_dato [DEFAULT valor_defecto],
+    [CONSTRAINT nombre_restriccion] PRIMARY KEY (columna_pk),
+    [CONSTRAINT nombre_restriccion] FOREIGN KEY (columna_fk) REFERENCES tabla_padre(columna_padre)
+);</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Creación de la entidad principal de clientes con restricciones defensivas
+CREATE TABLE IF NOT EXISTS clientes_cartera (
+    cliente_id INT PRIMARY KEY,
+    nombre VARCHAR NOT NULL,
+    doc_identidad VARCHAR UNIQUE NOT NULL,
+    score_credito INT CHECK (score_credito BETWEEN 300 AND 950),
+    cupo_aprobado DECIMAL(15,2) DEFAULT 5000000.00,
+    ciudad VARCHAR DEFAULT 'Bogotá'
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mecánica Interna:</strong> Reserva entradas en el catálogo de metadatos del motor (ej. <code>sqlite_master</code> o <code>pg_class</code>) y asigna las estructuras de almacenamiento iniciales.</li>
+              <li><strong>Cláusula IF NOT EXISTS:</strong> Previene excepciones fatales en scripts de automatización e infraestructura como código (IaC) si la tabla ya fue aprovisionada previamente.</li>
+              <li><strong>Creación de Índices Implícitos:</strong> Al declarar <code>PRIMARY KEY</code> o <code>UNIQUE</code>, los motores relacionales generan automáticamente un índice B-Tree subyacente para acelerar búsquedas y garantizar unicidad.</li>
+            </ul>
+          </div>
+
+          <!-- 2. ALTER TABLE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">ALTER TABLE</span>
+              <span class="keyword-entry-badge">Sublenguaje DDL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">ALTER TABLE nombre_tabla ADD COLUMN nombre_columna tipo_dato [restricciones];
+ALTER TABLE nombre_tabla DROP COLUMN nombre_columna;
+ALTER TABLE nombre_tabla ADD CONSTRAINT nombre_restriccion CHECK (...);</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Agrega una nueva columna para correo electrónico a clientes existentes
+ALTER TABLE clientes_cartera ADD COLUMN email VARCHAR;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Evolución de Esquema sin Pérdida:</strong> Permite adaptar la base de datos a nuevos requerimientos del negocio sin tener que recrear la tabla ni migrar datos manualmente.</li>
+              <li><strong>Bloqueo de Metadatos (Access Exclusive Lock):</strong> En motores tradicionales como PostgreSQL o SQL Server, ciertas operaciones <code>ALTER TABLE</code> adquieren bloqueos exclusivos sobre la tabla, por lo que deben ejecutarse en ventanas de mantenimiento controladas.</li>
+            </ul>
+          </div>
+
+          <!-- 3. DROP TABLE vs TRUNCATE TABLE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">DROP TABLE vs. TRUNCATE TABLE</span>
+              <span class="keyword-entry-badge">Sublenguaje DDL</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">TRUNCATE TABLE nombre_tabla;    -- Vacía los datos, preserva la estructura
+DROP TABLE [IF EXISTS] nombre_tabla [CASCADE]; -- Destruye datos y estructura</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Vacía todas las tuplas de pagos preservando columnas y restricciones
+TRUNCATE TABLE pagos_cartera;
+
+-- Elimina definitivamente la tabla completa del diccionario del sistema
+DROP TABLE IF EXISTS gestiones_cobranza;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>TRUNCATE vs DELETE:</strong> <code>TRUNCATE</code> es una operación DDL de alta velocidad porque desasigna las páginas de datos en lugar de recorrer y registrar cada fila individual en el transaction log. Reinicia además los generadores de secuencia/autoincrementales.</li>
+              <li><strong>Restricciones Foráneas:</strong> La mayoría de motores bloquean <code>TRUNCATE</code> si la tabla es referenciada por una Clave Foránea activa en otra tabla, incluso si la tabla hija está vacía.</li>
+              <li><strong>DROP:</strong> Remueve la tabla, sus datos, disparadores (triggers) e índices asociados permanentemente.</li>
+            </ul>
+          </div>
+
+          <!-- 4. PRIMARY KEY & FOREIGN KEY -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">PRIMARY KEY & FOREIGN KEY</span>
+              <span class="keyword-entry-badge">Restricciones de Integridad</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">columna_id INT PRIMARY KEY
+credito_id INT REFERENCES tabla_padre(columna_pk) [ON DELETE CASCADE | ON DELETE RESTRICT]
+PRIMARY KEY (columna_a, columna_b) -- Clave Primaria Compuesta</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Tabla asociativa N:M con Clave Primaria Compuesta y Foráneas con borrado en cascada
+CREATE TABLE credito_garantias (
+    credito_id INT REFERENCES creditos(credito_id) ON DELETE CASCADE,
+    garantia_id INT REFERENCES garantias(garantia_id) ON DELETE CASCADE,
+    porcentaje_cobertura DECIMAL(5,2) CHECK (porcentaje_cobertura BETWEEN 0 AND 100),
+    PRIMARY KEY (credito_id, garantia_id)
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Integridad de Entidad (PK):</strong> Cada tupla debe ser unívocamente identificable. Una clave primaria impone implícitamente <code>UNIQUE</code> y <code>NOT NULL</code>.</li>
+              <li><strong>Integridad Referencial (FK):</strong> Asegura que ningún registro hijo apunte a una clave inexistente en la tabla padre.</li>
+              <li><strong>Acciones Referenciales:</strong> <code>ON DELETE RESTRICT</code> (por defecto en DuckDB y ANSI) bloquea el borrado de la tupla padre si existen registros dependientes; <code>ON DELETE CASCADE</code> propaga automáticamente el borrado eliminando a los hijos.</li>
+            </ul>
+          </div>
+
+          <!-- 5. CHECK & DEFAULT -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">CHECK & DEFAULT</span>
+              <span class="keyword-entry-badge">Restricciones de Dominio</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">columna tipo_dato CHECK (condicion_booleana)
+columna tipo_dato DEFAULT valor_predeterminado</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- Reglas de negocio embebidas en el motor:
+CREATE TABLE creditos (
+    credito_id INT PRIMARY KEY,
+    monto_desembolsado DECIMAL(15,2) CHECK (monto_desembolsado > 0),
+    saldo_actual DECIMAL(15,2) CHECK (saldo_actual >= 0),
+    estado VARCHAR DEFAULT 'VIGENTE' CHECK (estado IN ('VIGENTE', 'MORA', 'PAGADO', 'CASTIGADO'))
+);</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Restricción CHECK:</strong> Se evalúa en cada operación de <code>INSERT</code> y <code>UPDATE</code>. La operación solo tiene éxito si la condición evalúa a <code>TRUE</code> o a <code>UNKNOWN</code> (¡ojo con los valores NULL en restricciones CHECK!).</li>
+              <li><strong>Cláusula DEFAULT:</strong> Si una instrucción <code>INSERT</code> omite el atributo en su lista de proyección, el motor rellena automáticamente el campo con el valor o función especificada (ej. <code>CURRENT_TIMESTAMP</code> o <code>'VIGENTE'</code>).</li>
+            </ul>
+          </div>
+
+          <!-- 6. INSERT, UPDATE & DELETE -->
+          <div class="keyword-entry-block">
+            <!-- 1. TÉRMINO -->
+            <div class="keyword-entry-header">
+              <span class="keyword-entry-title">INSERT INTO / UPDATE / DELETE</span>
+              <span class="keyword-entry-badge">Sublenguaje DML</span>
+            </div>
+
+            <!-- 2. SINTAXIS -->
+            <div class="keyword-section-label"><i class="fa-solid fa-code"></i> SINTAXIS:</div>
+            <pre class="keyword-syntax-box">INSERT INTO tabla (col1, col2) VALUES (val1, val2);
+UPDATE tabla SET col1 = nuevo_valor WHERE condicion;
+DELETE FROM tabla WHERE condicion;</pre>
+
+            <!-- 3. EJEMPLO -->
+            <div class="keyword-section-label"><i class="fa-solid fa-play"></i> EJEMPLO:</div>
+            <pre class="keyword-example-box">-- 1. Insertar nueva tupla
+INSERT INTO clientes_cartera (cliente_id, nombre, doc_identidad, score_credito)
+VALUES (1, 'Tech Inversiones S.A.S.', '900123456-1', 820);
+
+-- 2. Actualizar saldo aplicando penalización por mora del 5%
+UPDATE creditos SET saldo_actual = saldo_actual * 1.05 WHERE estado = 'MORA';
+
+-- 3. Borrado defensivo controlado
+DELETE FROM clientes_cartera WHERE cliente_id = 5;</pre>
+
+            <!-- 4. DETALLES & COMPORTAMIENTO -->
+            <ul class="keyword-details-list">
+              <li><strong>Mutación de Estado:</strong> Operan sobre las tuplas físicas existentes dentro de las páginas de datos.</li>
+              <li><strong>El Peligro de Omitir el WHERE:</strong> Un <code>UPDATE</code> o <code>DELETE</code> sin <code>WHERE</code> mutará o borrará <strong>todas las filas de la tabla</strong>.</li>
+              <li><strong>Verificación de Restricciones:</strong> Si cualquiera de las sentencias viola una restricción de integridad (PK duplicada, CHECK no satisfecho o violación de FK), el motor ejecuta un aborto transaccional automático (rollback) de la instrucción.</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 4: LABORATORIO DE CÓDIGO SQL & DESGLOSE LÍNEA A LÍNEA
+           =================================================================== -->
+      <section id="sec-laboratorio-sql" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-code"></i></div>
+          <div>
+            <h2>04. Laboratorio SQL & Desglose Línea a Línea</h2>
+            <p class="subtitle">Anatomía completa de la definición DDL de la entidad financiera CREDITOS</p>
+          </div>
+        </div>
+
+        <p>
+          Analicemos la instrucción DDL completa utilizada en producción para estructurar los desembolsos de cartera con integridad referencial y de dominio estricta:
+        </p>
+
+        <pre class="th-snippet">CREATE TABLE creditos (
+    credito_id           INT PRIMARY KEY,
+    cliente_id           INT NOT NULL REFERENCES clientes_cartera(cliente_id),
+    monto_desembolsado   DECIMAL(15,2) CHECK (monto_desembolsado > 0),
+    saldo_actual         DECIMAL(15,2) CHECK (saldo_actual >= 0),
+    tasa_interes_anual   DECIMAL(5,2) CHECK (tasa_interes_anual >= 0),
+    fecha_desembolso     DATE NOT NULL,
+    estado               VARCHAR DEFAULT 'VIGENTE' 
+                         CHECK (estado IN ('VIGENTE', 'MORA', 'PAGADO', 'CASTIGADO'))
+);</pre>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-list-check"></i> Desglose Anatómico de Restricciones y Tipos Físicos</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th style="width: 140px;">Línea SQL</th>
+              <th style="width: 250px;">Cláusula / Restricción</th>
+              <th>Mecánica Interna en el Motor de Base de Datos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>L2</code></td>
+              <td><code>credito_id INT PRIMARY KEY</code></td>
+              <td>Crea el identificador único entero del crédito. El motor genera automáticamente un índice B-Tree único no nulo para búsquedas directas por clave en $O(\log n)$.</td>
+            </tr>
+            <tr>
+              <td><code>L3</code></td>
+              <td><code>cliente_id INT NOT NULL REFERENCES ...</code></td>
+              <td>Clave Foránea vinculada a <code>clientes_cartera</code>. Impone integridad referencial: no se puede crear un crédito para un cliente inexistente, y <code>NOT NULL</code> prohíbe créditos huérfanos.</td>
+            </tr>
+            <tr>
+              <td><code>L4</code></td>
+              <td><code>monto_desembolsado DECIMAL(15,2) CHECK ...</code></td>
+              <td>Tipo numérico exacto de 15 dígitos con 2 decimales para evitar imprecisión de coma flotante. La regla <code>CHECK (> 0)</code> prohíbe desembolsos en cero o negativos.</td>
+            </tr>
+            <tr>
+              <td><code>L5</code></td>
+              <td><code>saldo_actual DECIMAL(15,2) CHECK (>= 0)</code></td>
+              <td>Mantiene la deuda viva. La condición <code>CHECK (>= 0)</code> asegura que un crédito pagado llegue a cero, pero nunca a saldo negativo por abonos en exceso.</td>
+            </tr>
+            <tr>
+              <td><code>L6</code></td>
+              <td><code>tasa_interes_anual DECIMAL(5,2) CHECK (>= 0)</code></td>
+              <td>Permite tasas hasta $999.99\%$. Prohíbe tasas de interés negativas que provocarían distorsión en la liquidación de intereses moratorios.</td>
+            </tr>
+            <tr>
+              <td><code>L7</code></td>
+              <td><code>fecha_desembolso DATE NOT NULL</code></td>
+              <td>Tipo de fecha pura sin componente de hora (formato ISO-8601: <code>YYYY-MM-DD</code>). Obligatoria para cálculo de vencimientos.</td>
+            </tr>
+            <tr>
+              <td><code>L8 - L9</code></td>
+              <td><code>estado VARCHAR DEFAULT 'VIGENTE' CHECK (...)</code></td>
+              <td>Si no se envía el estado al insertar, asume <code>'VIGENTE'</code>. La restricción <code>CHECK IN (...)</code> implementa un tipo enumerado cerrado para la máquina de estados de cobranza.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 5: MODELO ERD & DICCIONARIO DE DATOS
+           =================================================================== -->
+      <section id="sec-erd-modelo" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-sitemap"></i></div>
+          <div>
+            <h2>05. Modelo Entidad-Relación & Diccionario de Datos de Cartera</h2>
+            <p class="subtitle">Esquema financiero completo de 5 tablas modelando relaciones 1:N y N:M con tabla asociativa</p>
+          </div>
+        </div>
+
+        <p>
+          El dominio de cartera modela la cadena de valor crediticia: clientes titulares, sus créditos desembolsados (1:N), el recaudo de pagos parciales (1:N), y el respaldo de colaterales/garantías resuelto mediante relación N:M:
+        </p>
+
+        <div class="mermaid-box">
+          <h4>📐 Diagrama Entidad-Relación (MER/DER) — Sistema Financiero de Cartera</h4>
+          <div class="mermaid">
+erDiagram
+    CLIENTES_CARTERA ||--o{ CREDITOS : "solicita"
+    CREDITOS ||--o{ PAGOS_CARTERA : "recibe"
+    CREDITOS ||--o{ CREDITO_GARANTIAS : "respaldado_por"
+    GARANTIAS ||--o{ CREDITO_GARANTIAS : "avala_en"
+
+    CLIENTES_CARTERA {
+        int cliente_id PK
+        string nombre
+        string doc_identidad
+        int score_credito
+        decimal cupo_aprobado
+        string ciudad
+    }
+
+    CREDITOS {
+        int credito_id PK
+        int cliente_id FK
+        decimal monto_desembolsado
+        decimal saldo_actual
+        decimal tasa_interes_anual
+        date fecha_desembolso
+        string estado
+    }
+
+    PAGOS_CARTERA {
+        int pago_id PK
+        int credito_id FK
+        timestamp fecha_pago
+        decimal monto_pagado
+        string metodo_pago
+    }
+
+    GARANTIAS {
+        int garantia_id PK
+        string tipo_garantia
+        decimal valor_comercial
+        string descripcion
+    }
+
+    CREDITO_GARANTIAS {
+        int credito_id PK
+        int garantia_id PK
+        decimal porcentaje_cobertura
+    }
+          </div>
+        </div>
+
+        <h3 class="th-title" style="margin-top: 24px;"><i class="fa-solid fa-table-list"></i> Diccionario de Datos Físico del Sistema de Cartera</h3>
+        <table class="th-table">
+          <thead>
+            <tr>
+              <th>Tabla</th>
+              <th>Columna</th>
+              <th>Tipo de Dato</th>
+              <th>Restricciones</th>
+              <th>Justificación en Arquitectura de Producción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>CLIENTES_CARTERA</code></td>
+              <td><code>doc_identidad</code></td>
+              <td><code>VARCHAR(30)</code></td>
+              <td><code>UNIQUE NOT NULL</code></td>
+              <td>Evita duplicidad de clientes (cédula o NIT único en toda la entidad).</td>
+            </tr>
+            <tr>
+              <td><code>CLIENTES_CARTERA</code></td>
+              <td><code>score_credito</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>CHECK (300-950)</code></td>
+              <td>Mantiene el rango de scoring financiero (ej. DataCrédito / TransUnion).</td>
+            </tr>
+            <tr>
+              <td><code>CREDITOS</code></td>
+              <td><code>cliente_id</code></td>
+              <td><code>INTEGER</code></td>
+              <td><code>NOT NULL REFERENCES</code></td>
+              <td>Garantiza que no existan créditos anónimos sin titular responsable.</td>
+            </tr>
+            <tr>
+              <td><code>CREDITOS</code></td>
+              <td><code>saldo_actual</code></td>
+              <td><code>DECIMAL(15,2)</code></td>
+              <td><code>CHECK (>= 0)</code></td>
+              <td>Protege el libro contable de amortizaciones en exceso o saldos negativos.</td>
+            </tr>
+            <tr>
+              <td><code>PAGOS_CARTERA</code></td>
+              <td><code>fecha_pago</code></td>
+              <td><code>TIMESTAMP</code></td>
+              <td><code>DEFAULT CURRENT_TIMESTAMP</code></td>
+              <td>Registra auditoría temporal del momento exacto del recaudo.</td>
+            </tr>
+            <tr>
+              <td><code>CREDITO_GARANTIAS</code></td>
+              <td><code>(credito_id, garantia_id)</code></td>
+              <td><code>INT, INT</code></td>
+              <td><code>PRIMARY KEY COMPUESTA</code></td>
+              <td>Resuelve la relación N:M evitando que se asocie la misma garantía dos veces al mismo crédito.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 6: SIMULADOR VISUAL INTERACTIVO MULTI-MOTOR
+           =================================================================== -->
+      <section id="sec-simulador" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-play"></i></div>
+          <div>
+            <h2>06. Simulador Visual Interactivo: Matriz Multi-Motor en Tiempo Real</h2>
+            <p class="subtitle">Inspecciona y compara la implementación de tipos de datos y DDL en 6 motores líderes</p>
+          </div>
+        </div>
+
+        <div class="pipeline-container">
+          <div class="pipeline-header">
+            <span class="pipeline-title"><i class="fa-solid fa-server"></i> Selector Dinámico de Motor Relacional</span>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 20px;">
+            <p style="font-weight: 700; font-size: 0.9rem; color: var(--accent-dark); margin-bottom: 12px;">
+              Selecciona el motor relacional para ver su dialecto exacto y DDL generado:
+            </p>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="sim-btn engine-btn active" data-engine="mssql">
+                <i class="fa-brands fa-microsoft"></i> SQL Server / Azure SQL
+              </button>
+              <button class="sim-btn engine-btn" data-engine="postgres">
+                <i class="fa-solid fa-database"></i> PostgreSQL
+              </button>
+              <button class="sim-btn engine-btn" data-engine="oracle">
+                <i class="fa-solid fa-building-columns"></i> Oracle Database
+              </button>
+              <button class="sim-btn engine-btn" data-engine="mysql">
+                <i class="fa-solid fa-dolphin"></i> MariaDB / MySQL
+              </button>
+              <button class="sim-btn engine-btn" data-engine="duckdb">
+                <i class="fa-solid fa-feather"></i> DuckDB (Python / Colab)
+              </button>
+              <button class="sim-btn engine-btn" data-engine="informix">
+                <i class="fa-solid fa-cubes"></i> IBM Informix (IDS)
+              </button>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 10px;">
+              💡 <em>Compara cómo cada motor implementa llaves autoincrementales, documentos semi-estructurados JSON y operaciones de inserción/modificación combinada (Upsert).</em>
+            </p>
+          </div>
+
+          <!-- Contenedor de la Matriz Dinámica renderizado por app.js -->
+          <div id="mod1EngineDisplay"></div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 7: ANTI-PATRONES & CONSIDERACIONES DE RENDIMIENTO
+           =================================================================== -->
+      <section id="sec-antipatrones" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h2>07. Anti-Patrones y Consideraciones de Rendimiento</h2>
+            <p class="subtitle">Errores graves en DDL y DML que destruyen la consistencia o bloquean tablas en producción</p>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 1: Float en finanzas -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 1: Uso de FLOAT / REAL para Magnitudes Monetarias</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Los tipos <code>FLOAT</code> y <code>DOUBLE</code> implementan la especificación de coma flotante binaria IEEE 754, la cual no puede representar fracciones decimales exactas en base 10 (ej. $0.1$ o $0.05$), acumulando discrepancias graves en sumatorias de cartera.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> Riesgo Contable (Coma Flotante Inexacta)</span>
+<pre>-- Genera errores de centavos:
+CREATE TABLE pagos (
+    pago_id INT PRIMARY KEY,
+    monto FLOAT  -- ⚠️ Descuadre en conciliaciones
+);</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> Estándar Financiero (Coma Fija Exacta)</span>
+<pre>-- Precisión matemática decimal exacta:
+CREATE TABLE pagos (
+    pago_id INT PRIMARY KEY,
+    monto DECIMAL(15,2) CHECK (monto > 0)
+);</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 2: DELETE masivo en lugar de TRUNCATE -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 2: DELETE Masivo sin WHERE en Tablas de Staging o Log</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Ejecutar <code>DELETE FROM tabla;</code> para vaciar una tabla de staging con millones de filas bloquea los recursos, llena el transaction log (redo/undo) y puede agotar el espacio en disco.
+          </p>
+
+          <div class="code-compare-grid">
+            <div class="code-bad">
+              <span class="compare-title"><i class="fa-solid fa-xmark"></i> DELETE Masivo (Bloqueo y Log Excesivo)</span>
+<pre>-- Registra cada fila en el log individualmente:
+DELETE FROM pagos_staging;</pre>
+            </div>
+            <div class="code-good">
+              <span class="compare-title"><i class="fa-solid fa-check"></i> TRUNCATE (Desasignación Rápida)</span>
+<pre>-- Libera páginas en microsegundos:
+TRUNCATE TABLE pagos_staging;</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anti-patrón 3: Intento de Borrado de Padres con Huérfanos -->
+        <div class="antipattern-card">
+          <div class="antipattern-head">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Anti-Patrón 3: Intento de Eliminación de Registro Padre sin Orquestación Referencial</span>
+          </div>
+          <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main);">
+            Intentar borrar un cliente que posee créditos activos arroja un <code>Foreign Key Constraint Error</code>. Para depurar o archivar entidades, se debe orquestar el borrado desde las tablas asociativas intermedias hacia las tablas hijas y finalmente la tabla padre.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           SECCIÓN 8: RETOS PRÁCTICOS & CUADERNO EN GOOGLE COLAB
+           =================================================================== -->
+      <section id="sec-retos-colab" class="landing-section">
+        <div class="section-title-wrap">
+          <div class="section-icon-badge"><i class="fa-solid fa-trophy"></i></div>
+          <div>
+            <h2>08. Retos Prácticos & Laboratorio en Google Colab con DuckDB</h2>
+            <p class="subtitle">Pon a prueba tus conocimientos con ejercicios guiados y ejecuta el cuaderno interactivo</p>
+          </div>
+        </div>
+
+        <!-- Reto 1 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 1: DDL — Crear la Tabla `gestiones_cobranza` (Relación 1:N con Créditos)
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Crea la tabla <code>gestiones_cobranza</code> para registrar contactos a deudores. Debe incluir: <code>gestion_id</code> como PK entera, <code>credito_id</code> como FK obligatoria a <code>creditos</code>, <code>fecha_gestion</code> con valor por defecto de marca de tiempo actual, <code>tipo_contacto</code> restringido con <code>CHECK</code> a: <code>'Llamada', 'Correo', 'Visita Campo', 'WhatsApp'</code>, <code>compromiso_pago</code> de tipo fecha y <code>observaciones</code>.
+          </p>
+          
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución DDL Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 1:
+CREATE TABLE IF NOT EXISTS gestiones_cobranza (
+    gestion_id INT PRIMARY KEY,
+    credito_id INT NOT NULL REFERENCES creditos(credito_id),
+    fecha_gestion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo_contacto VARCHAR CHECK (tipo_contacto IN ('Llamada', 'Correo', 'Visita Campo', 'WhatsApp')),
+    compromiso_pago DATE,
+    observaciones VARCHAR
+);</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Se aplica <code>PRIMARY KEY</code>, <code>REFERENCES creditos(credito_id)</code> para integridad referencial, <code>DEFAULT CURRENT_TIMESTAMP</code> para auditoría automática y <code>CHECK IN (...)</code> para restringir el canal.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 2 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 2: DML — Insertar 2 Gestiones de Cobranza para Crédito en Mora
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe la instrucción <code>INSERT INTO</code> para registrar dos gestiones de cobro sobre el crédito <code>103</code> (el cual se encuentra en estado <code>'MORA'</code>), una por llamada telefónica y otra por WhatsApp con compromisos de pago definidos.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución DML Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 2:
+INSERT INTO gestiones_cobranza (gestion_id, credito_id, fecha_gestion, tipo_contacto, compromiso_pago, observaciones) VALUES
+(7001, 103, '2024-03-01 09:30:00', 'Llamada', '2024-03-15', 'Cliente solicita plazo adicional. Compromiso parcial.'),
+(7002, 103, '2024-03-10 14:15:00', 'WhatsApp', '2024-03-20', 'Recordatorio vía WhatsApp. Confirma transferencia.');</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> Se insertan dos tuplas verificando que el <code>tipo_contacto</code> coincida con los valores permitidos en el <code>CHECK</code> de la tabla creada en el Reto 1.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Reto 3 -->
+        <div class="challenge-card">
+          <h4 style="color: var(--accent-dark); font-size: 1.1rem; margin-bottom: 8px;">
+            <i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reto 3: DML UPDATE — Bonificación de Score Crediticio a Clientes Cumplidos
+          </h4>
+          <p style="font-size: 0.9rem; line-height: 1.6;">
+            Escribe una consulta de actualización con subconsulta para incrementar en <strong>+50 puntos</strong> el <code>score_credito</code> de todos los clientes que tengan al menos un crédito registrado en estado <strong>'PAGADO'</strong>, asegurando que no sobrepase el tope de 950 puntos.
+          </p>
+
+          <details>
+            <summary><i class="fa-solid fa-key"></i> Ver Solución DML UPDATE Comentada</summary>
+            <div class="solution-content">
+              <pre class="th-snippet">-- Solución Reto 3:
+UPDATE clientes_cartera
+SET score_credito = LEAST(score_credito + 50, 950)
+WHERE cliente_id IN (
+    SELECT DISTINCT cliente_id 
+    FROM creditos 
+    WHERE estado = 'PAGADO'
+);</pre>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">
+                <em>Explicación:</em> La subconsulta identifica los <code>cliente_id</code> con créditos saldados, y la función <code>LEAST(valor, 950)</code> previene violar la restricción <code>CHECK (score_credito <= 950)</code>.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Botones de Acción para Google Colab -->
+        <div style="margin-top: 32px; background: rgba(16, 185, 129, 0.08); border: 2px solid var(--accent-primary); border-radius: var(--radius-md); padding: 24px; text-align: center;">
+          <h3 style="color: var(--accent-dark); margin-bottom: 8px;">🚀 Laboratorio Práctico en Google Colab con DuckDB</h3>
+          <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 18px; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Ejecuta todos estos ejemplos en memoria sobre DuckDB, resuelve los retos interactivos de cartera y experimenta con restricciones de integridad directamente en tu cuaderno Colab:
+          </p>
+          <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="cuadernos/DBADV_1_DDL_DML_BASICO.ipynb" download class="btn-colab" style="background: #065f46;">
+              <i class="fa-solid fa-download"></i> Descargar Cuaderno Local (.ipynb)
+            </a>
+            <a href="https://colab.research.google.com/" target="_blank" class="btn-colab">
+              <i class="fa-solid fa-rocket"></i> Abrir Cuaderno en Google Colab
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Paginador Inferior Entre Módulos -->
+      <nav class="module-pager">
+        <a href="modulo00_algebra.html" class="pager-btn">
+          <i class="fa-solid fa-arrow-left"></i> Anterior: Módulo 00 (Álgebra & Conjuntos)
+        </a>
+        <a href="index.html" class="pager-btn">
+          <i class="fa-solid fa-house"></i> Volver al Portal General
+        </a>
+        <a href="modulo02_filtrado.html" class="pager-btn primary">
+          Siguiente: Módulo 02 (Filtrado & LIKE) <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+</body>
+</html>
