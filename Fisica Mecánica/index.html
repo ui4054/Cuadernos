@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="es" data-course="fisica-mecanica">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Física Mecánica: magnitudes escalares y vectoriales, vectores cartesianos y polares, movimiento uniformemente acelerado, lanzamiento de proyectiles y leyes de Newton.">
+  <title>Física Mecánica | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Física Mecánica, inicio">
+      <span class="course-brand-mark" aria-hidden="true">FM</span>
+      <span>Física Mecánica</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Mecánica clásica</p>
+        <h1 id="titulo-principal">Física Mecánica</h1>
+        <p>Cinco cuadernos que recorren magnitudes escalares y vectoriales, notación científica y de ingeniería, vectores en coordenadas cartesianas y polares, movimiento uniformemente acelerado, lanzamiento de proyectiles y las tres leyes de Newton con ejemplos de fuerzas, fricción y resortes.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#magnitudes">Magnitudes y vectores</a>
+      <a href="#mua">Movimiento acelerado</a>
+      <a href="#proyectiles">Lanzamiento de proyectiles</a>
+      <a href="#newton">Leyes de Newton</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso construye los fundamentos de la mecánica desde cero: qué son las magnitudes escalares y vectoriales, cómo expresar números muy grandes o pequeños, cómo operar vectores en el plano, cómo modelar movimiento con aceleración constante y caída libre, y cómo aplicar las leyes de Newton a fuerzas, fricción y sistemas de resortes.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Magnitudes y notación</h3>
+          <p>Escalares vs. vectoriales, unidades del SI, notación científica e ingeniería, conversiones de unidades y tabla de conversiones.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Vectores en el plano</h3>
+          <p>Componentes cartesianas y polares, teorema de Pitágoras, suma y resta de vectores, conversión entre coordenadas y ejercicios resueltos.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Movimiento uniformemente acelerado</h3>
+          <p>Ecuaciones del MUA (velocidad final, posición final, velocidad vs. posición), movimiento horizontal y vertical, caída libre y lanzamiento de proyectiles.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>Lanzamiento de proyectiles</h3>
+          <p>Componente horizontal (MRU) y vertical (MUA), tiempo de vuelo, alcance máximo, altura máxima y ejemplo resuelto con Python.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">05</span>
+          <h3>Leyes de Newton</h3>
+          <p>Inercia, F = ma, acción y reacción, fricción, planos inclinados y cálculo de constante k de resortes.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden va de lo más básico (magnitudes y unidades) hacia lo más dinámico (leyes de Newton y fuerzas), pasando por vectores y movimiento acelerado.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Unidades y vectores</h3>
+          <p>Magnitudes escalares y vectoriales, notación científica e ingeniería, conversiones y vectores en coordenadas cartesianas y polares.</p>
+          <p class="course-note">Fuente: <a href="FISMEC_1_UNIDADES_VECTOR.ipynb" download>FISMEC_1_UNIDADES_VECTOR</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Movimiento uniformemente acelerado</h3>
+          <p>Ecuaciones del MUA, velocidad final, posición final, movimiento en plano horizontal y vertical, caída libre y mini taller de ejercicios.</p>
+          <p class="course-note">Fuente: <a href="FISMEC_3_ACELERADO - copia.ipynb" download>FISMEC_3_ACELERADO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Lanzamiento de proyectiles</h3>
+          <p>Teoría básica, componentes del movimiento, ecuaciones paramétricas, tiempo de vuelo, alcance y altura máxima, ejemplo resuelto y código Python para graficar la trayectoria.</p>
+          <p class="course-note">Fuente: <a href="FISMEC_4_PARABOLICO.ipynb" download>FISMEC_4_PARABOLICO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Leyes de Newton</h3>
+          <p>Primera ley (inercia), segunda ley (F = ma), tercera ley (acción y reacción), fricción, planos inclinados y ejercicios con resortes (cálculo de k).</p>
+          <p class="course-note">Fuente: <a href="FISMEC_5_1_LeyesNewton_A.ipynb" download>FISMEC_5_1_LeyesNewton_A</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="magnitudes" class="course-section" aria-labelledby="magnitudes-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="magnitudes-titulo">Magnitudes, unidades y vectores</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Magnitudes escalares y vectoriales</h3>
+        <p><strong>Escalares:</strong> definidas con número y unidad (masa, longitud, temperatura, tiempo). <strong>Vectoriales:</strong> además requieren dirección y sentido (velocidad, aceleración, fuerza, desplazamiento).</p>
+
+        <h3>Notación científica e ingeniería</h3>
+        <div class="course-formula">
+\[
+\begin{aligned}
+\text{Científica:} &\quad 1500\,\text{cm} = 15\,\text{m} = 1.5 \times 10^1\,\text{m} \\
+\text{Ingeniería:} &\quad \text{múltiplos de }10^3\ (\text{k, M, G, m, µ, n…})
+\end{aligned}
+\]
+        </div>
+
+        <h3>Vectores en coordenadas cartesianas</h3>
+        <div class="course-formula">
+\[
+\begin{aligned}
+A_x &= A\cdot\cos(\theta), & A_y &= A\cdot\sin(\theta)\\
+|A| &= \sqrt{A_x^2 + A_y^2}\\
+\mathbf{R} &= \mathbf{A} + \mathbf{B} = (A_x+B_x,\ A_y+B_y)
+\end{aligned}
+\]
+        </div>
+
+        <h3>Vectores en coordenadas polares</h3>
+        <div class="course-formula">
+\[
+r = \sqrt{x^2+y^2}, \qquad
+\theta = \tan^{-1}\!\left(\frac{y}{x}\right)
+\]
+        </div>
+        <p>Para sumar o restar en polares: convertir a cartesianas, operar y volver a polares.</p>
+      </div>
+    </section>
+
+    <section id="mua" class="course-section" aria-labelledby="mua-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Movimiento acelerado</p>
+        <h2 id="mua-titulo">Movimiento uniformemente acelerado (MUA)</h2>
+        <p class="course-section-intro">Ecuaciones fundamentales para movimiento con aceleración constante.</p>
+      </div>
+      <div class="course-theory">
+        <div class="course-formula">
+\[
+\begin{aligned}
+v_f &= v_i + a\cdot t\\
+x_f &= x_i + v_i\cdot t + \frac{1}{2}a\cdot t^2\\
+v_f^2 &= v_i^2 + 2a\cdot(x_f - x_i)
+\end{aligned}
+\]
+        </div>
+        <p>En movimiento vertical, <code>a = −g</code> con <code>g = 9.8 m/s²</code> si se toma hacia arriba como positivo.</p>
+
+        <h3>Ejemplo: coche desde el reposo</h3>
+        <p>Aceleración <code>3 m/s²</code> durante <code>8 s</code>:</p>
+        <div class="course-formula">
+\[
+v_f = 0 + 3\cdot 8 = 24\,\text{m/s},\qquad
+x_f = 0 + 0\cdot 8 + \frac{1}{2}\cdot 3\cdot 8^2 = 96\,\text{m}
+\]
+        </div>
+      </div>
+    </section>
+
+    <section id="proyectiles" class="course-section" aria-labelledby="proyectiles-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Lanzamiento de proyectiles</h2>
+        <h2 id="proyectiles-titulo">Tiro parabólico</h2>
+        <p class="course-section-intro">Combinación de MRU horizontal y MUA vertical.</p>
+      </div>
+      <div class="course-theory">
+        <div class="course-formula">
+\[
+\begin{aligned}
+x(t) &= v_0\cos(\theta)\cdot t\\
+y(t) &= v_0\sin(\theta)\cdot t - \frac{1}{2}g t^2\\
+t_{\text{vuelo}} &= \frac{2v_0\sin(\theta)}{g}\\
+R &= \frac{v_0^2\sin(2\theta)}{g}\\
+h_{\text{máx}} &= \frac{(v_0\sin(\theta))^2}{2g}
+\end{aligned}
+\]
+        </div>
+        <p><strong>Ejemplo resuelto:</strong> <code>v₀ = 20 m/s</code>, <code>θ = 45°</code>, <code>g = 9.81 m/s²</code> da <code>t ≈ 2.89 s</code>, <code>R ≈ 40.86 m</code>, <code>h ≈ 10.20 m</code>.</p>
+      </div>
+    </section>
+
+    <section id="newton" class="course-section" aria-labelledby="newton-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Leyes de Newton</p>
+        <h2 id="newton-titulo">Fuerzas, inercia y resortes</h2>
+        <p class="course-section-intro">Las tres leyes de Newton con ejemplos calculados.</p>
+      </div>
+      <div class="course-theory">
+        <table class="course-table">
+          <thead><tr><th>Ley</th><th>Enunciado</th><th>Fórmula</th></tr></thead>
+          <tbody>
+            <tr><td>1.ª – Inercia</td><td>Un objeto permanece en reposo o MRU salvo fuerza neta.</td><td>\(\sum\vec{F}=0 \Rightarrow \vec{v}=\text{cte}\)</td></tr>
+            <tr><td>2.ª – Fuerza y aceleración</td><td>Aceleración proporcional a fuerza neta e inversa a masa.</td><td>\(\vec{F}=m\cdot\vec{a}\)</td></tr>
+            <tr><td>3.ª – Acción y reacción</td><td>Fuerzas iguales y opuestas entre dos cuerpos.</td><td>\(\vec{F}_{A\to B}=-\vec{F}_{B\to A}\)</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Ejemplo: fricción en un libro</h3>
+        <p>Libro de <code>1 kg</code>, <code>v₀ = 3 m/s</code>, se detiene en <code>2 m</code>:</p>
+        <div class="course-formula">
+\[
+f_{\text{fricción}} = \frac{\frac{1}{2}mv_0^2}{d} = \frac{0.5\cdot 1\cdot 3^2}{2} = 2.25\,\text{N}
+\]
+        </div>
+
+        <h3>Constante de resorte (k)</h3>
+        <p>Energía potencial elástica igual a energía cinética:</p>
+        <div class="course-formula">
+\[
+\frac{1}{2}kx^2 = \frac{1}{2}mv_0^2
+\quad\Rightarrow\quad
+k = \frac{mv_0^2}{x^2}
+\]
+        </div>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FISMEC 1 – Unidades y vectores</strong>
+            <span>Magnitudes escalares y vectoriales, notación científica, vectores cartesianos y polares, suma y resta, ejercicios resueltos.</span>
+          </div>
+          <a class="course-button" href="FISMEC_1_UNIDADES_VECTOR.ipynb" download aria-label="Descargar FISMEC 1 Unidades y vectores">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FISMEC 3 – Movimiento acelerado</strong>
+            <span>MUA, ecuaciones de velocidad y posición, caída libre, lanzamiento de proyectiles, mini taller de ejercicios.</span>
+          </div>
+          <a class="course-button" href="FISMEC_3_ACELERADO%20-%20copia.ipynb" download aria-label="Descargar FISMEC 3 Movimiento acelerado">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FISMEC 4 – Parabólico</strong>
+            <span>Lanzamiento de proyectiles, componentes del movimiento, tiempo de vuelo, alcance, altura máxima, ejemplo resuelto y código Python.</span>
+          </div>
+          <a class="course-button" href="FISMEC_4_PARABOLICO.ipynb" download aria-label="Descargar FISMEC 4 Parabólico">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FISMEC 5 – Leyes de Newton</strong>
+            <span>Tres leyes de Newton, fricción, planos inclinados, ejercicios con resortes y cálculo de la constante k.</span>
+          </div>
+          <a class="course-button" href="FISMEC_5_1_LeyesNewton_A.ipynb" download aria-label="Descargar FISMEC 5 Leyes de Newton">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Física Mecánica · Basada en los cuadernos FISMEC disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

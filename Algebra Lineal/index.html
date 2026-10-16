@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="es" data-course="algebra-lineal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Álgebra Lineal basada en los cuatro cuadernos disponibles: sistemas 3×3, determinantes, regla de Cramer y aplicaciones económicas del producto punto.">
+  <title>Álgebra Lineal | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+  <script defer src="math.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Álgebra Lineal, inicio">
+      <span class="course-brand-mark" aria-hidden="true">AL</span>
+      <span>Álgebra Lineal</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Sistemas y aplicaciones</p>
+        <h1 id="titulo-principal">Álgebra Lineal</h1>
+        <p>Una ruta por los materiales disponibles para modelar sistemas de tres incógnitas, resolverlos con determinantes y reconocer cómo un producto punto expresa costos y presupuestos. La guía presenta ecuaciones renderizadas y un desarrollo completo paso a paso.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#fundamentos">Fundamentos</a>
+      <a href="#ejemplo">Ejemplo guiado</a>
+      <a href="#aplicaciones">Aplicaciones</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">Los cuatro notebooks disponibles abordan dos líneas relacionadas: sistemas lineales 3×3 resueltos mediante determinantes y una introducción aplicada al producto punto en situaciones económicas. No se presentan como un temario exhaustivo de todas las áreas del álgebra lineal.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Traducir situaciones a ecuaciones</h3>
+          <p>Representa cantidades desconocidas y restricciones de producción como un sistema de ecuaciones y su forma matricial.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Resolver y comprobar</h3>
+          <p>Usa el determinante del sistema y la regla de Cramer para obtener una solución; después comprueba los valores en las ecuaciones originales.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Interpretar en contexto</h3>
+          <p>Distingue una solución algebraica de una combinación viable de producción y modela el costo de una cesta con un producto punto.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden organiza los materiales existentes desde el modelo y el método hasta la práctica y la aplicación. Es una propuesta de lectura, no un calendario oficial.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Modelar y estudiar el método</h3>
+          <p>Parte del problema de producción, identifica la matriz de coeficientes y sigue el cálculo de determinantes y la regla de Cramer.</p>
+          <p class="course-note">Fuente: <a href="Teoria%20_algebra_lineal_determimantes.ipynb" download>Teoría de álgebra lineal y determinantes</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Intentar los sistemas de práctica</h3>
+          <p>Trabaja los problemas de producción y mezclas antes de consultar resultados; anota qué ecuación representa cada recurso disponible.</p>
+          <p class="course-note">Fuente: <a href="Ejercicios_det.ipynb" download>Banco de ejercicios de sistemas 3×3</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Revisar resultados con cuidado</h3>
+          <p>Compara las soluciones propuestas con las ecuaciones: el propio cuaderno de soluciones señala discrepancias en algunos enunciados o resultados.</p>
+          <p class="course-note">Fuente: <a href="Soluciones_Determinantes.ipynb" download>Soluciones y revisión de determinantes</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Conectar con presupuestos</h3>
+          <p>Lee cómo el producto punto de precios y cantidades modela un gasto, y cómo una restricción se representa como línea, plano o hiperplano.</p>
+          <p class="course-note">Fuente: <a href="Aplicacion_Empresas.ipynb" download>Economía lineal: cestas, precios y presupuestos</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fundamentos" class="course-section" aria-labelledby="fundamentos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="fundamentos-titulo">De un sistema al determinante</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Representación matricial</h3>
+        <p>En el problema de producción del cuaderno teórico, \(x\), \(y\) y \(z\) son las cantidades de los productos A, B y C. Las restricciones de ensamblaje, inspección y empaque se reúnen en \(A\mathbf{x}=\mathbf{b}\):</p>
+        <div class="course-formula">\[
+          \begin{pmatrix}
+          2 &amp; 1 &amp; 2\\
+          1 &amp; 3 &amp; 2\\
+          2 &amp; 1 &amp; 3
+          \end{pmatrix}
+          \begin{pmatrix}x\\y\\z\end{pmatrix}
+          =
+          \begin{pmatrix}200\\150\\180\end{pmatrix}
+        \]</div>
+        <p>Cada fila representa un proceso y cada columna un producto. El sistema equivalente es \(2x+y+2z=200\), \(x+3y+2z=150\) y \(2x+y+3z=180\).</p>
+
+        <h3>Determinante y regla de Cramer</h3>
+        <p>El cuaderno aplica la regla de Sarrus para calcular el determinante de la matriz \(3\times3\). Si el determinante principal \(\Delta_s\) no es cero, el sistema tiene una solución única. Para hallar cada incógnita con Cramer, se sustituye su columna por el vector de términos independientes \(\mathbf{b}\):</p>
+        <div class="course-formula">\[
+          x=\frac{\Delta_x}{\Delta_s},\qquad
+          y=\frac{\Delta_y}{\Delta_s},\qquad
+          z=\frac{\Delta_z}{\Delta_s}
+        \]</div>
+        <div class="course-callout">
+          <strong>Una solución algebraica también debe pasar la prueba del contexto</strong>
+          <p>En el ejemplo del cuaderno, \(\Delta_s=5\) y la solución es \((106,28,-20)\). Satisface las igualdades, pero producir una cantidad negativa no es viable. Por eso se distingue la solución del sistema igualitario de una decisión de producción que requiera \(x,y,z\geq0\).</p>
+        </div>
+        <p class="course-note">Referencia principal: <a href="Teoria%20_algebra_lineal_determimantes.ipynb" download>Teoría de álgebra lineal y determinantes</a>. Su conclusión relaciona la interpretación empresarial con restricciones de tipo ≤ y programación lineal, tema que el cuaderno menciona pero no desarrolla como unidad completa.</p>
+      </div>
+    </section>
+
+    <section id="ejemplo" class="course-section" aria-labelledby="ejemplo-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Ejemplo guiado</p>
+        <h2 id="ejemplo-titulo">Comprobar el determinante del sistema</h2>
+        <p class="course-section-intro">El cálculo siguiente retoma la matriz de coeficientes del problema de producción del cuaderno teórico.</p>
+      </div>
+      <div class="course-theory">
+        <ol class="math-steps">
+          <li>
+            <strong>Identificar la matriz de coeficientes.</strong>
+            <p>Tomamos los coeficientes de \(x,y,z\) en el orden de las tres ecuaciones:</p>
+            <div class="course-formula">\[
+              A=\begin{pmatrix}2&amp;1&amp;2\\1&amp;3&amp;2\\2&amp;1&amp;3\end{pmatrix},
+              \qquad
+              \mathbf{b}=\begin{pmatrix}200\\150\\180\end{pmatrix}.
+            \]</div>
+          </li>
+          <li>
+            <strong>Calcular el determinante principal con Sarrus.</strong>
+            <p>Sumamos los tres productos de diagonales descendentes y restamos los tres productos de diagonales ascendentes opuestas:</p>
+            <div class="course-formula">\[
+              \begin{aligned}
+              \Delta_s
+              &amp;=(2\cdot3\cdot3+1\cdot2\cdot2+2\cdot1\cdot1)\\
+              &amp;\quad -(2\cdot3\cdot2+2\cdot2\cdot1+3\cdot1\cdot1)\\
+              &amp;=(18+4+2)-(12+4+3)=24-19=5.
+              \end{aligned}
+            \]</div>
+            <p>Como \(\Delta_s=5\neq0\), Cramer determina una única solución.</p>
+          </li>
+          <li>
+            <strong>Formar y calcular \(\Delta_x,\Delta_y,\Delta_z\).</strong>
+            <p>En cada determinante sustituimos por \(\mathbf{b}\) solo la columna de la variable que queremos encontrar. Luego aplicamos la misma resta de diagonales de Sarrus.</p>
+            <div class="course-formula">\[
+              \begin{aligned}
+              \Delta_x
+              &amp;=\begin{vmatrix}200&amp;1&amp;2\\150&amp;3&amp;2\\180&amp;1&amp;3\end{vmatrix}\\
+              &amp;=(200\cdot3\cdot3+1\cdot2\cdot180+2\cdot150\cdot1)\\
+              &amp;\quad -(180\cdot3\cdot2+1\cdot150\cdot3+2\cdot1\cdot200)\\
+              &amp;=(1800+360+300)-(1080+450+400)=2460-1930=530,\\[4pt]
+              \Delta_y
+              &amp;=\begin{vmatrix}2&amp;200&amp;2\\1&amp;150&amp;2\\2&amp;180&amp;3\end{vmatrix}\\
+              &amp;=(2\cdot150\cdot3+200\cdot2\cdot2+2\cdot1\cdot180)\\
+              &amp;\quad -(2\cdot150\cdot2+180\cdot2\cdot2+3\cdot1\cdot200)\\
+              &amp;=(900+800+360)-(600+720+600)=2060-1920=140,\\[4pt]
+              \Delta_z
+              &amp;=\begin{vmatrix}2&amp;1&amp;200\\1&amp;3&amp;150\\2&amp;1&amp;180\end{vmatrix}\\
+              &amp;=(2\cdot3\cdot180+1\cdot150\cdot2+200\cdot1\cdot1)\\
+              &amp;\quad -(200\cdot3\cdot2+1\cdot1\cdot180+150\cdot1\cdot2)\\
+              &amp;=(1080+300+200)-(1200+180+300)=1580-1680=-100.
+              \end{aligned}
+            \]</div>
+          </li>
+          <li>
+            <strong>Aplicar la regla de Cramer.</strong>
+            <p>Dividimos cada determinante auxiliar entre el determinante principal:</p>
+            <div class="course-formula">\[
+              x=\frac{530}{5}=106,\qquad
+              y=\frac{140}{5}=28,\qquad
+              z=\frac{-100}{5}=-20.
+            \]</div>
+          </li>
+          <li>
+            <strong>Verificar sustituyendo en las ecuaciones originales.</strong>
+            <div class="course-formula">\[
+              \begin{aligned}
+              2(106)+28+2(-20)&amp;=212+28-40=200,\\
+              106+3(28)+2(-20)&amp;=106+84-40=150,\\
+              2(106)+28+3(-20)&amp;=212+28-60=180.
+              \end{aligned}
+            \]</div>
+            <p>Las tres igualdades se cumplen. La solución algebraica es correcta, pero \(z=-20\) no es una cantidad de producción admisible.</p>
+          </li>
+        </ol>
+        <p class="course-note">Desarrollo contrastado con los pasos 1–6 de <a href="Teoria%20_algebra_lineal_determimantes.ipynb" download>Teoría de álgebra lineal y determinantes</a>.</p>
+      </div>
+    </section>
+
+    <section id="aplicaciones" class="course-section" aria-labelledby="aplicaciones-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Otra conexión</p>
+        <h2 id="aplicaciones-titulo">Precios, cantidades y presupuestos</h2>
+        <p class="course-section-intro">El cuaderno de aplicación usa el producto punto para expresar el gasto de una cesta y representar restricciones presupuestarias.</p>
+      </div>
+      <div class="course-theory">
+        <h3>El gasto como producto punto</h3>
+        <p>Si \(\mathbf{p}\) es el vector de precios y \(\mathbf{q}\) el vector de cantidades, el gasto total es el producto punto. Para los valores ilustrativos del ejemplo, \(\mathbf{p}=(10,5)\) y \(\mathbf{q}=(3,2)\):</p>
+        <div class="course-formula">\[
+          \mathbf{p}\cdot\mathbf{q}
+          =p_1q_1+p_2q_2
+          =10\cdot3+5\cdot2
+          =30+10
+          =40.
+        \]</div>
+        <h3>La misma restricción cambia de forma según el espacio</h3>
+        <ul>
+          <li>Con dos bienes, \(p_1q_1+p_2q_2=I\) describe una recta de presupuesto en \(\mathbb{R}^2\).</li>
+          <li>Con tres bienes, \(p_1q_1+p_2q_2+p_3q_3=I\) describe un plano en \(\mathbb{R}^3\).</li>
+          <li>En \(\mathbb{R}^n\), una restricción lineal de este tipo se interpreta como un hiperplano.</li>
+        </ul>
+        <p>El cuaderno también distingue las cestas que cumplen el presupuesto de las que lo exceden. La igualdad representa el límite presupuestario; las cantidades asequibles se interpretan usando el lado que no supera el ingreso <var>I</var>.</p>
+        <p class="course-note">Referencia: <a href="Aplicacion_Empresas.ipynb" download>Economía lineal: cestas, precios y presupuestos</a>. Los ejemplos usan valores ilustrativos del cuaderno; no describen precios actuales.</p>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los cuatro cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual. Las referencias anteriores apuntan a estos mismos materiales; no se han modificado ni incrustado en la guía.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Teoría de álgebra lineal y determinantes</strong>
+            <span>Modelo 3×3, forma matricial, regla de Sarrus, Cramer, verificación e interpretación de resultados.</span>
+          </div>
+          <a class="course-button" href="Teoria%20_algebra_lineal_determimantes.ipynb" download aria-label="Descargar Teoría de álgebra lineal y determinantes">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Banco de ejercicios: sistemas de ecuaciones 3×3 en producción</strong>
+            <span>Problemas aplicados de producción, mezclas y asignación de recursos con soluciones propuestas.</span>
+          </div>
+          <a class="course-button" href="Ejercicios_det.ipynb" download aria-label="Descargar Banco de ejercicios de sistemas 3×3">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Soluciones de determinantes</strong>
+            <span>Desarrolla respuestas y contrasta algunos resultados con las ecuaciones de los enunciados.</span>
+          </div>
+          <a class="course-button" href="Soluciones_Determinantes.ipynb" download aria-label="Descargar Soluciones de determinantes">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Economía lineal: cestas, precios y presupuestos</strong>
+            <span>Producto punto, vectores de precios y cantidades, rectas, planos e hiperplanos presupuestarios.</span>
+          </div>
+          <a class="course-button" href="Aplicacion_Empresas.ipynb" download aria-label="Descargar Economía lineal: cestas, precios y presupuestos">Descargar notebook</a>
+        </article>
+      </div>
+      <div class="course-callout">
+        <strong>Nota de lectura sobre las soluciones</strong>
+        <p><code>Soluciones_Determinantes.ipynb</code> advierte que varias respuestas propuestas en el banco no satisfacen todas las ecuaciones (entre ellas, el ejemplo de la fábrica de muebles). Conviene comprobar cada solución por sustitución y atender a las correcciones explicadas en ese notebook. Los cuadernos originales se conservan sin cambios.</p>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de `vendor/katex/`.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Álgebra Lineal · Basada en los materiales del curso disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10271f">
+  <meta name="description" content="Biblioteca de cursos: explora sitios didácticos y descarga cuadernos Jupyter.">
+  <title>Biblioteca de cursos | Cuadernos</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Biblioteca de cursos, inicio">
+      <span class="brand-mark" aria-hidden="true">C</span>
+      <span>Cuadernos <span class="brand-light">/ Biblioteca</span></span>
+    </a>
+    <a class="header-link" href="#cursos">Explorar cursos <span aria-hidden="true">↓</span></a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> RECURSOS PARA APRENDER Y ENSEÑAR</p>
+        <h1>Todos tus cursos,<br><span>en un solo lugar.</span></h1>
+        <p class="hero-copy">Explora los sitios didácticos y descarga los cuadernos Jupyter de cada curso para trabajarlos a tu ritmo.</p>
+        <a class="hero-button" href="#cursos">Ver biblioteca <span aria-hidden="true">↘</span></a>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="art-card art-card-back"><span>01</span><i></i><i></i><i></i></div>
+        <div class="art-card art-card-front">
+          <span class="art-label">MIS RECURSOS</span>
+          <span class="art-title">Aprender<br>haciendo.</span>
+          <span class="art-icon">↗</span>
+          <div class="art-bars"><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <span class="art-sparkle sparkle-one">✳</span>
+        <span class="art-sparkle sparkle-two">✳</span>
+      </div>
+      <div class="hero-foot"><span>COLECCIÓN ACADÉMICA</span><span>EXPLORA · APRENDE · DESCARGA</span></div>
+    </section>
+
+    <section class="library-section" id="cursos">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow section-eyebrow">LA COLECCIÓN</p>
+          <h2>Biblioteca de cursos</h2>
+          <p class="section-copy">Encuentra una materia o busca un cuaderno específico.</p>
+        </div>
+        <div class="library-stats" aria-label="Resumen de la biblioteca">
+          <div><strong id="course-count">—</strong><span>cursos</span></div>
+          <div><strong id="notebook-count">—</strong><span>cuadernos</span></div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <span class="visually-hidden">Buscar cursos o cuadernos</span>
+          <input id="course-search" type="search" placeholder="Buscar curso o cuaderno..." autocomplete="off">
+          <kbd>/</kbd>
+        </label>
+        <div class="filters" role="group" aria-label="Filtrar cursos">
+          <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">Todos</button>
+          <button class="filter-button" type="button" data-filter="site" aria-pressed="false">Con sitio web</button>
+          <button class="filter-button" type="button" data-filter="notebooks" aria-pressed="false">Con cuadernos</button>
+        </div>
+      </div>
+
+      <p class="results-label" id="results-label" aria-live="polite"></p>
+      <div class="course-grid" id="course-grid"></div>
+      <div class="empty-state" id="empty-state" hidden>
+        <span aria-hidden="true">⌕</span>
+        <h3>No encontramos resultados</h3>
+        <p>Prueba otro nombre o cambia el filtro seleccionado.</p>
+      </div>
+    </section>
+
+    <section class="download-note">
+      <div class="note-icon" aria-hidden="true">↓</div>
+      <div>
+        <h2>Cuadernos listos para descargar</h2>
+        <p>Los archivos Jupyter se descargan directamente. Ábrelos con Jupyter Notebook, JupyterLab o Google Colab.</p>
+      </div>
+      <span class="file-badge">.IPYNB</span>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="./">
+      <span class="brand-mark" aria-hidden="true">C</span>
+      <span>Cuadernos <span class="brand-light">/ Biblioteca</span></span>
+    </a>
+    <span>Material académico organizado por curso.</span>
+    <a class="back-top" href="#">Volver arriba ↑</a>
+  </footer>
+</body>
+</html>

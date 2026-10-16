@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="es" data-course="cuntech">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de CunTech 2025: fundamentos de HTML, CSS, JavaScript, PHP y CRUD con MySQL para desarrollo web básico.">
+  <title>CunTech 2025 | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="CunTech 2025, inicio">
+      <span class="course-brand-mark" aria-hidden="true">CT</span>
+      <span>CunTech 2025</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Desarrollo web básico</p>
+        <h1 id="titulo-principal">CunTech 2025</h1>
+        <p>Diez cuadernos que recorren desde la estructura de una página HTML hasta un CRUD completo con PHP y MySQL. Incluye landing pages, formularios, CSS, diseño responsive, JavaScript de validación y arquitectura de capas para aplicaciones web.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#fundamentos">Fundamentos web</a>
+      <a href="#programacion">Programación con PHP</a>
+      <a href="#crud">CRUD y base de datos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso avanza de lo estático a lo dinámico: HTML para estructura, CSS para presentación, JavaScript para interactividad y PHP con MySQL para persistencia de datos. Cada notebook incluye código fuente completo, explicaciones paso a paso y ejercicios prácticos.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>HTML: estructura de la web</h3>
+          <p>Etiquetas, elementos semánticos, atributos, listas, enlaces, imágenes y la estructura básica de un documento HTML5.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>CSS: diseño y presentación</h3>
+          <p>Selectores, modelo de caja, Flexbox, diseño responsive con media queries y estilos para formularios y tablas.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>JavaScript: interactividad</h3>
+          <p>Validación de formularios, manipulación del DOM, desplazamiento suave y manejo de eventos.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>PHP: lógica del servidor</h3>
+          <p>Sintaxis básica, manejo de formularios, conexión a base de datos y generación dinámica de HTML.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">05</span>
+          <h3>CRUD con MySQL</h3>
+          <p>Crear, leer, actualizar y eliminar registros en una base de datos relacional mediante scripts PHP separados por responsabilidad.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden va de lo más simple (una página HTML estática) a lo más complejo (una aplicación CRUD con base de datos y arquitectura separada por capas).</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Introducción a HTML</h3>
+          <p>Qué es HTML, diferencia con CSS y JavaScript, protocolo HTTP, estructura de documento y primera página "Hola Mundo".</p>
+          <p class="course-note">Fuente: <a href="HMTL_1_BASICO.ipynb" download>HMTL_1_BASICO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Landing page con HTML y CSS</h3>
+          <p>Estructura de un hotel con secciones (Bienvenidos, Servicios, Galería, Contacto), menú de navegación y hoja de estilos externa.</p>
+          <p class="course-note">Fuente: <a href="HTML_2_BASICO.ipynb" download>HTML_2_BASICO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Imágenes, Flexbox y enlaces</h3>
+          <p>Galería de imágenes, modelo Flexbox para disposición de elementos, enlaces mailto/tel y favicon.</p>
+          <p class="course-note">Fuente: <a href="HTML_3_BASICO.ipynb" download>HTML_3_BASICO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Landing page avanzada y JavaScript</h3>
+          <p>Encabezado fijo, desplazamiento suave con JavaScript, formulario de contacto y diseño responsive.</p>
+          <p class="course-note">Fuente: <a href="HTML_4_Basico.ipynb" download>HTML_4_Basico</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">5</span>
+          <h3>Tablas y formularios</h3>
+          <p>Tabla de precios de habitaciones con CSS y formulario de contacto con campos de entrada, textarea y botón de envío.</p>
+          <p class="course-note">Fuente: <a href="HTML_5_Basico.ipynb" download>HTML_5_Basico</a>, <a href="HTML_6_Basico.ipynb" download>HTML_6_Basico</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">6</span>
+          <h3>PHP básico y validación</h3>
+          <p>Formulario de suma de dos números con HTML, CSS, validación en JavaScript y procesamiento en PHP.</p>
+          <p class="course-note">Fuente: <a href="PROGRAMACION_1_BASICO.ipynb" download>PROGRAMACION_1_BASICO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">7</span>
+          <h3>Ciclos repetitivos en PHP</h3>
+          <p>Bucles for, while, do-while y foreach. Ejemplo práctico: tabla de multiplicar generada dinámicamente.</p>
+          <p class="course-note">Fuente: <a href="PROGRAMACION_2_BASICO.ipynb" download>PROGRAMACION_2_BASICO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">8</span>
+          <h3>CRUD integrado con MySQL</h3>
+          <p>Aplicación de reservaciones de hotel: formulario de inserción, listado de registros, conexión db.php y operaciones create/read.</p>
+          <p class="course-note">Fuente: <a href="PROGRAMACION_3_BASICO.ipynb" download>PROGRAMACION_3_BASICO</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">9</span>
+          <h3>CRUD separado por capas</h3>
+          <p>Arquitectura con archivos independientes: create.php, read.php, update.php, delete.php, index.php, db.php, CSS y JavaScript modular.</p>
+          <p class="course-note">Fuente: <a href="PROGRAMACION_4_BASICO.ipynb" download>PROGRAMACION_4_BASICO</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fundamentos" class="course-section" aria-labelledby="fundamentos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="fundamentos-titulo">HTML, CSS y JavaScript</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Estructura de un documento HTML5</h3>
+        <p>Un documento HTML básico consta de declaración <code>&lt;!DOCTYPE html&gt;</code>, elemento raíz <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code> (metadatos) y <code>&lt;body&gt;</code> (contenido visible):</p>
+        <div class="course-formula">
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Título de la página</title>
+</head>
+<body>
+    <h1>Encabezado principal</h1>
+    <p>Párrafo de contenido.</p>
+</body>
+</html>
+```
+        </div>
+
+        <h3>CSS: hojas de estilo en cascada</h3>
+        <p>CSS separa la presentación de la estructura. Un ejemplo de regla:</p>
+        <div class="course-formula">
+```css
+section {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 8px;
+}
+```
+        </div>
+        <p><strong>Flexbox</strong> permite disponer elementos en una dirección (fila o columna) con control de alineación, espaciado y envoltura:</p>
+        <div class="course-formula">
+```css
+.flex-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+```
+        </div>
+
+        <h3>JavaScript: interactividad en el navegador</h3>
+        <p>Se utiliza para validar formularios antes del envío y manipular el DOM. Ejemplo de escucha de evento <code>submit</code>:</p>
+        <div class="course-formula">
+```javascript
+document.getElementById('formulario').addEventListener('submit', function (e) {
+    if (!validar()) {
+        e.preventDefault();
+    }
+});
+```
+        </div>
+        <p>El desplazamiento suave se logra con <code>window.scrollTop({ behavior: 'smooth' })</code>.</p>
+      </div>
+    </section>
+
+    <section id="programacion" class="course-section" aria-labelledby="programacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Programación con PHP</p>
+        <h2 id="programacion-titulo">Lógica del servidor y ciclos</h2>
+        <p class="course-section-intro">PHP permite generar HTML dinámico y procesar datos enviados desde formularios.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Sintaxis básica de PHP</h3>
+        <p>El código PHP se delimita con <code>&lt;?php ... ?&gt;</code>. Se integra con HTML para generar contenido dinámico:</p>
+        <div class="course-formula">
+```php
+<?php
+$numero1 = floatval($_POST['numero1']);
+$numero2 = floatval($_POST['numero2']);
+$resultado = $numero1 + $numero2;
+echo "<p>Resultado: $resultado</p>";
+?>
+```
+        </div>
+
+        <h3>Ciclos repetitivos</h3>
+        <table class="course-table">
+          <thead><tr><th>Ciclo</th><th>Uso típico</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><code>for</code></td><td>Número conocido de iteraciones</td><td><code>for ($i = 1; $i <= 10; $i++)</code></td></tr>
+            <tr><td><code>while</code></td><td>Mientras una condición sea verdadera</td><td><code>while ($contador <= 5)</code></td></tr>
+            <tr><td><code>do-while</code></td><td>Al menos una ejecución garantizada</td><td><code>do { ... } while ($c &lt;= 3);</code></td></tr>
+            <tr><td><code>foreach</code></td><td>Recorrer arreglos</td><td><code>foreach ($colores as $color)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="crud" class="course-section" aria-labelledby="crud-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">CRUD y base de datos</p>
+        <h2 id="crud-titulo">Persistencia con PHP y MySQL</h2>
+        <p class="course-section-intro">Operaciones de crear, leer, actualizar y eliminar registros en una tabla de reservaciones.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Conexión a MySQL</h3>
+        <p>El archivo <code>db.php</code> establece la conexión y se incluye en los scripts que la necesitan:</p>
+        <div class="course-formula">
+```php
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'hotel_reservas';
+$conn = mysqli_connect($host, $user, $password, $database);
+if (!$conn) {
+    die("Error de conexión: " . mysqli_connect_error());
+}
+```
+        </div>
+
+        <h3>Operaciones CRUD</h3>
+        <table class="course-table">
+          <thead><tr><th>Operación</th><th>Archivo</th><th>Sentencia SQL</th></tr></thead>
+          <tbody>
+            <tr><td>Crear</td><td><code>create.php</code></td><td><code>INSERT INTO reservaciones (...) VALUES (...)</code></td></tr>
+            <tr><td>Leer</td><td><code>read.php</code></td><td><code>SELECT * FROM reservaciones</code></td></tr>
+            <tr><td>Actualizar</td><td><code>update.php</code></td><td><code>UPDATE reservaciones SET ... WHERE id = ?</code></td></tr>
+            <tr><td>Eliminar</td><td><code>delete.php</code></td><td><code>DELETE FROM reservaciones WHERE id = ?</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Estructura de la tabla</h3>
+        <div class="course-formula">
+```sql
+CREATE TABLE reservaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    habitacion VARCHAR(10) NOT NULL,
+    fecha_entrada DATE NOT NULL,
+    fecha_salida DATE NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL
+);
+```
+        </div>
+        <p>El notebook <code>PROGRAMACION_4_BASICO</code> separa cada operación en su propio archivo, siguiendo una arquitectura de capas simple con CSS y JavaScript organizados en carpetas <code>css/</code> y <code>js/</code>.</p>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los diez cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Introducción a HTML</strong>
+            <span>Etiquetas, elementos semánticos, HTTP, estructura de documento y primera página web.</span>
+          </div>
+          <a class="course-button" href="HMTL_1_BASICO.ipynb" download aria-label="Descargar Introducción a HTML">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Landing page con HTML y CSS</strong>
+            <span>Estructura de hotel con secciones, menú de navegación y hoja de estilos externa.</span>
+          </div>
+          <a class="course-button" href="HTML_2_BASICO.ipynb" download aria-label="Descargar Landing page HTML y CSS">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Imágenes, Flexbox y enlaces</strong>
+            <span>Galería de imágenes, modelo Flexbox, enlaces mailto/tel y favicon.</span>
+          </div>
+          <a class="course-button" href="HTML_3_BASICO.ipynb" download aria-label="Descargar Imágenes, Flexbox y enlaces">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Landing page avanzada y JavaScript</strong>
+            <span>Encabezado fijo, desplazamiento suave, formulario de contacto y diseño responsive.</span>
+          </div>
+          <a class="course-button" href="HTML_4_Basico.ipynb" download aria-label="Descargar Landing page avanzada">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Tablas y formularios</strong>
+            <span>Tabla de precios de habitaciones y formulario de contacto con CSS.</span>
+          </div>
+          <a class="course-button" href="HTML_5_Basico.ipynb" download aria-label="Descargar Tablas y formularios">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Formulario de contacto</strong>
+            <span>HTML de formulario, CSS de estilo, diseño responsive y prototipo PHP + SQL para procesamiento.</span>
+          </div>
+          <a class="course-button" href="HTML_6_Basico.ipynb" download aria-label="Descargar Formulario de contacto">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>PHP básico y validación</strong>
+            <span>Formulario de suma de dos números con HTML, CSS, validación en JavaScript y procesamiento en PHP.</span>
+          </div>
+          <a class="course-button" href="PROGRAMACION_1_BASICO.ipynb" download aria-label="Descargar PHP básico y validación">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Ciclos repetitivos en PHP</strong>
+            <span>Bucles for, while, do-while y foreach con ejemplo de tabla de multiplicar.</span>
+          </div>
+          <a class="course-button" href="PROGRAMACION_2_BASICO.ipynb" download aria-label="Descargar Ciclos repetitivos">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>CRUD integrado con MySQL</strong>
+            <span>Reservaciones de hotel: inserción, listado, conexión db.php y operaciones create/read.</span>
+          </div>
+          <a class="course-button" href="PROGRAMACION_3_BASICO.ipynb" download aria-label="Descargar CRUD integrado">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>CRUD separado por capas</strong>
+            <span>Archivos independientes create.php, read.php, update.php, delete.php, index.php, db.php, CSS y JS modular.</span>
+          </div>
+          <a class="course-button" href="PROGRAMACION_4_BASICO.ipynb" download aria-label="Descargar CRUD separado por capas">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de CunTech 2025 · Basada en los cuadernos HTML, CSS, JavaScript, PHP y CRUD disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

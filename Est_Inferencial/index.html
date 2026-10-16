@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="es" data-course="estadistica-inferencial">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Estadística Inferencial: contraste de hipótesis, prueba t para medias, prueba Z para muestras grandes, prueba Z para proporciones y taller de duelos estadísticos.">
+  <title>Estadística Inferencial | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Estadística Inferencial, inicio">
+      <span class="course-brand-mark" aria-hidden="true">EI</span>
+      <span>Estadística Inferencial</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Pruebas de confianza</p>
+        <h1 id="titulo-principal">Estadística Inferencial</h1>
+        <p>Un cuaderno con guías de contraste de hipótesis para comparar medias (prueba t), evaluar mejoras en software (prueba Z, muestras grandes), comparar proporciones de tratamientos médicos y resolver 15 desafíos de producción, finanzas y ventas. Incluye plantilla maestra y tabla de valores críticos Z.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuaderno</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#fundamentos">Fundamentos</a>
+      <a href="#prueba-t">Prueba t (medias)</a>
+      <a href="#prueba-z">Prueba Z (muestras grandes)</a>
+      <a href="#proporciones">Prueba Z (proporciones)</a>
+      <a href="#taller">Taller de duelos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El cuaderno <code>Pruebas_Confianza.ipynb</code> enseña a determinar si una diferencia observada entre dos grupos es <strong>estadísticamente significativa</strong> o si se debe al azar. Sigue una estructura narrativa de seis pasos: la sospecha (hipótesis), la evidencia (datos), el ruido (error estándar), el duelo final (estadístico calculado), el juez (valor crítico) y el veredicto (conclusión).</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Contraste de hipótesis</h3>
+          <p>Planteamiento de H₀ (nula) y H₁ (alternativa), pruebas de una cola y dos colas, nivel de confianza 95% (α = 0.05).</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Prueba t para medias</h3>
+          <p>Comparación de dos promedios con muestras pequeñas (n &lt; 30), usando T-Student y grados de libertad df = n_A + n_B − 2.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Prueba Z para muestras grandes</h3>
+          <p>Evaluación de mejoras con n &gt; 30, valor crítico Z = 1.96 para 95% de confianza (dos colas) o 1.645 (una cola).</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>Prueba Z para proporciones</h3>
+          <p>Comparación de tasas de recuperación o conversión, convirtiendo porcentajes a decimales y usando SE = √(pq/n).</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">05</span>
+          <h3>Taller de duelos estadísticos</h3>
+          <p>15 desafíos narrados en control de calidad, finanzas y ventas, con plantilla maestra de solución y tabla de valores críticos Z.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través del cuaderno</h2>
+        <p class="course-section-intro">El orden avanza de comparar medias con prueba t, a muestras grandes con prueba Z, luego proporciones, y finalmente práctica con el taller de 15 casos.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Comparación de medias (prueba t)</h3>
+          <p>Ejemplo de dos empresas de mensajería: planteamiento de H₀/H₁, cálculo de error estándar, estadístico t calculado, valor crítico de tabla y veredicto de no rechazar H₀.</p>
+          <p class="course-note">Fuente: <a href="Pruebas_Confianza.ipynb" download>Guía 1 – Prueba t para medias</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Rendimiento de software (prueba Z)</h3>
+          <p>Comparación de dos versiones de software con muestras grandes (n = 50 cada una), estadístico Z calculado, valor crítico 1.96 y rechazo de H₀.</p>
+          <p class="course-note">Fuente: <a href="Pruebas_Confianza.ipynb" download>Guía 2 – Muestras grandes</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Comparación de proporciones médicas</h3>
+          <p>Tratamientos A (75%) y B (80%) con n = 50 cada uno, prueba Z para proporciones, SE basado en p×q/n y conclusión de no diferencia significativa.</p>
+          <p class="course-note">Fuente: <a href="Pruebas_Confianza.ipynb" download>Guía 3 – Proporciones</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Proporciones con muestra masiva</h3>
+          <p>Mismos tratamientos pero con n = 5000 cada uno: el ruido se reduce drásticamente, Z calculado = 6.002 y se rechaza H₀ con p &lt; 0.001.</p>
+          <p class="course-note">Fuente: <a href="Pruebas_Confianza.ipynb" download>Guía 3B – Muestra masiva</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">5</span>
+          <h3>Taller: 15 duelos estadísticos</h3>
+          <p>Desafíos en producción (T-Student, n &lt; 30), procesos (Z-Test, n &gt; 30) y finanzas/ventas (proporciones %), con plantilla maestra de solución.</p>
+          <p class="course-note">Fuente: <a href="Pruebas_Confianza.ipynb" download>Taller y plantilla maestra</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">6</span>
+          <h3>Tabla de valores críticos Z</h3>
+          <p>Regla de las colitas: valores críticos para 90%, 95% y 99% de confianza, pruebas de 1 y 2 colas, y nota para T-Student con n &lt; 30.</p>
+          <p class="course-note">Fuente: <a href="Pruebas_Confianza.ipynb" download>Regla de las colitas</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fundamentos" class="course-section" aria-labelledby="fundamentos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="fundamentos-titulo">De la hipótesis al veredicto</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Seis pasos del contraste de hipótesis</h3>
+        <ol>
+          <li><strong>La sospecha:</strong> definir H₀ (no hay diferencia) y H₁ (sí hay diferencia).</li>
+          <li><strong>La evidencia:</strong> recopilar medias, desviaciones y tamaños de muestra de ambos grupos.</li>
+          <li><strong>El ruido:</strong> calcular el error estándar <code>SE</code>.</li>
+          <li><strong>El duelo final:</strong> computar el estadístico (<code>t</code> o <code>Z</code>) comparando diferencia contra ruido.</li>
+          <li><strong>El juez:</strong> obtener el valor crítico de tabla según confianza y tipo de prueba.</li>
+          <li><strong>El veredicto:</strong> comparar estadístico calculado vs. valor crítico y concluir (rechazar o no rechazar H₀).</li>
+        </ol>
+
+        <h3>Error estándar de la diferencia de medias</h3>
+        <div class="course-formula">
+\[
+SE = \sqrt{\frac{s_A^2}{n_A} + \frac{s_B^2}{n_B}}
+\]
+        </div>
+        <p>Donde <code>s²</code> es la varianza (desviación estándar al cuadrado) y <code>n</code> el tamaño de muestra.</p>
+
+        <h3>Estadístico t y Z</h3>
+        <div class="course-formula">
+\[
+t_{calc} = \frac{\bar{x}_A - \bar{x}_B}{SE}, \qquad
+Z_{calc} = \frac{\bar{x}_1 - \bar{x}_2}{SE}
+\]
+        </div>
+        <p>Usar <code>t</code> para muestras pequeñas (T-Student) y <code>Z</code> para muestras grandes (<code>n &gt; 30</code>).</p>
+
+        <h3>Error estándar de proporciones</h3>
+        <div class="course-formula">
+\[
+SE = \sqrt{\frac{p_A \times q_A}{n_A} + \frac{p_B \times q_B}{n_B}}
+\]
+        </div>
+        <p>Donde <code>p</code> es la proporción de éxito y <code>q = 1 − p</code> la proporción de fracaso, convertidos a decimales.</p>
+
+        <h3>Valores críticos Z (95% de confianza)</h3>
+        <table class="course-table">
+          <thead><tr><th>Tipo de prueba</th><th>H₁</th><th>Valor crítico Z</th></tr></thead>
+          <tbody>
+            <tr><td>Dos colas</td><td><code>≠</code> (diferente)</td><td><code>1.96</code></td></tr>
+            <tr><td>Una cola</td><td><code>&gt;</code> o <code>&lt;</code></td><td><code>1.645</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="prueba-t" class="course-section" aria-labelledby="prueba-t-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Prueba t para medias</p>
+        <h2 id="prueba-t-titulo">Comparación de dos promedios</h2>
+        <p class="course-section-intro">Ejemplo resuelto: empresas de mensajería A y B.</p>
+      </div>
+      <div class="course-theory">
+        <div class="course-formula">
+\[
+\begin{aligned}
+\bar{x}_A &= 2.5, & s_A &= 0.8, & n_A &= 30 \\
+\bar{x}_B &= 2.2, & s_B &= 0.6, & n_B &= 30
+\end{aligned}
+\]
+        </div>
+        <p><strong>Diferencia bruta:</strong> <code>2.5 − 2.2 = 0.3</code></p>
+        <p><strong>Error estándar:</strong></p>
+        <div class="course-formula">
+\[
+SE = \sqrt{\frac{0.8^2}{30} + \frac{0.6^2}{30}} = \sqrt{0.0213 + 0.0120} = \sqrt{0.0333} \approx 0.1825
+\]
+        </div>
+        <p><strong>Estadístico t:</strong></p>
+        <div class="course-formula">
+\[
+t_{calc} = \frac{0.3}{0.1825} \approx 1.644
+\]
+        </div>
+        <p><strong>Grados de libertad:</strong> <code>df = 30 + 30 − 2 = 58</code>. Valor crítico (tabla t, 95%): <code>2.000</code>.</p>
+        <p><strong>Veredicto:</strong> <code>1.644 &lt; 2.000</code>, por lo que <strong>no se rechaza H₀</strong>. No hay evidencia suficiente de diferencia significativa entre las empresas.</p>
+      </div>
+    </section>
+
+    <section id="prueba-z" class="course-section" aria-labelledby="prueba-z-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Prueba Z (muestras grandes)</p>
+        <h2 id="prueba-z-titulo">Comparación de versiones de software</h2>
+        <p class="course-section-intro">Ejemplo resuelto: Versión 1 vs Versión 2, n = 50 cada una.</p>
+      </div>
+      <div class="course-theory">
+        <div class="course-formula">
+\[
+\begin{aligned}
+\bar{x}_1 &= 10, & s_1 &= 2, & n_1 &= 50 \\
+\bar{x}_2 &= 9, & s_2 &= 1.5, & n_2 &= 50
+\end{aligned}
+\]
+        </div>
+        <p><strong>Diferencia bruta:</strong> <code>10 − 9 = 1.0</code> segundo</p>
+        <div class="course-formula">
+\[
+SE = \sqrt{\frac{2^2}{50} + \frac{1.5^2}{50}} = \sqrt{0.08 + 0.045} = \sqrt{0.125} \approx 0.3535
+\]
+        </div>
+        <div class="course-formula">
+\[
+Z_{calc} = \frac{1.0}{0.3535} \approx 2.828
+\]
+        </div>
+        <p><strong>Valor crítico Z (95%, dos colas):</strong> <code>1.96</code>.</p>
+        <p><strong>Veredicto:</strong> <code>2.828 &gt; 1.96</code>, por lo que <strong>se rechaza H₀</strong>. La Versión 2 es significativamente más rápida.</p>
+      </div>
+    </section>
+
+    <section id="proporciones" class="course-section" aria-labelledby="proporciones-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Prueba Z para proporciones</h2>
+        <h2 id="proporciones-titulo">Tratamientos médicos A y B</h2>
+        <p class="course-section-intro">Comparación de tasas de recuperación: 75% vs 80%.</p>
+      </div>
+      <div class="course-theory">
+        <div class="course-formula">
+\[
+\begin{aligned}
+p_A &= 0.75, & q_A &= 0.25, & n_A &= 50 \\
+p_B &= 0.80, & q_B &= 0.20, & n_B &= 50
+\end{aligned}
+\]
+        </div>
+        <p><strong>Diferencia bruta:</strong> <code>0.80 − 0.75 = 0.05</code> (5%)</p>
+        <div class="course-formula">
+\[
+SE = \sqrt{\frac{0.75 \times 0.25}{50} + \frac{0.80 \times 0.20}{50}} = \sqrt{0.00375 + 0.00320} = \sqrt{0.00695} \approx 0.0833
+\]
+        </div>
+        <div class="course-formula">
+\[
+Z_{calc} = \frac{0.05}{0.0833} \approx 0.6002
+\]
+        </div>
+        <p><strong>Veredicto:</strong> <code>0.6002 &lt; 1.96</code>, por lo que <strong>no se rechaza H₀</strong>. La diferencia del 5% podría ser azar.</p>
+
+        <p class="course-callout"><strong>Con muestra masiva (n = 5000):</strong> El ruido cae a <code>0.00833</code>, <code>Z_{calc} = 6.002</code>, y se <strong>rechaza H₀</strong> con <code>p &lt; 0.001</code>. El tamaño de la muestra cambia drásticamente el poder estadístico.</p>
+      </div>
+    </section>
+
+    <section id="taller" class="course-section" aria-labelledby="taller-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Taller de duelos estadísticos</h2>
+        <h2 id="taller-titulo">15 desafíos de producción, finanzas y ventas</h2>
+        <p class="course-section-intro">Casos narrados para practicar contraste de hipótesis en tres bloques.</p>
+      </div>
+      <div class="course-theory">
+        <table class="course-table">
+          <thead><tr><th>Bloque</th><th>Tema</th><th>Prueba</th><th>Muestra</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>Control de calidad y producción</td><td>T-Student</td><td>n &lt; 30</td></tr>
+            <tr><td>B</td><td>Optimización y procesos</td><td>Z-Test</td><td>n &gt; 30</td></tr>
+            <tr><td>C</td><td>Finanzas y ventas</td><td>Z-Test (proporciones)</td><td>n &gt; 30</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Ejemplos de casos:</strong> vida útil de brocas, tiempo de secado de pintura, soldadura reforzada, consumo eléctrico, velocidad de ensamblaje, guerra de básculas, control de defectos, dureza de plásticos, web vs app, WhatsApp de cobro, club de puntos, tarjetas Oro vs Platino, TikTok vs Instagram.</p>
+        <p><strong>Plantilla maestra:</strong> seis pasos para resolver cada caso: sospecha (H₀/H₁), evidencia (datos), ruido (SE), duelo final (estadístico), juez (valor crítico) y veredicto.</p>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga el cuaderno</h2>
+        <p class="course-section-intro">El enlace descarga el notebook original con las seis guías, el taller de 15 casos, la plantilla maestra y la tabla de valores críticos.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Pruebas de Confianza</strong>
+            <span>Contraste de hipótesis: prueba t para medias, prueba Z para muestras grandes, prueba Z para proporciones, taller de 15 duelos estadísticos y plantilla maestra de solución.</span>
+          </div>
+          <a class="course-button" href="Pruebas_Confianza.ipynb" download aria-label="Descargar Pruebas de Confianza">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Estadística Inferencial · Basada en el cuaderno <code>Pruebas_Confianza.ipynb</code> disponible.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

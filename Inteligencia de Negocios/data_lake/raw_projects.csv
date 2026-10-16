@@ -1,0 +1,7 @@
+project_id,project_name,client_name,budget_usd,start_date,planned_hours
+PRJ-101,Migración ERP Cloud,Fintech Global,150000.0,2026-01-15,1200
+PRJ-102,App Móvil V2,Retail Co,85000.0,2026-02-01,750
+PRJ-103,Rediseño Plataforma B2B,Logística Express,120000.0,2026-01-10,1000
+PRJ-104,Sistema BI & Analytics,Fintech Global,95000.0,2026-03-01,800
+PRJ-105,Portal Clientes,Salud Integral,60000.0,2026-02-15,500
+PRJ-106,Auditoría Seguridad,Retail Co,45000.0,2026-04-01,350

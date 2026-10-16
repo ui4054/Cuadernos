@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligencia de Negocios (BI) | Presentación Corporativa</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- KaTeX CSS & JS for Math Equation Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="dark-theme">
+
+    <!-- Header / Navigation Bar -->
+    <header class="top-nav">
+        <div class="nav-brand">
+            <i class="fa-solid fa-chart-network brand-icon"></i>
+            <span class="brand-title">BI</span>
+            <span class="badge badge-accent">Inteligencia de Negocios</span>
+        </div>
+
+        <div class="nav-controls">
+            <div class="slide-indicator">
+                Diapositiva <span id="current-slide-num">1</span> / <span id="total-slides-num">8</span>
+            </div>
+
+            <button id="theme-toggle-btn" class="btn-icon" title="Cambiar Tema (T)">
+                <i class="fa-solid fa-sun"></i>
+            </button>
+            <button id="fullscreen-btn" class="btn-icon" title="Pantalla Completa (F)">
+                <i class="fa-solid fa-expand"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+
+    <!-- Main Presentation Container -->
+    <main class="presentation-wrapper" id="presentation-container">
+
+        <!-- SLIDE 1: PORTADA CORPORATIVA (ESCALA VERDE & BLANCO) -->
+        <section class="slide active" data-slide="1">
+            <div class="hero-content">
+                <div class="hero-badge animate-fade-in">
+                    <i class="fa-solid fa-seedling"></i> Formación Executive & Técnica 2026
+                </div>
+                <h1 class="hero-title animate-slide-up">
+                    Inteligencia de Negocios <br>
+                    <span class="gradient-text">(Business Intelligence)</span>
+                </h1>
+                <p class="hero-subtitle animate-slide-up delay-1">
+                    Transformación de datos dispersos en decisiones de alto valor: Código, Arquitecturas, Ecuaciones
+                    Estadísticas e Inteligencia Artificial.
+                </p>
+
+                <div class="hero-highlights animate-fade-in delay-2">
+                    <div class="highlight-item">
+                        <i class="fa-solid fa-briefcase highlight-icon"></i>
+                        <div>
+                            <h4>Casos Prácticos & ROI</h4>
+                            <p>Escenarios reales de impacto en Retail, Finanzas & Commodities</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fa-solid fa-code highlight-icon"></i>
+                        <div>
+                            <h4>Implementación en Código</h4>
+                            <p>Pipeline completo con código Python y salidas de consola</p>
+                        </div>
+                    </div>
+                    <div class="highlight-item">
+                        <i class="fa-solid fa-calculator highlight-icon"></i>
+                        <div>
+                            <h4>Estadística & Ecuaciones</h4>
+                            <p>Ecuaciones formales de estadígrafos y visualización SVG</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-cta animate-fade-in delay-3">
+                    <button class="btn btn-primary" onclick="goToSlide(2)">
+                        Iniciar Recorrido Corporativo <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <span class="keyboard-hint"><i class="fa-solid fa-keyboard"></i> Usa las flechas ◀ ▶ del teclado
+                        para navegar</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: ¿PARA QUÉ SIRVE EL BI? (CASOS DE USO REALES PROPIOS) -->
+        <section class="slide" data-slide="2">
+            <div class="slide-header">
+                <span class="section-tag">Impacto Operativo & Financiero</span>
+                <h2>¿Para Qué Sirve la Inteligencia de Negocios?</h2>
+                <p>Demostración práctica de cómo el BI resuelve ineficiencias críticas en los sectores líderes del
+                    mercado.</p>
+            </div>
+
+            <div class="usecase-grid">
+                <!-- Case 1: E-commerce & Retail -->
+                <div class="usecase-card glass-panel">
+                    <div class="usecase-header">
+                        <i class="fa-solid fa-cart-shopping text-mint"></i>
+                        <h3>Retail & Comercio Electrónico</h3>
+                    </div>
+                    <div class="usecase-body">
+                        <div class="before-box">
+                            <span class="box-tag tag-red"><i class="fa-solid fa-xmark"></i> Sin BI (Decisiones a
+                                ciegas)</span>
+                            <p>Quiebres de stock repentinos en productos de alta demanda en CyberMonday; capital
+                                estancado en bodega por mercadería sin rotación.</p>
+                        </div>
+                        <div class="after-box">
+                            <span class="box-tag tag-green"><i class="fa-solid fa-check"></i> Con BI
+                                (Data-Driven)</span>
+                            <p>Alertas automáticas de reabastecimiento en tiempo real y optimización del inventario
+                                según elasticidad precio-demanda. <strong>ROI: +24% ventas netas.</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 2: Finanzas & Banca -->
+                <div class="usecase-card glass-panel">
+                    <div class="usecase-header">
+                        <i class="fa-solid fa-building-columns text-mint"></i>
+                        <h3>Finanzas & Servicios Bancarios</h3>
+                    </div>
+                    <div class="usecase-body">
+                        <div class="before-box">
+                            <span class="box-tag tag-red"><i class="fa-solid fa-xmark"></i> Sin BI (Decisiones a
+                                ciegas)</span>
+                            <p>Revisión manual de transacciones sospechosas días después del hecho; pérdida constante de
+                                clientes valiosos (*Churn*) sin advertencia previa.</p>
+                        </div>
+                        <div class="after-box">
+                            <span class="box-tag tag-green"><i class="fa-solid fa-check"></i> Con BI
+                                (Data-Driven)</span>
+                            <p>Modelos de score de riesgo crediticio automatizado e identificación proactiva de fuga de
+                                clientes. <strong>Ahorro: -$1.2M USD en fraudes.</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 3: Salud & Hospitales -->
+                <div class="usecase-card glass-panel">
+                    <div class="usecase-header">
+                        <i class="fa-solid fa-hospital text-mint"></i>
+                        <h3>Sector Salud & Hospitalario</h3>
+                    </div>
+                    <div class="usecase-body">
+                        <div class="before-box">
+                            <span class="box-tag tag-red"><i class="fa-solid fa-xmark"></i> Sin BI (Decisiones a
+                                ciegas)</span>
+                            <p>Saturación en salas de urgencias y tiempos de espera de más de 4 horas por falta de
+                                coordinación en la rotación de camas.</p>
+                        </div>
+                        <div class="after-box">
+                            <span class="box-tag tag-green"><i class="fa-solid fa-check"></i> Con BI
+                                (Data-Driven)</span>
+                            <p>Cuadro de mando en tiempo real que predice el flujo de pacientes por hora y asigna turnos
+                                de personal médico. <strong>Reducción de espera: -42%.</strong></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 4: Gestión de Proyectos Tech -->
+                <div class="usecase-card glass-panel">
+                    <div class="usecase-header">
+                        <i class="fa-solid fa-diagram-project text-mint"></i>
+                        <h3>Gestión de Proyectos & Tecnologías</h3>
+                    </div>
+                    <div class="usecase-body">
+                        <div class="before-box">
+                            <span class="box-tag tag-red"><i class="fa-solid fa-xmark"></i> Sin BI (Decisiones a
+                                ciegas)</span>
+                            <p>Detección del sobrecosto cuando el presupuesto ha sido agotado y las horas trabajadas han
+                                superado el contrato inicial.</p>
+                        </div>
+                        <div class="after-box">
+                            <span class="box-tag tag-green"><i class="fa-solid fa-check"></i> Con BI
+                                (Data-Driven)</span>
+                            <p>Monitoreo semanal del índice de desempeño de costos (CPI) y cronogramas (SPI) con alertas
+                                proactivas. <strong>Desviación media: &lt; 3%.</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: CÓDIGO PYTHON SIMULADO + RESULTADOS EN VIVO POR ETAPA -->
+        <section class="slide" data-slide="3">
+            <div class="slide-header">
+                <span class="section-tag">Pipeline de Datos en Código</span>
+                <h2>Implementación en Código Python & Resultados en Vivo</h2>
+                <p>Haz clic en cada etapa del pipeline para explorar su código Python fuente, sus parámetros y su salida
+                    en consola simulada.</p>
+            </div>
+
+            <!-- Pipeline Interactive Selector -->
+            <div class="pipeline-container">
+                <div class="pipeline-step selected" onclick="selectPipelineStage(1)" id="pipe-1">
+                    <div class="step-number">Etapa 01</div>
+                    <div class="step-icon"><i class="fa-solid fa-server"></i></div>
+                    <h3>1. Extracción Cruda</h3>
+                    <p>JSON / CSV / SQL</p>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <div class="pipeline-step" onclick="selectPipelineStage(2)" id="pipe-2">
+                    <div class="step-number">Etapa 02</div>
+                    <div class="step-icon"><i class="fa-solid fa-filter-circle-dollar"></i></div>
+                    <h3>2. Transformación ETL</h3>
+                    <p>Limpieza & Métricas</p>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <div class="pipeline-step" onclick="selectPipelineStage(3)" id="pipe-3">
+                    <div class="step-number">Etapa 03</div>
+                    <div class="step-icon"><i class="fa-solid fa-warehouse"></i></div>
+                    <h3>3. Carga a DWH</h3>
+                    <p>DuckDB / SQLite</p>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <div class="pipeline-step" onclick="selectPipelineStage(4)" id="pipe-4">
+                    <div class="step-number">Etapa 04</div>
+                    <div class="step-icon"><i class="fa-solid fa-chart-column"></i></div>
+                    <h3>4. Visualización KPIs</h3>
+                    <p>Plotly Dashboards</p>
+                </div>
+                <div class="pipeline-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                <div class="pipeline-step" onclick="selectPipelineStage(5)" id="pipe-5">
+                    <div class="step-number">Etapa 05</div>
+                    <div class="step-icon"><i class="fa-solid fa-chess-knight"></i></div>
+                    <h3>5. Decisión Ejecutiva</h3>
+                    <p>Acción de Negocio</p>
+                </div>
+            </div>
+
+            <!-- Stage Detail Display Grid: Code + Output -->
+            <div class="stage-detail-grid">
+                <!-- Left: Code Box -->
+                <div class="code-box-wrapper">
+                    <div class="code-box-header">
+                        <span id="stage-code-title"><i class="fa-solid fa-code"></i> Código Python - Etapa 1: Extracción
+                            Cruda</span>
+                        <span class="code-lang">Python 3.12</span>
+                    </div>
+                    <pre class="code-content"><code id="stage-code-body"># 1. Extracción de fuentes heterogéneas
+import pandas as pd
+import json
+
+# Cargar CSV de proyectos y presupuestos
+df_projects = pd.read_csv('raw_projects.csv')
+
+# Cargar logs semiestructurados en JSON
+with open('time_logs.json') as f:
+    logs_data = json.load(f)
+
+print(f"[OK] Extraídos {len(df_projects)} proyectos y {len(logs_data)} registros de logs.")</code></pre>
+                </div>
+
+                <!-- Right: Simulated Console Output Box -->
+                <div class="output-box-wrapper">
+                    <div class="output-box-header">
+                        <i class="fa-solid fa-terminal"></i> <span>Consola / Resultado de Ejecución Simulado</span>
+                    </div>
+                    <div class="console-output" id="stage-output-body">[OK] Extraídos 6 proyectos y 11 registros de
+                        logs.
+                        --- MUESTRA DATOS DE PROYECTOS ---
+                        project_id project_name budget_usd
+                        0 PRJ-101 Migración ERP Cloud $150,000.00
+                        1 PRJ-102 App Móvil V2 $85,000.00
+                        2 PRJ-103 Rediseño Plataforma B2B $120,000.00</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: MADUREZ ANALÍTICA CON ECUACIONES ESTADÍSTICAS Y GRÁFICAS SVG -->
+        <section class="slide" data-slide="4">
+            <div class="slide-header">
+                <span class="section-tag">Fundamento Matemático</span>
+                <h2>Niveles de Madurez Analítica, Ecuaciones & Gráficas</h2>
+                <p>Definición formal de los estadígrafos empleados en cada etapa de madurez con sus formulaciones y
+                    representaciones gráficas.</p>
+            </div>
+
+            <div class="maturity-grid-deep">
+                <!-- LEVEL 1: DESCRIPTIVA -->
+                <div class="maturity-card-deep glass-panel">
+                    <div class="maturity-card-header">
+                        <h3><i class="fa-solid fa-chart-bar text-mint"></i> 1. Analítica Descriptiva</h3>
+                        <span class="badge badge-accent">¿Qué ocurrió?</span>
+                    </div>
+                    <p>Describe el comportamiento histórico del negocio sintetizando datos masivos en indicadores
+                        resumidos de posición y dispersión.</p>
+
+                    <!-- Math Equation Box -->
+                    <div class="math-equation-box">
+                        <span class="math-title">Ecuaciones de Estadígrafos Clave:</span>
+                        <div class="math-formula">
+                            <div
+                                style="font-size: 1.1rem; text-align: center; color: #ffffff; font-family: 'JetBrains Mono', monospace;">
+                                Media: x̄ = (1/N) Σ x<sub>i</sub> &nbsp;&nbsp;|&nbsp;&nbsp; Varianza: σ² = (1/N) Σ
+                                (x<sub>i</sub> - x̄)²
+                            </div>
+                        </div>
+                        <p class="math-desc"><strong>Parámetros:</strong> N = Número total de observaciones,
+                            x<sub>i</sub> = Valor en el registro i, x̄ = Media aritmética, σ² = Varianza.</p>
+                    </div>
+
+                    <!-- SVG Chart Illustration -->
+                    <div class="chart-svg-container">
+                        <svg width="280" height="120" viewBox="0 0 280 120">
+                            <rect x="20" y="50" width="30" height="50" fill="#047857" rx="3" />
+                            <rect x="60" y="30" width="30" height="70" fill="#059669" rx="3" />
+                            <rect x="100" y="15" width="30" height="85" fill="#10b981" rx="3" />
+                            <rect x="140" y="40" width="30" height="60" fill="#34d399" rx="3" />
+                            <rect x="180" y="65" width="30" height="35" fill="#6ee7b7" rx="3" />
+                            <rect x="220" y="80" width="30" height="20" fill="#a7f3d0" rx="3" />
+                            <line x1="10" y1="45" x2="270" y2="45" stroke="#ffffff" stroke-width="2"
+                                stroke-dasharray="4,4" />
+                            <text x="180" y="40" fill="#ffffff" font-size="11" font-weight="bold">Media μ = $105k</text>
+                        </svg>
+                        <span class="chart-caption">Histograma de Frecuencias y Línea de Tendencia Central
+                            (Media)</span>
+                    </div>
+                </div>
+
+                <!-- LEVEL 2: DIAGNÓSTICA -->
+                <div class="maturity-card-deep glass-panel">
+                    <div class="maturity-card-header">
+                        <h3><i class="fa-solid fa-magnifying-glass-chart text-mint"></i> 2. Analítica Diagnóstica</h3>
+                        <span class="badge badge-accent">¿Por qué ocurrió?</span>
+                    </div>
+                    <p>Evalúa las relaciones causa-efecto entre variables independientes ($X$) y dependientes ($Y$)
+                        mediante pruebas estadísticas de hipótesis.</p>
+
+                    <!-- Math Equation Box -->
+                    <div class="math-equation-box">
+                        <span class="math-title">Coeficiente de Correlación de Pearson (r):</span>
+                        <div class="math-formula">
+                            <div
+                                style="font-size: 1.05rem; text-align: center; color: #ffffff; font-family: 'JetBrains Mono', monospace;">
+                                r = Σ[(x<sub>i</sub> - x̄)(y<sub>i</sub> - ȳ)] / √[ Σ(x<sub>i</sub> - x̄)² ·
+                                Σ(y<sub>i</sub> - ȳ)² ]
+                            </div>
+                        </div>
+                        <p class="math-desc"><strong>Interpretación:</strong> r ∈ [-1, 1]. Si r > 0.8, existe una fuerte
+                            relación directa entre la causa y el efecto detectado.</p>
+                    </div>
+
+                    <!-- SVG Chart Illustration -->
+                    <div class="chart-svg-container">
+                        <svg width="280" height="120" viewBox="0 0 280 120">
+                            <circle cx="30" cy="95" r="4" fill="#34d399" />
+                            <circle cx="60" cy="80" r="4" fill="#34d399" />
+                            <circle cx="90" cy="70" r="4" fill="#34d399" />
+                            <circle cx="120" cy="55" r="4" fill="#34d399" />
+                            <circle cx="150" cy="45" r="4" fill="#34d399" />
+                            <circle cx="180" cy="30" r="4" fill="#34d399" />
+                            <circle cx="210" cy="25" r="4" fill="#34d399" />
+                            <circle cx="240" cy="15" r="4" fill="#34d399" />
+                            <line x1="20" y1="100" x2="250" y2="10" stroke="#ffffff" stroke-width="2.5" />
+                            <text x="130" y="90" fill="#ffffff" font-size="11" font-weight="bold">Correlación r =
+                                0.94</text>
+                        </svg>
+                        <span class="chart-caption">Diagrama de Dispersión y Línea de Ajuste Lineal de Regresión</span>
+                    </div>
+                </div>
+
+                <!-- LEVEL 3: PREDICTIVA -->
+                <div class="maturity-card-deep glass-panel">
+                    <div class="maturity-card-header">
+                        <h3><i class="fa-solid fa-chart-line text-mint"></i> 3. Analítica Predictiva</h3>
+                        <span class="badge badge-accent">¿Qué sucederá?</span>
+                    </div>
+                    <p>Proyecta escenarios futuros utilizando modelos estocásticos, regresión múltiple y algoritmos de
+                        Machine Learning sobre datos de series de tiempo.</p>
+
+                    <!-- Math Equation Box -->
+                    <div class="math-equation-box">
+                        <span class="math-title">Modelo de Regresión Lineal Múltiple:</span>
+                        <div class="math-formula">
+                            <div
+                                style="font-size: 1.1rem; text-align: center; color: #ffffff; font-family: 'JetBrains Mono', monospace;">
+                                Ŷ = β<sub>0</sub> + β<sub>1</sub>X<sub>1</sub> + β<sub>2</sub>X<sub>2</sub> + ... +
+                                β<sub>k</sub>X<sub>k</sub> + ε
+                            </div>
+                        </div>
+                        <p class="math-desc"><strong>Parámetros:</strong> Ŷ = Variable estimada, β<sub>0</sub> =
+                            Intercepto, β<sub>i</sub> = Coeficientes de regresión, ε = Término de error residual.</p>
+                    </div>
+
+                    <!-- SVG Chart Illustration -->
+                    <div class="chart-svg-container">
+                        <svg width="280" height="120" viewBox="0 0 280 120">
+                            <path d="M10,90 Q40,70 70,80 T130,50" fill="none" stroke="#34d399" stroke-width="3" />
+                            <path d="M130,50 Q170,35 210,25 T260,15" fill="none" stroke="#ffffff" stroke-width="3"
+                                stroke-dasharray="5,5" />
+                            <polygon points="130,50 260,0 260,35" fill="rgba(52, 211, 153, 0.2)" />
+                            <text x="140" y="85" fill="#34d399" font-size="11" font-weight="bold">Intervalo de Confianza
+                                (95%)</text>
+                        </svg>
+                        <span class="chart-caption">Serie Temporal con Proyección de Forecast y Banda de
+                            Confianza</span>
+                    </div>
+                </div>
+
+                <!-- LEVEL 4: PRESCRIPTIVA -->
+                <div class="maturity-card-deep glass-panel">
+                    <div class="maturity-card-header">
+                        <h3><i class="fa-solid fa-gears text-mint"></i> 4. Analítica Prescriptiva</h3>
+                        <span class="badge badge-accent">¿Qué hacer?</span>
+                    </div>
+                    <p>Recomienda la decisión óptima automatizada resolviendo modelos de programación matemática sujeta
+                        a restricciones de recursos.</p>
+
+                    <!-- Math Equation Box -->
+                    <div class="math-equation-box">
+                        <span class="math-title">Modelo de Optimización Lineal (Maximizador):</span>
+                        <div class="math-formula">
+                            <div
+                                style="font-size: 1.1rem; text-align: center; color: #ffffff; font-family: 'JetBrains Mono', monospace;">
+                                Max Z = c<sup>T</sup>x &nbsp;&nbsp; sujeto a &nbsp;&nbsp; A·x ≤ b, &nbsp; x ≥ 0
+                            </div>
+                        </div>
+                        <p class="math-desc"><strong>Parámetros:</strong> Z = Función objetivo (Ganancia), c = Vector de
+                            beneficios, A, b = Matriz y vector de restricciones.</p>
+                    </div>
+
+                    <!-- SVG Chart Illustration -->
+                    <div class="chart-svg-container">
+                        <svg width="280" height="120" viewBox="0 0 280 120">
+                            <polygon points="30,100 30,50 120,20 200,60 200,100" fill="rgba(16, 185, 129, 0.3)"
+                                stroke="#10b981" stroke-width="2" />
+                            <circle cx="120" cy="20" r="6" fill="#ffffff" stroke="#10b981" stroke-width="3" />
+                            <text x="135" y="25" fill="#ffffff" font-size="11" font-weight="bold">Solución Óptima
+                                (Z*)</text>
+                        </svg>
+                        <span class="chart-caption">Región Factible de Soluciones y Punto de Decisión Óptimo (Z*)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: ARQUITECTURA DE ALMACENAMIENTO (CONCEPTUAL + CÓDIGO PERSONAL) -->
+        <section class="slide" data-slide="5">
+            <div class="slide-header">
+                <span class="section-tag">Arquitectura de Almacenamiento & Valor de Negocio</span>
+                <h2>Data Warehouse vs. Data Lake vs. Data Lakehouse</h2>
+                <p>Análisis comparativo conceptual orientado a valor de negocio completado con la simulación en código
+                    para un entorno personal.</p>
+            </div>
+
+            <!-- Conceptual Cards Grid -->
+            <div class="storage-cards-grid margin-bottom-md">
+                <!-- DWH -->
+                <div class="storage-card glass-panel border-cyan">
+                    <div class="storage-card-header">
+                        <i class="fa-solid fa-building-columns text-mint"></i>
+                        <div>
+                            <h3>Data Warehouse (DWH)</h3>
+                            <span class="tag-sub">Estructurado & Curado</span>
+                        </div>
+                    </div>
+                    <ul class="storage-list">
+                        <li><strong>Esquema:</strong> <em>Schema-on-Write</em> (Estructura fija definida previa a la
+                            carga).</li>
+                        <li><strong>Valor de Negocio:</strong> Consultas SQL ultrarrápidas, tableros gerenciales y datos
+                            100% auditables.</li>
+                        <li><strong>Usuarios Clave:</strong> Ejecutivos, Directores Financieros, Analistas de BI.</li>
+                        <li><strong>Tecnologías:</strong> Snowflake, BigQuery, AWS Redshift, Azure Synapse.</li>
+                    </ul>
+                </div>
+
+                <!-- Data Lake -->
+                <div class="storage-card glass-panel border-purple">
+                    <div class="storage-card-header">
+                        <i class="fa-solid fa-water text-mint"></i>
+                        <div>
+                            <h3>Data Lake</h3>
+                            <span class="tag-sub">Almacenamiento Crudo Masivo</span>
+                        </div>
+                    </div>
+                    <ul class="storage-list">
+                        <li><strong>Esquema:</strong> <em>Schema-on-Read</em> (Los datos crudos se interpretan al
+                            consultar).</li>
+                        <li><strong>Valor de Negocio:</strong> Almacenamiento económico e ilimitado de archivos JSON,
+                            Parquet, imágenes y logs.</li>
+                        <li><strong>Usuarios Clave:</strong> Data Scientists, Ingenieros de Datos, Modelos de ML.</li>
+                        <li><strong>Tecnologías:</strong> AWS S3, Azure ADLS Gen2, Google Cloud Storage.</li>
+                    </ul>
+                </div>
+
+                <!-- Data Lakehouse -->
+                <div class="storage-card glass-panel border-emerald featured-card">
+                    <div class="badge-ribbon">Paradigma Moderno</div>
+                    <div class="storage-card-header">
+                        <i class="fa-solid fa-layer-group text-mint"></i>
+                        <div>
+                            <h3>Data Lakehouse</h3>
+                            <span class="tag-sub">Híbrido de Alto Rendimiento</span>
+                        </div>
+                    </div>
+                    <ul class="storage-list">
+                        <li><strong>Esquema:</strong> Gobernanza con transacciones ACID sobre formatos abiertos.</li>
+                        <li><strong>Valor de Negocio:</strong> Elimina los silos duplicados al unir la economía del Lake
+                            con la velocidad del DWH.</li>
+                        <li><strong>Usuarios Clave:</strong> Analistas de BI y Científicos de Datos sobre la misma
+                            fuente de verdad.</li>
+                        <li><strong>Tecnologías:</strong> Databricks, Delta Lake, Apache Iceberg, DuckDB.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Code Illustration for Personal PC Setup -->
+            <div class="code-box-wrapper glass-panel">
+                <div class="code-box-header">
+                    <span><i class="fa-solid fa-laptop-code"></i> Simulación en PC Personal (Script Python + DuckDB +
+                        Parquet)</span>
+                    <span class="code-lang">Entorno Local de Práctica</span>
+                </div>
+                <pre class="code-content"><code><span class="code-comment"># 1. Instalar dependencias necesarias en la laptop: pip install duckdb pandas pyarrow</span>
+<span class="code-keyword">import</span> duckdb
+<span class="code-keyword">import</span> pandas <span class="code-keyword">as</span> pd
+
+<span class="code-comment"># 2. Paso Data Lake: Crear archivo Parquet comprimido en disco local</span>
+df_ventas_raw = pd.DataFrame({
+    <span class="code-string">'transaccion_id'</span>: range(1, 10001),
+    <span class="code-string">'categoria'</span>: [<span class="code-string">'Tecnología'</span>, <span class="code-string">'Hogar'</span>, <span class="code-string">'Industrial'</span>, <span class="code-string">'Servicios'</span>] * 2500,
+    <span class="code-string">'monto_usd'</span>: (pd.Series(range(1, 10001)) * 1.5).values
+})
+df_ventas_raw.to_parquet(<span class="code-string">'data_lake_ventas.parquet'</span>, compression=<span class="code-string">'snappy'</span>)
+
+<span class="code-comment"># 3. Paso Data Lakehouse: Conectar DuckDB local e importar el Parquet</span>
+con = duckdb.connect(<span class="code-string">'mi_data_warehouse_local.duckdb'</span>)
+con.execute(<span class="code-string">"""
+    CREATE OR REPLACE TABLE fact_ventas_diarias AS 
+    SELECT 
+        categoria,
+        COUNT(transaccion_id) AS total_transacciones,
+        SUM(monto_usd) AS venta_bruta_usd,
+        AVG(monto_usd) AS ticket_promedio_usd
+    FROM 'data_lake_ventas.parquet'
+    GROUP BY categoria;
+"""</span>)
+
+<span class="code-comment"># 4. Consultar los resultados de KPIs desde el Data Warehouse embebido</span>
+resultado_kpis = con.execute(<span class="code-string">"SELECT * FROM fact_ventas_diarias ORDER BY venta_bruta_usd DESC;"</span>).df()
+print(resultado_kpis)</code></pre>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: RESTRUCTURED TEAL / AZUL VERDOSO FILTER CONTAINER & VENDOR MATRIX -->
+        <section class="slide" data-slide="6">
+            <div class="slide-header">
+                <span class="section-tag">Ecosistema Tecnológico & Nube</span>
+                <h2>Matriz de Proveedores Cloud, Precios & Requisitos</h2>
+                <p>Explora la matriz filtrable con resaltado Azul Verdoso y la tabla detallada de modelos de precios y
+                    requerimientos operativos.</p>
+            </div>
+
+            <!-- RESTRUCTURED TEAL / AZUL VERDOSO FILTER CONTAINER -->
+            <div class="vendor-matrix-container glass-panel margin-bottom-md">
+                <div class="matrix-filter">
+                    <div class="filter-top-bar">
+                        <div class="filter-title-group">
+                            <i class="fa-solid fa-sliders text-teal filter-main-icon"></i>
+                            <div>
+                                <span class="filter-label">Filtro Interactivo de Arquitectura</span>
+                                <div class="filter-status-badge" id="filterStatusBadge">
+                                    <span class="pulse-teal-dot"></span>
+                                    <span id="filterStatusText">Todas las Capas (16 Soluciones Visibles)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-search-box">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" id="vendorSearchInput"
+                                placeholder="🔍 Buscar por tecnología (ej: Power BI, Snowflake, S3...)"
+                                onkeyup="searchVendorTech(this.value)">
+                        </div>
+                    </div>
+
+                    <div class="filter-pills-grid">
+                        <button class="filter-card-btn active" onclick="filterVendorCapa('all', this)">
+                            <div class="filter-btn-icon"><i class="fa-solid fa-layer-group"></i></div>
+                            <div class="filter-btn-content">
+                                <span class="filter-btn-title">Todas las Capas</span>
+                                <span class="filter-btn-sub">Ecosistema Completo</span>
+                            </div>
+                            <span class="badge-count">16</span>
+                        </button>
+
+                        <button class="filter-card-btn" onclick="filterVendorCapa('storage', this)">
+                            <div class="filter-btn-icon"><i class="fa-solid fa-water"></i></div>
+                            <div class="filter-btn-content">
+                                <span class="filter-btn-title">1. Storage & Lake</span>
+                                <span class="filter-btn-sub">S3, ADLS Gen2, GCS</span>
+                            </div>
+                            <span class="badge-count">4</span>
+                        </button>
+
+                        <button class="filter-card-btn" onclick="filterVendorCapa('engine', this)">
+                            <div class="filter-btn-icon"><i class="fa-solid fa-database"></i></div>
+                            <div class="filter-btn-content">
+                                <span class="filter-btn-title">2. DWH Engine (OLAP)</span>
+                                <span class="filter-btn-sub">Redshift, BigQuery, Snowflake</span>
+                            </div>
+                            <span class="badge-count">4</span>
+                        </button>
+
+                        <button class="filter-card-btn" onclick="filterVendorCapa('etl', this)">
+                            <div class="filter-btn-icon"><i class="fa-solid fa-bolt"></i></div>
+                            <div class="filter-btn-content">
+                                <span class="filter-btn-title">3. ETL & Orquestación</span>
+                                <span class="filter-btn-sub">Glue, ADF, Dataflow, dbt</span>
+                            </div>
+                            <span class="badge-count">4</span>
+                        </button>
+
+                        <button class="filter-card-btn" onclick="filterVendorCapa('bi', this)">
+                            <div class="filter-btn-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                            <div class="filter-btn-content">
+                                <span class="filter-btn-title">4. BI & Dashboards</span>
+                                <span class="filter-btn-sub">Power BI, Tableau, Looker</span>
+                            </div>
+                            <span class="badge-count">4</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vendor-grid">
+                    <!-- AWS -->
+                    <div class="vendor-card">
+                        <div class="vendor-logo-header aws-bg">
+                            <i class="fa-brands fa-aws"></i>
+                            <h3>Amazon Web Services (AWS)</h3>
+                        </div>
+                        <div class="vendor-services">
+                            <div class="service-row" data-capa="storage"><strong>Lake:</strong> Amazon S3</div>
+                            <div class="service-row" data-capa="engine"><strong>DWH:</strong> Amazon Redshift</div>
+                            <div class="service-row" data-capa="etl"><strong>ETL:</strong> AWS Glue / EMR</div>
+                            <div class="service-row" data-capa="bi"><strong>BI:</strong> Amazon QuickSight</div>
+                        </div>
+                    </div>
+
+                    <!-- AZURE -->
+                    <div class="vendor-card">
+                        <div class="vendor-logo-header azure-bg">
+                            <i class="fa-brands fa-microsoft"></i>
+                            <h3>Microsoft Azure & Fabric</h3>
+                        </div>
+                        <div class="vendor-services">
+                            <div class="service-row" data-capa="storage"><strong>Lake:</strong> ADLS Gen2 / OneLake
+                            </div>
+                            <div class="service-row" data-capa="engine"><strong>DWH:</strong> Synapse / Fabric
+                                Warehouses</div>
+                            <div class="service-row" data-capa="etl"><strong>ETL:</strong> Azure Data Factory</div>
+                            <div class="service-row" data-capa="bi"><strong>BI:</strong> Microsoft Power BI</div>
+                        </div>
+                    </div>
+
+                    <!-- GCP -->
+                    <div class="vendor-card">
+                        <div class="vendor-logo-header gcp-bg">
+                            <i class="fa-brands fa-google"></i>
+                            <h3>Google Cloud (GCP)</h3>
+                        </div>
+                        <div class="vendor-services">
+                            <div class="service-row" data-capa="storage"><strong>Lake:</strong> Google Cloud Storage
+                                (GCS)</div>
+                            <div class="service-row" data-capa="engine"><strong>DWH:</strong> BigQuery</div>
+                            <div class="service-row" data-capa="etl"><strong>ETL:</strong> Dataflow / Dataproc /
+                                Composer</div>
+                            <div class="service-row" data-capa="bi"><strong>BI:</strong> Looker / Looker Studio</div>
+                        </div>
+                    </div>
+
+                    <!-- INDEPENDENTS -->
+                    <div class="vendor-card">
+                        <div class="vendor-logo-header indie-bg">
+                            <i class="fa-solid fa-snowflake"></i>
+                            <h3>Especialistas Independent</h3>
+                        </div>
+                        <div class="vendor-services">
+                            <div class="service-row" data-capa="engine"><strong>Data Cloud:</strong> Snowflake</div>
+                            <div class="service-row" data-capa="storage"><strong>Lakehouse:</strong> Databricks (Delta
+                                Lake)</div>
+                            <div class="service-row" data-capa="etl"><strong>Transformation:</strong> dbt (data build
+                                tool)</div>
+                            <div class="service-row" data-capa="bi"><strong>Visualisation:</strong> Tableau /
+                                ThoughtSpot</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Table of Prices and Requirements -->
+            <div class="table-responsive glass-panel">
+                <table class="styled-table" id="pricingTable">
+                    <thead>
+                        <tr>
+                            <th>Herramienta / Proveedor</th>
+                            <th>Capa Principal</th>
+                            <th>Modelo de Precios Aproximado</th>
+                            <th>Requisitos de Instalación & Operación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-capa="bi">
+                            <td><strong>Microsoft Power BI</strong></td>
+                            <td><span class="table-capa-tag capa-bi">Visualización & BI</span></td>
+                            <td><strong>Pro:</strong> ~$10 USD/usuario/mes.<br><strong>Premium:</strong> ~$20
+                                USD/usuario/mes o desde $4,995 USD/capacidad.</td>
+                            <td><strong>Cliente:</strong> Power BI Desktop (Windows 10/11 64-bit, 8GB RAM
+                                mín).<br><strong>Cloud:</strong> Cuenta M365 corporativa.</td>
+                        </tr>
+                        <tr data-capa="bi">
+                            <td><strong>Tableau (Salesforce)</strong></td>
+                            <td><span class="table-capa-tag capa-bi">Visualización Avanzada</span></td>
+                            <td><strong>Creator:</strong> ~$70 USD/usuario/mes.<br><strong>Explorer:</strong> ~$42
+                                USD/usuario/mes.<br><strong>Viewer:</strong> ~$15 USD/usuario/mes.</td>
+                            <td><strong>Desktop:</strong> Windows / macOS (8GB RAM mín).<br><strong>Server:</strong>
+                                Linux Ubuntu/RHEL (32GB RAM mín, 8 vCPUs).</td>
+                        </tr>
+                        <tr data-capa="engine bi">
+                            <td><strong>Google Looker / BigQuery</strong></td>
+                            <td><span class="table-capa-tag capa-engine">DWH</span> & <span
+                                    class="table-capa-tag capa-bi">BI</span></td>
+                            <td><strong>BigQuery:</strong> ~$5 USD por TB escaneado.<br><strong>Almacenamiento:</strong>
+                                ~$0.02 USD/GB/mes.<br><strong>Looker:</strong> Cotización anual SaaS.</td>
+                            <td><strong>SaaS 100% Cloud:</strong> Sin instalación local.<br>Requiere GCP activo y
+                                modelos LookML.</td>
+                        </tr>
+                        <tr data-capa="engine storage">
+                            <td><strong>Snowflake Data Cloud</strong></td>
+                            <td><span class="table-capa-tag capa-engine">Data Warehouse</span></td>
+                            <td><strong>Consumo:</strong> Pago por segundo de cómputo (~$2 a $4 USD/crédito) +
+                                ~$40/TB/mes.</td>
+                            <td><strong>Multi-Cloud (AWS/Azure/GCP):</strong> Cero mantenimiento de infraestructura.
+                                Conexión nativa via Python/SQL Drivers.</td>
+                        </tr>
+                        <tr data-capa="engine storage etl">
+                            <td><strong>Databricks (Delta Lake)</strong></td>
+                            <td><span class="table-capa-tag capa-storage">Lakehouse</span> & <span
+                                    class="table-capa-tag capa-etl">ETL</span></td>
+                            <td><strong>DBU (Databricks Units):</strong> Desde ~$0.15 a $0.55 USD por DBU/hora según el
+                                tipo de clúster.</td>
+                            <td>Desplegado sobre AWS, Azure o GCP. Requiere conocimientos en PySpark y Apache Spark.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: TIPOS DE CUADROS DE MANDO & DATA STORYTELLING -->
+        <section class="slide" data-slide="7">
+            <div class="slide-header">
+                <span class="section-tag">Arquitectura Visual & Comunicación</span>
+                <h2>Tipos de Cuadros de Mando & Data Storytelling</h2>
+                <p>Selección técnica de tipos de gráficos según la estructura del dato e importancia del Storytelling de
+                    Datos en la toma de decisiones.</p>
+            </div>
+
+            <div class="dashboard-types-grid margin-bottom-md">
+                <!-- Type 1: Structured -->
+                <div class="db-type-card glass-panel">
+                    <i class="fa-solid fa-table-cells db-icon text-mint"></i>
+                    <h3>Datos Estructurados</h3>
+                    <span class="db-tag">Tablas / Relacionales</span>
+                    <p><strong>Visualización:</strong> Gráficos de barras agrupadas, columnas apiladas y tarjetas KPI
+                        sintéticas.</p>
+                    <p class="db-usage"><strong>Caso de Uso:</strong> Análisis comparativo de presupuestos, ventas netas
+                        por zona y balances financieros.</p>
+                </div>
+
+                <!-- Type 2: Time Series -->
+                <div class="db-type-card glass-panel">
+                    <i class="fa-solid fa-chart-line db-icon text-mint"></i>
+                    <h3>Series de Tiempo</h3>
+                    <span class="db-tag">Tendencias Temporales</span>
+                    <p><strong>Visualización:</strong> Gráficos de líneas continuas, áreas apiladas y líneas de
+                        tendencia con bandas de pronóstico.</p>
+                    <p class="db-usage"><strong>Caso de Uso:</strong> Evolución mensual de ventas, proyección de flujo
+                        de caja e inventarios.</p>
+                </div>
+
+                <!-- Type 3: Matrix & Heatmaps -->
+                <div class="db-type-card glass-panel">
+                    <i class="fa-solid fa-border-all db-icon text-mint"></i>
+                    <h3>Matriz & Mapas de Calor</h3>
+                    <span class="db-tag">Densidad / Correlación</span>
+                    <p><strong>¿Cuándo usar Mapas de Calor?:</strong> Indispensables para representar densidades (ej.
+                        transacciones por hora y día de la semana) o matrices de correlación estadística entre decenas
+                        de variables sin saturar la vista.</p>
+                </div>
+
+                <!-- Type 4: Unstructured / Text -->
+                <div class="db-type-card glass-panel">
+                    <i class="fa-solid fa-comments db-icon text-mint"></i>
+                    <h3>Datos No Estructurados</h3>
+                    <span class="db-tag">Texto / Encuestas / Logs</span>
+                    <p><strong>Visualización:</strong> Nubes de palabras procesadas mediante NLP, medidores de
+                        sentimiento (*Sentiment Gauges*) y diagramas de flujo Sankey.</p>
+                </div>
+            </div>
+
+            <!-- Data Storytelling Panel -->
+            <div class="storytelling-panel glass-panel">
+                <h3><i class="fa-solid fa-book-open-reader text-mint"></i> La Importancia del Data Storytelling
+                    (Historia con Datos)</h3>
+                <p>Un dashboard sin narrativa es solo un conjunto de gráficos inconexos. El <strong>Data
+                        Storytelling</strong> estructura la presentación ante la junta directiva en 3 fases continuas:
+                </p>
+                <div class="story-steps">
+                    <div class="story-step">
+                        <strong>1. El Contexto Inicial:</strong> Establecer la situación de partida y los objetivos
+                        previstos (ej. meta de ventas anual).
+                    </div>
+                    <div class="story-step">
+                        <strong>2. El Conflicto / Hallazgo:</strong> Presentar la anomalía crítica descubierta en los
+                        datos (ej. caída de margen del 18% en la región norte).
+                    </div>
+                    <div class="story-step">
+                        <strong>3. La Resolución / Acción:</strong> Proponer la acción correctiva fundamentada en los
+                        datos (ej. renegociar tarifas con proveedores locales).
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: CASO SIMULADO DE COMMODITIES, IA & FAQ -->
+        <section class="slide" data-slide="8">
+            <div class="slide-header">
+                <span class="section-tag">Inteligencia Artificial Aplicada</span>
+                <h2>Caso Práctico: Mercado de Commodities & FAQ</h2>
+                <p>Explora el comportamiento de un asistente de datos IA consultando un almacén sobre materias primas
+                    globales.</p>
+            </div>
+
+            <!-- Commodities AI Simulator -->
+            <div class="sandbox-container glass-panel margin-bottom-lg">
+                <div class="sandbox-header">
+                    <i class="fa-solid fa-wheat-awt text-mint"></i> <span>Simulador BI + IA (Caso de Estudio: Mercado
+                        Global de Commodities)</span>
+                </div>
+                <div class="sandbox-body">
+                    <label for="ai-prompt-select">Elige una consulta de negocio sobre el mercado de Commodities:</label>
+                    <div class="sandbox-input-group">
+                        <select id="ai-prompt-select" class="styled-select">
+                            <option value="cmd-1">🛢️ ¿Cuál es el impacto del aumento del precio del Petróleo Brent en
+                                nuestros costos logísticos?</option>
+                            <option value="cmd-2">☕ Analiza el riesgo de desabastecimiento de Café Arábica por sequía en
+                                la región andina</option>
+                            <option value="cmd-3">⛏️ Evalúa la correlación entre el precio del Cobre y el presupuesto
+                                del proyecto de infraestructura</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="runCommoditiesAiQuery()">
+                            <i class="fa-solid fa-bolt"></i> Ejecutar Consulta IA
+                        </button>
+                    </div>
+
+                    <div class="sandbox-output" id="sandbox-output-box">
+                        <div class="output-placeholder">
+                            <i class="fa-solid fa-robot"></i> Selecciona una consulta sobre Commodities y presiona
+                            "Ejecutar Consulta IA".
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Accordion -->
+            <div class="faq-container">
+                <div class="accordion-item glass-panel">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><i class="fa-solid fa-circle-question"></i> ¿Por qué es crucial el BI en mercados volátiles
+                            como los Commodities?</h4>
+                        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Porque las cotizaciones de materias primas (petróleo, metales, productos agrícolas) cambian
+                            de forma continua por factores geopolíticos y climáticos. El BI integra cotizaciones
+                            internacionales con costos internos para calcular la exposición al riesgo en tiempo real.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="accordion-item glass-panel">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><i class="fa-solid fa-circle-question"></i> ¿Cómo nos preparamos para el Laboratorio
+                            Práctico en el Cuaderno Jupyter?</h4>
+                        <i class="fa-solid fa-chevron-down accordion-icon"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>En el cuaderno <code>BI_Modulo1_Introduccion.ipynb</code> ejecutaremos exactamente los
+                            scripts vistos en esta presentación: cargaremos un Data Lake local, aplicaremos
+                            transformaciones ETL en Python, crearemos tablas relacionales en SQLite/DuckDB y generaremos
+                            gráficos interactivos con Plotly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer / Navigation Bar -->
+    <footer class="bottom-nav">
+        <button id="prev-btn" class="btn btn-secondary" onclick="prevSlide()" disabled>
+            <i class="fa-solid fa-chevron-left"></i> Anterior
+        </button>
+
+        <div class="slide-thumbnails-bar" id="thumbnails-container">
+            <!-- Rendered by JavaScript -->
+        </div>
+
+        <button id="next-btn" class="btn btn-primary" onclick="nextSlide()">
+            Siguiente <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Trigger KaTeX rendering after document load if KaTeX is loaded
+        window.addEventListener("load", function () {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: true },
+                        { left: "$", right: "$", display: false }
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

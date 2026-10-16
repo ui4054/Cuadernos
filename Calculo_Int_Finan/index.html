@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="es" data-course="calculo-integral">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Cálculo Integral y Financiero: derivadas, integrales definidas e indefinidas, sustitución, fracciones parciales, sustitución trigonométrica y aplicaciones en economía.">
+  <title>Cálculo Integral y Financiero | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Cálculo Integral y Financiero, inicio">
+      <span class="course-brand-mark" aria-hidden="true">CI</span>
+      <span>Cálculo Integral y Financiero</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Cálculo y economía</p>
+        <h1 id="titulo-principal">Cálculo Integral y Financiero</h1>
+        <p>Cinco cuadernos que recorren derivadas y sus aplicaciones en la maximización del ingreso, el Teorema Fundamental del Cálculo, antiderivadas, métodos de integración (sustitución, partes, fracciones parciales, sustitución trigonométrica) y su uso en problemas económicos (ingreso total, costo total, valor medio).</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#fundamentos">Fundamentos</a>
+      <a href="#metodos">Métodos de integración</a>
+      <a href="#aplicaciones">Aplicaciones financieras</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso combina cálculo diferencial e integral con modelado financiero práctico. Los cuadernos no pretenden ser un tratado completo de análisis matemático, sino una introducción aplicada: derivadas para optimizar ingresos, integrales para calcular áreas bajo curvas de costo y demanda, y técnicas de integración para resolver problemas concretos de economía.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Derivadas y optimización</h3>
+          <p>Límites, regla de la potencia, derivada de funciones cuadráticas, función de ingreso y punto crítico para maximizar ingresos.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Teorema Fundamental del Cálculo e integrales definidas</h3>
+          <p>Antiderivadas, existencia de la integral, linealidad y aditividad, valor medio para integrales y aplicaciones a ingreso y costo totales.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Métodos de integración</h3>
+          <p>Sustitución simple e integración por partes con ejemplos resueltos paso a paso.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>Fracciones parciales</h3>
+          <p>Descomposición de fracciones racionales y su integración, incluyendo factores cuadráticos irreducibles.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">05</span>
+          <h3>Sustitución trigonométrica</h3>
+          <p>Integrales con raíces cuadradas de la forma √(a²−x²), √(a²+x²) e √(x²−a²).</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden organiza los materiales desde el cálculo diferencial básico hasta técnicas avanzadas de integración, siempre con ejemplos financieros intercalados.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Derivadas y función de ingreso</h3>
+          <p>Definición de límite y derivada, regla de la potencia y aplicación a la maximización del ingreso total con funciones de precio lineal.</p>
+          <p class="course-note">Fuente: <a href="CALINT_1_DERIVADAS.ipynb" download>CALINT_1_DERIVADAS</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Integrales definidas y TFC</h3>
+          <p>Teorema Fundamental del Cálculo, antiderivadas comunes, existencia de la integral, propiedades de linealidad y aditividad, y taller de ejercicios económicos.</p>
+          <p class="course-note">Fuente: <a href="CALINT_2_Integraldefinida_B.ipynb" download>CALINT_2_Integraldefinida_B</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Sustitución e integración por partes</h3>
+          <p>Cambio de variable simple y fórmula de integración por partes (∫ u dv = uv − ∫ v du) con ejercicios propuestos.</p>
+          <p class="course-note">Fuente: <a href="CALINT_3_Integral_indefinida_B.ipynb" download>CALINT_3_Integral_indefinida_B</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Fracciones parciales</h3>
+          <p>Descomposición de P(x)/Q(x) con factores lineales y cuadráticos irreducibles, resolución de sistemas de coeficientes e integración término a término.</p>
+          <p class="course-note">Fuente: <a href="CALINT_4_FRACCIONES_PARCIALES.ipynb" download>CALINT_4_FRACCIONES_PARCIALES</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">5</span>
+          <h3>Sustitución trigonométrica</h3>
+          <p>Sustituciones x = a·sen(θ), x = a·tan(θ) y x = a·sec(θ) para integrales con raíces cuadradas, con ejercicios por forma.</p>
+          <p class="course-note">Fuente: <a href="CALINT_5_SUSTITUCIONTRIG.ipynb" download>CALINT_5_SUSTITUCIONTRIG</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fundamentos" class="course-section" aria-labelledby="fundamentos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="fundamentos-titulo">De la derivada a la integral</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Límite y derivada</h3>
+        <p>El límite <code>lim(x→c) f(x) = L</code> describe el comportamiento de <code>f(x)</code> cuando <code>x</code> se acerca a <code>c</code>. La derivada <code>f'(x)</code> mide la tasa de cambio instantánea:</p>
+        <div class="course-formula">
+\[
+f'(x) = \frac{d}{dx}f(x), \qquad
+\frac{d}{dx}(ax^n) = anx^{n-1}
+\]
+        </div>
+        <p>Para una cuadrática <code>f(x) = ax² + bx + c</code>, la derivada es <code>f'(x) = 2ax + b</code>, que representa la pendiente de la recta tangente en cualquier punto <code>x</code>.</p>
+
+        <h3>Función de ingreso y maximización</h3>
+        <p>Dada una función de precio lineal <code>p(x)</code> y cantidad <code>x</code>, el ingreso total es:</p>
+        <div class="course-formula">
+\[
+R(x) = p(x) \cdot x
+\]
+        </div>
+        <p>Para maximizar, se deriva <code>R(x)</code>, se iguala a cero y se resuelve el punto crítico:</p>
+        <div class="course-formula">
+\[
+R'(x) = 0 \quad\Rightarrow\quad x^* = \text{cantidad óptima}
+\]
+        </div>
+        <p>Ejemplo del cuaderno: <code>p(x) = 50 − 2x</code> da <code>R(x) = 50x − 2x²</code>, <code>R'(x) = 50 − 4x</code>, punto crítico <code>x = 12.5</code>, ingreso máximo <code>312</code>.</p>
+
+        <h3>Teorema Fundamental del Cálculo</h3>
+        <p>Conecta derivación e integración. Si <code>F</code> es antiderivada de <code>f</code> en <code>[a, b]</code>:</p>
+        <div class="course-formula">
+\[
+\int_a^b f(x)\,dx = F(b) - F(a)
+\]
+        </div>
+        <p>Segunda parte: si <code>F(x) = ∫ₐˣ f(t) dt</code>, entonces <code>F'(x) = f(x)</code>.</p>
+
+        <h3>Antiderivadas comunes</h3>
+        <table class="course-table">
+          <thead><tr><th><code>f(x)</code></th><th><code>F(x)</code></th></tr></thead>
+          <tbody>
+            <tr><td><code>axⁿ</code></td><td><code>a/(n+1)·xⁿ⁺¹ + C</code></td></tr>
+            <tr><td><code>sin(x)</code></td><td><code>−cos(x) + C</code></td></tr>
+            <tr><td><code>cos(x)</code></td><td><code>sin(x) + C</code></td></tr>
+            <tr><td><code>eˣ</code></td><td><code>eˣ + C</code></td></tr>
+            <tr><td><code>1/x</code></td><td><code>ln|x| + C</code></td></tr>
+            <tr><td><code>aˣ</code></td><td><code>aˣ/ln(a) + C</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="metodos" class="course-section" aria-labelledby="metodos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Métodos de integración</p>
+        <h2 id="metodos-titulo">Técnicas de integración paso a paso</h2>
+        <p class="course-section-intro">Resumen de los cuatro métodos presentados en los cuadernos, con un ejemplo resuelto de cada uno.</p>
+      </div>
+      <div class="course-theory">
+        <h3>1. Sustitución simple</h3>
+        <p>Identificar <code>u = g(x)</code>, calcular <code>du = g'(x)dx</code>, reescribir en términos de <code>u</code>, integrar y volver a <code>x</code>.</p>
+        <div class="course-formula">
+\[
+\int (2x+3)\,e^{x²+3x}\,dx,\quad u=x²+3x,\ du=(2x+3)\,dx
+\Rightarrow \int e^u\,du = e^u+C = e^{x²+3x}+C
+\]
+        </div>
+
+        <h3>2. Integración por partes</h3>
+        <p>Fórmula basada en la regla del producto:</p>
+        <div class="course-formula">
+\[
+\int u\,dv = uv - \int v\,du
+\]
+        </div>
+        <p>Ejemplo: <code>∫ x·eˣ dx</code> con <code>u = x</code>, <code>dv = eˣ dx</code> da <code>xeˣ − eˣ + C = eˣ(x − 1) + C</code>.</p>
+
+        <h3>3. Fracciones parciales</h3>
+        <p>Descomponer <code>P(x)/Q(x)</code> cuando <code>deg(P) < deg(Q)</code>. Factores lineales dan constantes en el numerador; cuadráticos irreducibles dan expresiones lineales.</p>
+        <div class="course-formula">
+\[
+\frac{2x+3}{(x-1)(x+2)} = \frac{A}{x-1} + \frac{B}{x+2}
+\Rightarrow A=1,\ B=1
+\Rightarrow \int = \ln|x-1| + \ln|x+2| + C
+\]
+        </div>
+
+        <h3>4. Sustitución trigonométrica</h3>
+        <table class="course-table">
+          <thead><tr><th>Forma del integrando</th><th>Sustitución</th><th>Diferencial</th></tr></thead>
+          <tbody>
+            <tr><td><code>√(a² − x²)</code></td><td><code>x = a·sen(θ)</code></td><td><code>dx = a·cos(θ) dθ</code></td></tr>
+            <tr><td><code>√(a² + x²)</code></td><td><code>x = a·tan(θ)</code></td><td><code>dx = a·sec²(θ) dθ</code></td></tr>
+            <tr><td><code>√(x² − a²)</code></td><td><code>x = a·sec(θ)</code></td><td><code>dx = a·sec(θ)·tan(θ) dθ</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="aplicaciones" class="course-section" aria-labelledby="aplicaciones-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Aplicaciones financieras</p>
+        <h2 id="aplicaciones-titulo">Ingreso total, costo total y valor medio</h2>
+        <p class="course-section-intro">Ejemplos resueltos de cálculo económico aplicado a partir de los cuadernos.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Ingreso total mediante integral definida</h3>
+        <p>Si la función de ingreso es <code>R(x) = 50x − 2x²</code>, el ingreso acumulado entre vender 5 y 15 unidades es:</p>
+        <div class="course-formula">
+\[
+\int_5^{15} (50x - 2x²)\,dx =
+\left[25x² - \frac{2x³}{3}\right]_5^{15} \approx 2833.33
+\]
+        </div>
+
+        <h3>Costo total a partir del costo marginal</h3>
+        <p>Si <code>C'(x) = 4x + 10</code>, el costo de producir entre 10 y 20 unidades es:</p>
+        <div class="course-formula">
+\[
+\int_{10}^{20} (4x + 10)\,dx =
+\left[2x² + 10x\right]_{10}^{20} = 700
+\]
+        </div>
+
+        <h3>Teorema del Valor Medio para integrales</h3>
+        <p>Si <code>f</code> es continua en <code>[a, b]</code>, existe <code>c ∈ [a, b]</code> tal que:</p>
+        <div class="course-formula">
+\[
+\int_a^b f(x)\,dx = f(c)\,(b-a)
+\]
+        </div>
+        <p>Ejemplo: <code>f(x) = x²</code> en <code>[1, 3]</code> da <code>c = √(13/3) ≈ 2.08</code>.</p>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los cinco cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>CALINT 1 – Derivadas</strong>
+            <span>Límites, derivada de funciones cuadráticas, función de ingreso, maximización y ejercicios de optimización económica.</span>
+          </div>
+          <a class="course-button" href="CALINT_1_DERIVADAS.ipynb" download aria-label="Descargar CALINT 1 Derivadas">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>CALINT 2 – Integral definida</strong>
+            <span>Teorema Fundamental del Cálculo, antiderivadas, existencia de la integral, linealidad y aditividad, aplicaciones en economía y taller de ejercicios.</span>
+          </div>
+          <a class="course-button" href="CALINT_2_Integraldefinida_B.ipynb" download aria-label="Descargar CALINT 2 Integral definida">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>CALINT 3 – Integral indefinida</strong>
+            <span>Sustitución simple e integración por partes con ejemplos y ejercicios propuestos.</span>
+          </div>
+          <a class="course-button" href="CALINT_3_Integral_indefinida_B.ipynb" download aria-label="Descargar CALINT 3 Integral indefinida">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>CALINT 4 – Fracciones parciales</strong>
+            <span>Descomposición de fracciones racionales, factores lineales y cuadráticos irreducibles, integración término a término y ejercicios.</span>
+          </div>
+          <a class="course-button" href="CALINT_4_FRACCIONES_PARCIALES.ipynb" download aria-label="Descargar CALINT 4 Fracciones parciales">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>CALINT 5 – Sustitución trigonométrica</strong>
+            <span>Integrales con raíces cuadradas √(a²−x²), √(a²+x²) e √(x²−a²), ejemplos resueltos y ejercicios por forma.</span>
+          </div>
+          <a class="course-button" href="CALINT_5_SUSTITUCIONTRIG.ipynb" download aria-label="Descargar CALINT 5 Sustitución trigonométrica">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Cálculo Integral y Financiero · Basada en los cuadernos CALINT 1–5 disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

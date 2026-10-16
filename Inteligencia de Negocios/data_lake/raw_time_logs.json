@@ -1,0 +1,90 @@
+[
+  {
+    "log_id": 1,
+    "project_id": "PRJ-101",
+    "resource_id": "RES-01",
+    "hours_logged": 160,
+    "date": "2026-02-28",
+    "status": "Approved"
+  },
+  {
+    "log_id": 2,
+    "project_id": "PRJ-101",
+    "resource_id": "RES-02",
+    "hours_logged": 210,
+    "date": "2026-02-28",
+    "status": "Approved"
+  },
+  {
+    "log_id": 3,
+    "project_id": "PRJ-101",
+    "resource_id": "RES-03",
+    "hours_logged": 180,
+    "date": "2026-02-28",
+    "status": "Approved"
+  },
+  {
+    "log_id": 4,
+    "project_id": "PRJ-102",
+    "resource_id": "RES-02",
+    "hours_logged": 350,
+    "date": "2026-03-15",
+    "status": "Approved"
+  },
+  {
+    "log_id": 5,
+    "project_id": "PRJ-102",
+    "resource_id": "RES-03",
+    "hours_logged": 200,
+    "date": "2026-03-15",
+    "status": "Approved"
+  },
+  {
+    "log_id": 6,
+    "project_id": "PRJ-103",
+    "resource_id": "RES-01",
+    "hours_logged": 450,
+    "date": "2026-03-31",
+    "status": "Approved"
+  },
+  {
+    "log_id": 7,
+    "project_id": "PRJ-103",
+    "resource_id": "RES-04",
+    "hours_logged": 580,
+    "date": "2026-03-31",
+    "status": "Approved"
+  },
+  {
+    "log_id": 8,
+    "project_id": "PRJ-104",
+    "resource_id": "RES-04",
+    "hours_logged": 300,
+    "date": "2026-04-15",
+    "status": "Approved"
+  },
+  {
+    "log_id": 9,
+    "project_id": "PRJ-104",
+    "resource_id": "RES-05",
+    "hours_logged": 320,
+    "date": "2026-04-15",
+    "status": "Approved"
+  },
+  {
+    "log_id": 10,
+    "project_id": "PRJ-105",
+    "resource_id": "RES-02",
+    "hours_logged": 220,
+    "date": "2026-04-30",
+    "status": "Approved"
+  },
+  {
+    "log_id": 11,
+    "project_id": "PRJ-106",
+    "resource_id": "RES-05",
+    "hours_logged": 180,
+    "date": "2026-04-30",
+    "status": "Approved"
+  }
+]

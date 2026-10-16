@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="es" data-course="cuntech-cloud">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de CunTech APIs y Cloud: arquitectura de cliente web, JavaScript, estructuras de datos, JSON, API REST con Express y MongoDB, fetch() y CRUD completo frontend-backend.">
+  <title>CunTech APIs y Cloud | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="CunTech APIs y Cloud, inicio">
+      <span class="course-brand-mark" aria-hidden="true">CC</span>
+      <span>CunTech APIs y Cloud</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Arquitectura cloud y APIs</p>
+        <h1 id="titulo-principal">CunTech APIs y Cloud</h1>
+        <p>Ocho cuadernos que recorren desde los fundamentos del cliente web (HTML, CSS, JavaScript) hasta una API REST completa con Express, MongoDB y un frontend que consume la API mediante <code>fetch()</code>. Incluye estructuras de datos en JavaScript, validación de formularios y un prototipo full stack con backend en el puerto 4001 y frontend en el 3000.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#fundamentos">Fundamentos web</a>
+      <a href="#javascript">JavaScript y datos</a>
+      <a href="#api">API REST y backend</a>
+      <a href="#frontend">Frontend con fetch</a>
+      <a href="#fullstack">Prototipo full stack</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso enseña a construir aplicaciones web que consumen y exponen APIs. Comienza con el cliente (HTML/CSS/JS), avanza a estructuras de datos y JSON en JavaScript, luego construye un backend con Express y MongoDB, y cierra con un frontend que se comunica con la API mediante <code>fetch()</code> para operaciones CRUD completas.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Cliente web: HTML, CSS, JavaScript</h3>
+          <p>HTML como esqueleto, CSS como ropa y JavaScript como sistema nervioso. El DOM, fetch() y la conexión con APIs.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>JavaScript con Node.js</h3>
+          <p>Tipos de datos, operadores, condicionales, ciclos (for, while, forEach) y funciones (declaración y arrow).</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Estructuras de datos y JSON</h3>
+          <p>Arrays, objetos literales, diccionarios, métodos map/filter/reduce y serialización con JSON.stringify/parse.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>Agenda de contactos en memoria</h3>
+          <p>Aplicación integradora con HTML, CSS y JavaScript: formulario, validación y tabla dinámica sin base de datos.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">05</span>
+          <h3>API REST con Express y MongoDB</h3>
+          <p>Modelo con Mongoose, endpoints GET/POST/PUT/DELETE, CORS, JSON middleware y conexión a MongoDB Atlas.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">06</span>
+          <h3>Frontend que consume la API con fetch</h3>
+          <p>Peticiones HTTP asíncronas, renderizado dinámico de tabla, formateo de fechas y manejo de errores.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">07</span>
+          <h3>CRUD completo con fetch</h3>
+          <p>Crear, leer, actualizar y eliminar reservaciones desde el frontend, con validación, modo edición y diseño responsive.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">08</span>
+          <h3>Prototipo full stack</h3>
+          <p>Backend Express en puerto 4001, frontend servido por Express en puerto 3000, archivos estáticos en public/ y conexión a MongoDB.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden avanza de lo más básico (estructura de una página web) a lo más completo (una aplicación full stack con backend y frontend separados).</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Fundamentos del cliente web</h3>
+          <p>HTML (esqueleto), CSS (ropa/estilo), JavaScript (sistema nervioso), DOM, fetch() y cómo una API se conecta con el cliente.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_1.ipynb" download>Cloud_Arq_1</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>JavaScript con Node.js</h3>
+          <p>Configuración del entorno (Node, npm, express), entrada/salida por consola, tipos de datos, operadores, condicionales, ciclos y funciones.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_2.ipynb" download>Cloud_Arq_2</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Estructuras de datos en JavaScript</h3>
+          <p>Arrays (push/pop/shift/unshift, map/filter/reduce), objetos literales, diccionarios y JSON (stringify/parse). Ejercicio: agenda de contactos en memoria.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_3.ipynb" download>Cloud_Arq_3</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Agenda integradora: HTML + CSS + JS</h3>
+          <p>Formulario de reservaciones, validación de campos, inserción dinámica de filas en tabla y limpieza del formulario tras guardar.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_4.ipynb" download>Cloud_Arq_4</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">5</span>
+          <h3>API REST de reservaciones</h3>
+          <p>Modelo de datos con Mongoose, servidor Express, endpoints REST (GET, POST, PUT, DELETE), CORS y conexión a MongoDB Atlas.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_5.ipynb" download>Cloud_Arq_5</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">6</span>
+          <h3>Consumir la API con fetch()</h3>
+          <p>Peticiones GET/POST/DELETE con fetch(), renderizado de filas de tabla, formateo de fechas y manejo de errores con try/catch.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_6.ipynb" download>Cloud_Arq_6</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">7</span>
+          <h3>CRUD completo con fetch</h3>
+          <p>Operaciones crear/leer/actualizar/eliminar desde el frontend, validación de formulario, modo creación/edición y diseño responsive para móviles.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_7.ipynb" download>Cloud_Arq_7</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">8</span>
+          <h3>Prototipo full stack</h3>
+          <p>Backend Express en puerto 4001, frontend estático servido por Express en puerto 3000, carpeta public/ con HTML/CSS/JS y conexión a MongoDB.</p>
+          <p class="course-note">Fuente: <a href="Cloud_Arq_8.ipynb" download>Cloud_Arq_8</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fundamentos" class="course-section" aria-labelledby="fundamentos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="fundamentos-titulo">HTML, CSS y JavaScript del cliente</h2>
+      </div>
+      <div class="course-theory">
+        <h3>HTML: estructura semántica</h3>
+        <p>HTML no es un lenguaje de programación, es un lenguaje de marcado que da estructura al contenido. Elementos clave: <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;h1&gt;</code>–<code>&lt;h6&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;img&gt;</code>.</p>
+
+        <h3>CSS: presentación y caja</h3>
+        <p>CSS separa el contenido de la presentación. Sintaxis: <code>selector { propiedad: valor; }</code>. El modelo de caja (box model) define contenido, relleno (<code>padding</code>), borde (<code>border</code>) y margen (<code>margin</code>) de cada elemento.</p>
+
+        <h3>JavaScript: interactividad y fetch</h3>
+        <p>JavaScript manipula el DOM, reacciona a eventos y hace peticiones de red a APIs. La función <code>fetch(url, opciones)</code> devuelve una promesa que se resuelve con un objeto <code>Response</code>:</p>
+        <div class="course-formula">
+```javascript
+async function getReservaciones() {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error("Error al obtener reservaciones");
+    return res.json();
+}
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="javascript" class="course-section" aria-labelledby="javascript-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">JavaScript y datos</p>
+        <h2 id="javascript-titulo">Estructuras de datos y JSON</h2>
+        <p class="course-section-intro">Arrays, objetos, diccionarios y serialización JSON.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Arrays</h3>
+        <p>Lista ordenada de elementos. Métodos principales:</p>
+        <div class="course-formula">
+```javascript
+let numeros = [1, 2, 3];
+numeros.push(4);       // [1,2,3,4] - agregar al final
+numeros.pop();         // [1,2,3]   - eliminar el último
+numeros.unshift(0);    // [0,1,2,3] - agregar al inicio
+numeros.shift();       // [1,2,3]   - eliminar el primero
+```
+        </div>
+        <p>Métodos de transformación y acumulación:</p>
+        <div class="course-formula">
+```javascript
+let dobles = edades.map(x => x * 2);           // transformar
+let mayores = edades.filter(x => x >= 18);     // filtrar
+let suma = edades.reduce((acc, val) => acc + val, 0); // acumular
+```
+        </div>
+
+        <h3>Objetos literales y diccionarios</h3>
+        <p>Colección de propiedades <code>clave: valor</code>. Acceso con notación de punto o corchetes:</p>
+        <div class="course-formula">
+```javascript
+let persona = { nombre: "Ana", edad: 28, ciudad: "Bogotá" };
+console.log(persona.nombre);   // "Ana"
+persona.profesion = "Ingeniera"; // agregar propiedad
+```
+        </div>
+
+        <h3>JSON</h3>
+        <p>Formato de texto para intercambio de datos. Conversión entre objeto JavaScript y texto JSON:</p>
+        <div class="course-formula">
+```javascript
+let jsonStr = JSON.stringify(usuario);  // objeto → texto JSON
+let objeto = JSON.parse(jsonStr);       // texto JSON → objeto
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="api" class="course-section" aria-labelledby="api-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">API REST y backend</p>
+        <h2 id="api-titulo">Express, Mongoose y MongoDB</h2>
+        <p class="course-section-intro">Construcción de un backend REST para gestionar reservaciones.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Servidor Express</h3>
+        <p>Express es un framework para construir APIs en Node.js. Configuración básica:</p>
+        <div class="course-formula">
+```javascript
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const app = express();
+app.use(cors({ origin: '*' }));
+app.use(express.json());
+const PORT = 5000;
+app.listen(PORT, () => console.log('Servidor en el puerto', PORT));
+```
+        </div>
+
+        <h3>Endpoints REST de reservaciones</h3>
+        <table class="course-table">
+          <thead><tr><th>Método</th><th>Ruta</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>GET</code></td><td><code>/api/reservaciones</code></td><td>Listar todas las reservaciones</td></tr>
+            <tr><td><code>POST</code></td><td><code>/api/reservaciones</code></td><td>Crear una nueva reservación</td></tr>
+            <tr><td><code>GET</code></td><td><code>/api/reservaciones/:id</code></td><td>Obtener una reservación por ID</td></tr>
+            <tr><td><code>PUT</code></td><td><code>/api/reservaciones/:id</code></td><td>Actualizar una reservación existente</td></tr>
+            <tr><td><code>DELETE</code></td><td><code>/api/reservaciones/:id</code></td><td>Eliminar una reservación por ID</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Modelo de datos con Mongoose</h3>
+        <div class="course-formula">
+```javascript
+const ReservacionSchema = mongoose.Schema({
+    nombre: { type: String, required: true },
+    apellido: { type: String, required: true },
+    telefono: { type: String, required: true },
+    habitacion: { type: String, required: true },
+    fecha_entrada: { type: Date, required: true },
+    fecha_salida: { type: Date, required: true },
+    precio: { type: Number, required: true, default: 0 },
+}, { timestamps: true });
+const Reservacion = mongoose.model("Reservacion", ReservacionSchema);
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="frontend" class="course-section" aria-labelledby="frontend-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Frontend con fetch</p>
+        <h2 id="frontend-titulo">Consumo de API desde el navegador</h2>
+        <p class="course-section-intro">Cómo el frontend se comunica con el backend usando fetch().</p>
+      </div>
+      <div class="course-theory">
+        <h3>Funciones de API con fetch</h3>
+        <div class="course-formula">
+```javascript
+const API_URL = "http://localhost:4001/api/reservaciones";
+
+async function createReservacion(data) {
+    const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error("Error al crear reservación");
+    return res.json();
+}
+
+async function deleteReservacion(id) {
+    const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Error al eliminar reservación");
+}
+```
+        </div>
+
+        <h3>Renderizado dinámico de tabla</h3>
+        <p>Cada reservación se convierte en una fila <code>&lt;tr&gt;</code> insertada en el <code>&lt;tbody&gt;</code> de la tabla:</p>
+        <div class="course-formula">
+```javascript
+function renderFila(reservacion) {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+        <td>${reservacion.nombre}</td>
+        <td>${reservacion.apellido}</td>
+        <td>$${reservacion.precio}</td>
+        <td>
+            <button class="btn-delete" data-id="${reservacion._id}">Eliminar</button>
+        </td>
+    `;
+    return fila;
+}
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="fullstack" class="course-section" aria-labelledby="fullstack-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Prototipo full stack</p>
+        <h2 id="fullstack-titulo">Backend y frontend separados</h2>
+        <p class="course-section-intro">Arquitectura con backend en el puerto 4001 y frontend servido como archivos estáticos en el puerto 3000.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Estructura de carpetas</h3>
+        <div class="course-formula">
+```
+project-root/
+├── models/
+│   └── reservacion.models.js
+├── server.js          # API Express en puerto 4001
+├── index.js           # Frontend Express en puerto 3000 (express.static)
+├── package.json
+└── public/
+    ├── index.html
+    ├── styles.css
+    └── script.js
+```
+        </div>
+
+        <h3>Servidor de archivos estáticos</h3>
+        <p>El frontend se sirve con <code>express.static('public')</code>, permitiendo acceder al HTML, CSS y JS del cliente desde el navegador:</p>
+        <div class="course-formula">
+```javascript
+const express = require('express');
+const app = express();
+app.use(express.static('public'));
+app.listen(3000, () => console.log('Servidor en el puerto 3000'));
+```
+        </div>
+
+        <h3>Conexión a MongoDB Atlas</h3>
+        <p>El backend se conecta a una base de datos en la nube mediante una cadena de conexión:</p>
+        <div class="course-formula">
+```javascript
+mongoose.connect("mongodb+srv://USUARIO:CLAVE@cluster.mongodb.net/?retryWrites=true&w=majority&appName=app")
+    .then(() => {
+        console.log("Connected to database");
+        app.listen(4001, () => console.log('Servidor en el puerto 4001'));
+    })
+    .catch((error) => {
+        console.log("Connection Failed");
+        console.log({ message: error.message });
+    });
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los ocho cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_1 – Fundamentos del cliente web</strong>
+            <span>HTML, CSS, JavaScript, DOM, fetch() y cómo una API se conecta con el cliente web.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_1.ipynb" download aria-label="Descargar Cloud_Arq_1">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_2 – JavaScript con Node.js</strong>
+            <span>Tipos de datos, operadores, condicionales, ciclos, funciones y arrow functions con Node.js.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_2.ipynb" download aria-label="Descargar Cloud_Arq_2">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_3 – Estructuras de datos y JSON</strong>
+            <span>Arrays, objetos literales, diccionarios, map/filter/reduce y serialización JSON.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_3.ipynb" download aria-label="Descargar Cloud_Arq_3">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_4 – Agenda integradora</strong>
+            <span>Formulario de reservaciones, validación y tabla dinámica con HTML, CSS y JavaScript.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_4.ipynb" download aria-label="Descargar Cloud_Arq_4">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_5 – API REST con Express y MongoDB</strong>
+            <span>Modelo Mongoose, endpoints REST, CORS, JSON middleware y conexión a MongoDB Atlas.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_5.ipynb" download aria-label="Descargar Cloud_Arq_5">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_6 – Consumir la API con fetch</strong>
+            <span>Peticiones GET/POST/DELETE con fetch(), renderizado de tabla y manejo de errores.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_6.ipynb" download aria-label="Descargar Cloud_Arq_6">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_7 – CRUD completo con fetch</strong>
+            <span>Crear/leer/actualizar/eliminar desde el frontend, validación, modo edición y diseño responsive.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_7.ipynb" download aria-label="Descargar Cloud_Arq_7">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Cloud_Arq_8 – Prototipo full stack</strong>
+            <span>Backend Express en puerto 4001, frontend estático en puerto 3000 y conexión a MongoDB.</span>
+          </div>
+          <a class="course-button" href="Cloud_Arq_8.ipynb" download aria-label="Descargar Cloud_Arq_8">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de CunTech APIs y Cloud · Basada en los cuadernos Cloud_Arq_1–8 disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es" data-course="fisica-ondas">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Física: Ondas y Electricidad — movimiento armónico simple, ondas en cuerdas y ondas estacionarias, con ejemplos resueltos y código Python.">
+  <title>Física: Ondas y Electricidad | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Física: Ondas y Electricidad, inicio">
+      <span class="course-brand-mark" aria-hidden="true">FO</span>
+      <span>Física: Ondas y Electricidad</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Ondas y oscilaciones</p>
+        <h1 id="titulo-principal">Física: Ondas y Electricidad</h1>
+        <p>Tres cuadernos que recorren el movimiento armónico simple (péndulo, masa-resorte, energía), mecánica ondulatoria en cuerdas (propagación, ecuación de onda, rapidez, energía) y ondas estacionarias (nodos, antinodos, resonancia), con ejemplos numéricos y visualizaciones en Python.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#mas">Movimiento armónico simple</a>
+      <a href="#ondas-cuerdas">Ondas en cuerdas</a>
+      <a href="#estacionarias">Ondas estacionarias</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso estudia el movimiento vibratorio y ondulatorio: el MAS como modelo base (desplazamiento, velocidad, aceleración sinusoidales), la propagación de perturbaciones en cuerdas (ondas progresivas, ecuación de onda, rapidez v = √(T/μ), energía transportada) y las ondas estacionarias (nodos, antinodos, condiciones de resonancia f_n = n·v/(2L)). Incluye ejercicios y código Python para graficar trayectorias y patrones de nodos/antinodos.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Movimiento armónico simple</h3>
+          <p>Definición, parámetros (amplitud, frecuencia, periodo, fase), gráficas x/v/a, ejemplos de péndulo y masa-resorte, energía cinética/potencial/total.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Ondas en cuerdas</h3>
+          <p>Propagación de perturbaciones, onda progresiva y(x,t), ecuación de onda lineal, rapidez v = √(T/μ), energía por unidad de longitud, proyecto con Python.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Ondas estacionarias</h3>
+          <p>Superposición de ondas progresivas, ecuación y(x,t) = 2A·sin(kx)·cos(ωt), nodos y antinodos, frecuencias resonantes, ejercicios y simulaciones 3D.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden va del oscilador simple (MAS) a la propagación de ondas en cuerdas, y culmina con ondas estacionarias y resonancia.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Cinemática del MAS</h3>
+          <p>Definición, componentes, gráficas sinusoidales de desplazamiento, velocidad y aceleración, ejemplos de péndulo simple y sistema masa-resorte.</p>
+          <p class="course-note">Fuente: <a href="1_MAS.ipynb" download>1_MAS</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Energía en el oscilador armónico</h3>
+          <p>Energía cinética, potencial y total, conservación de la energía, ejemplo numérico y gráficas con Python.</p>
+          <p class="course-note">Fuente: <a href="1_MAS.ipynb" download>1_MAS (sección energía)</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Mecánica ondulatoria en cuerdas</h3>
+          <p>Propagación de perturbaciones, modelo de onda progresiva, ecuación de onda lineal, rapidez v = √(T/μ), energía transportada, ejemplos resueltos y taller de energía con Python.</p>
+          <p class="course-note">Fuente: <a href="2_ONDULATORIA_CUERDAS.ipynb" download>2_ONDULATORIA_CUERDAS</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Ondas estacionarias</h3>
+          <p>Definición, nodos y antinodos, ecuación y(x,t) = 2A·sin(kx)·cos(ωt), condiciones de resonancia f_n = n·v/(2L), ejemplo de cordón de zapato y 10 ejercicios.</p>
+          <p class="course-note">Fuente: <a href="3_ONDAS_ESTACIONARIAS_b.ipynb" download>3_ONDAS_ESTACIONARIAS_b</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="mas" class="course-section" aria-labelledby="mas-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="mas-titulo">Movimiento armónico simple</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Ecuaciones del MAS</h3>
+        <div class="course-formula">
+\[
+\begin{aligned}
+x(t) &= A\cos(\omega t + \phi)\\
+v(t) &= -A\omega\sin(\omega t + \phi)\\
+a(t) &= -A\omega^2\cos(\omega t + \phi)\\
+\omega &= 2\pi f,\qquad T = \frac{1}{f}
+\end{aligned}
+\]
+        </div>
+
+        <h3>Péndulo simple</h3>
+        <div class="course-formula">
+\[
+\omega = \sqrt{\frac{g}{L}},\qquad f = \frac{\omega}{2\pi}
+\]
+        </div>
+        <p>Ejemplo: L = 0.30 m, g = 9.81 m/s² → ω ≈ 5.72 rad/s, f ≈ 0.91 Hz.</p>
+
+        <h3>Sistema masa-resorte</h3>
+        <div class="course-formula">
+\[
+k = \frac{mg}{x},\qquad \omega = \sqrt{\frac{k}{m}},\qquad f = \frac{\omega}{2\pi}
+\]
+        </div>
+        <p>Ejemplo: elongación 0.05 m, masa 0.2 kg → k ≈ 39.24 N/m, f ≈ 2.23 Hz.</p>
+
+        <h3>Energía en el oscilador</h3>
+        <div class="course-formula">
+\[
+E_k = \frac{1}{2}mv^2,\quad E_p = \frac{1}{2}kx^2,\quad E_t = E_k + E_p = \frac{1}{2}kA^2
+\]
+        </div>
+      </div>
+    </section>
+
+    <section id="ondas-cuerdas" class="course-section" aria-labelledby="ondas-cuerdas-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Ondas en cuerdas</p>
+        <h2 id="ondas-cuerdas-titulo">Mecánica ondulatoria</h2>
+        <p class="course-section-intro">Propagación de perturbaciones y ondas progresivas.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Onda progresiva</h3>
+        <div class="course-formula">
+\[
+y(x,t) = A\sin(kx - \omega t + \phi)
+\]
+        </div>
+        <table class="course-table">
+          <thead><tr><th>Parámetro</th><th>Significado</th><th>Fórmula</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>Amplitud</td><td>—</td></tr>
+            <tr><td>k</td><td>Número de onda</td><td>k = 2π/λ</td></tr>
+            <tr><td>ω</td><td>Frecuencia angular</td><td>ω = 2πf</td></tr>
+            <tr><td>φ</td><td>Fase inicial</td><td>—</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Ecuación de onda lineal</h3>
+        <div class="course-formula">
+\[
+\frac{\partial^2 y}{\partial x^2} = \frac{1}{v^2}\frac{\partial^2 y}{\partial t^2}
+\]
+        </div>
+
+        <h3>Rapidez en cuerdas</h3>
+        <div class="course-formula">
+\[
+v = \sqrt{\frac{T}{\mu}}
+\]
+        </div>
+        <p>Ejemplo: T = 200 N, μ = 0.01 kg/m → v = √(200/0.01) ≈ 141.42 m/s.</p>
+
+        <h3>Energía transportada</h3>
+        <div class="course-formula">
+\[
+E = \frac{1}{2}\mu A^2\omega^2 v
+\]
+        </div>
+      </div>
+    </section>
+
+    <section id="estacionarias" class="course-section" aria-labelledby="estacionarias-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Ondas estacionarias</p>
+        <h2 id="estacionarias-titulo">Resonancia y modos de vibración</h2>
+        <p class="course-section-intro">Superposición de ondas progresivas en direcciones opuestas.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Ecuación de onda estacionaria</h3>
+        <div class="course-formula">
+\[
+y(x,t) = 2A\sin(kx)\cos(\omega t)
+\]
+        </div>
+        <p>Se obtiene sumando dos ondas progresivas opuestas: y₁ = A·sin(kx − ωt) y y₂ = A·sin(kx + ωt).</p>
+
+        <h3>Condiciones de resonancia</h3>
+        <p>Para una cuerda fija en ambos extremos:</p>
+        <div class="course-formula">
+\[
+L = n\frac{\lambda}{2},\qquad f_n = \frac{nv}{2L},\qquad n = 1, 2, 3, \dots
+\]
+        </div>
+        <table class="course-table">
+          <thead><tr><th>Modo (n)</th><th>Frecuencia resonante</th></tr></thead>
+          <tbody>
+            <tr><td>1 (fundamental)</td><td>f₁ = v/(2L)</td></tr>
+            <tr><td>2</td><td>f₂ = 2·v/(2L)</td></tr>
+            <tr><td>3</td><td>f₃ = 3·v/(2L)</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Ejemplo: cordón de zapato</h3>
+        <p>L = 2 m, v = 22.14 m/s → f₁ ≈ 5.535 Hz, f₂ ≈ 11.07 Hz, f₃ ≈ 16.605 Hz.</p>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los tres cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>1_MAS – Movimiento armónico simple</strong>
+            <span>Definición, componentes, gráficas x/v/a, péndulo simple, masa-resorte, energía cinética/potencial/total, ejercicios.</span>
+          </div>
+          <a class="course-button" href="1_MAS.ipynb" download aria-label="Descargar 1_MAS">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>2_ONDULATORIA_CUERDAS – Mecánica ondulatoria</strong>
+            <span>Propagación de perturbaciones, onda progresiva, ecuación de onda, rapidez v = √(T/μ), energía, taller de energía con Python.</span>
+          </div>
+          <a class="course-button" href="2_ONDULATORIA_CUERDAS.ipynb" download aria-label="Descargar 2_ONDULATORIA_CUERDAS">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>3_ONDAS_ESTACIONARIAS_b – Ondas estacionarias</strong>
+            <span>Nodos y antinodos, ecuación y(x,t) = 2A·sin(kx)·cos(ωt), resonancia, ejemplo cordón de zapato, 10 ejercicios, simulación 3D con Python.</span>
+          </div>
+          <a class="course-button" href="3_ONDAS_ESTACIONARIAS_b.ipynb" download aria-label="Descargar 3_ONDAS_ESTACIONARIAS_b">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Física: Ondas y Electricidad · Basada en los cuadernos 1_MAS, 2_ONDULATORIA_CUERDAS y 3_ONDAS_ESTACIONARIAS_b disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

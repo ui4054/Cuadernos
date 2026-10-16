@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es" data-course="diseno-software">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Diseño de Software: arquitectura en capas, MVC, principios SOLID y CQRS, con ejemplo de cálculo de IMC en C# y SQL Server.">
+  <title>Diseño de Software | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Diseño de Software, inicio">
+      <span class="course-brand-mark" aria-hidden="true">DS</span>
+      <span>Diseño de Software</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Arquitectura y patrones</p>
+        <h1 id="titulo-principal">Diseño de Software</h1>
+        <p>Dos cuadernos que recorren la arquitectura en capas con un ejemplo práctico de cálculo de IMC (C# y SQL Server) y los patrones arquitectónicos MVC, principios SOLID y CQRS con diagramas UML generados con Graphviz.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#arquitectura">Arquitectura en capas</a>
+      <a href="#patrones">Patrones de diseño</a>
+      <a href="#solid">Principios SOLID</a>
+      <a href="#cqrs">CQRS</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso distingue entre arquitectura de software (nivel de abstracción alto, decisiones técnicas que impactan al negocio) y diseño de software (detalles de implementación, diagramas de clases, patrones de código). Incluye un ejemplo completo de aplicación en capas para cálculo de IMC y diagramas de clases UML para MVC, capas, SOLID y CQRS.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Arquitectura en capas</h3>
+          <p>Capa de presentación, lógica de negocio, acceso a datos y almacenamiento. Ejemplo: cálculo de IMC con C# y SQL Server.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Arquitectura MVC</h3>
+          <p>Modelo-Vista-Controlador: separación de responsabilidades entre lógica de datos, interfaz y control del flujo.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Principios SOLID</h3>
+          <p>SRP, OCP, LSP, ISP y DIP: buenas prácticas para código orientado a objetos mantenible y extensible.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>CQRS</h3>
+          <p>Command Query Responsibility Segregation: separación de operaciones de lectura y escritura para optimizar rendimiento y escalabilidad.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden va de un ejemplo concreto y aplicado (cálculo de IMC en capas) hacia los patrones arquitectónicos generales y sus diagramas UML.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Aplicación en capas: IMC</h3>
+          <p>Cálculo del Índice de Masa Corporal con tres capas: datos (SQL Server), lógica (C#) y presentación (C# consola). Incluye consulta de desviación estándar del IMC.</p>
+          <p class="course-note">Fuente: <a href="DISEÑO_CAPAS.ipynb" download>DISEÑO_CAPAS</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Definición de arquitectura de software</h3>
+          <p>Componentes de una arquitectura, diferencias entre arquitectura y diseño, nivel de abstracción y enlace entre entorno del negocio y entorno de la solución.</p>
+          <p class="course-note">Fuente: <a href="PatronesDiseño.ipynb" download>PatronesDiseño</a>, secciones 1–3.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Atributos de calidad y evolución del diseño</h3>
+          <p>Mantenibilidad, escalabilidad, seguridad. Evolución desde diseño monolítico hacia microservicios, pasando por MVC, SOLID y capas.</p>
+          <p class="course-note">Fuente: <a href="PatronesDiseño.ipynb" download>PatronesDiseño</a>, secciones 4–5.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Diagrama de clases y MVC</h3>
+          <p>Diagrama de clases UML, componentes de MVC (Modelo, Vista, Controlador) y sus relaciones, con diagrama generado en Graphviz.</p>
+          <p class="course-note">Fuente: <a href="PatronesDiseño.ipynb" download>PatronesDiseño</a>, secciones 6 y arquitectura MVC.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">5</span>
+          <h3>Arquitectura en capas y SOLID</h3>
+          <p>Diagrama de capas (UI, BL, DA, DB) y principios SOLID: SRP, OCP, LSP, ISP, DIP, con ejemplo de aplicación y diagrama UML.</p>
+          <p class="course-note">Fuente: <a href="PatronesDiseño.ipynb" download>PatronesDiseño</a>, secciones arquitectura en capas y SOLID.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">6</span>
+          <h3>CQRS</h3>
+          <p>Command Query Responsibility Segregation: separación de comandos (escritura) y consultas (lectura), modelos de comando y consulta, beneficios de escalabilidad y rendimiento.</p>
+          <p class="course-note">Fuente: <a href="PatronesDiseño.ipynb" download>PatronesDiseño</a>, sección CQRS.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="arquitectura" class="course-section" aria-labelledby="arquitectura-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="arquitectura-titulo">Arquitectura en capas: ejemplo IMC</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Fórmula del IMC</h3>
+        <p>El Índice de Masa Corporal se calcula como:</p>
+        <div class="course-formula">
+\[
+\text{IMC} = \frac{\text{Peso (kg)}}{\text{Altura (m)}^2}
+\]
+        </div>
+        <p>Interpretación de los valores:</p>
+        <table class="course-table">
+          <thead><tr><th>IMC</th><th>Clasificación</th></tr></thead>
+          <tbody>
+            <tr><td>&lt; 18.5</td><td>Bajo peso</td></tr>
+            <tr><td>18.5 – 24.9</td><td>Peso normal</td></tr>
+            <tr><td>25 – 29.9</td><td>Sobrepeso</td></tr>
+            <tr><td>≥ 30</td><td>Obesidad</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Capa de datos (SQL Server)</h3>
+        <p>Tabla <code>Personas</code> con columnas <code>Id</code>, <code>Nombre</code>, <code>Edad</code>, <code>Peso</code>, <code>Altura</code>:</p>
+        <div class="course-formula">
+```sql
+CREATE TABLE Personas (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100),
+    Edad INT,
+    Peso DECIMAL(5,2),
+    Altura DECIMAL(4,2)
+);
+```
+        </div>
+        <p>Consulta con cálculo de IMC y desviación estándar:</p>
+        <div class="course-formula">
+```sql
+SELECT Nombre, Peso, Altura,
+       (Peso / (Altura * Altura)) AS IMC
+FROM Personas;
+
+SELECT STDEV(Peso / (Altura * Altura)) AS DesviacionEstandarIMC
+FROM Personas;
+```
+        </div>
+
+        <h3>Capa lógica (C#)</h3>
+        <p>Clase <code>IMCCalculator</code> que lee personas de la base de datos y calcula su IMC; clase <code>Statistics</code> para la desviación estándar:</p>
+        <div class="course-formula">
+```csharp
+persona.IMC = persona.Peso / (persona.Altura * persona.Altura);
+
+decimal media = imcs.Average();
+decimal sumatoriaDesviaciones = imcs.Sum(imc => (imc - media) * (imc - media));
+decimal desviacionEstandar = (decimal)Math.Sqrt((double)(sumatoriaDesviaciones / imcs.Count));
+```
+        </div>
+
+        <h3>Capa de presentación (C# consola)</h3>
+        <p>El programa principal conecta a la base de datos, obtiene las personas con su IMC y muestra el resultado en consola.</p>
+      </div>
+    </section>
+
+    <section id="patrones" class="course-section" aria-labelledby="patrones-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Patrones de diseño</p>
+        <h2 id="patrones-titulo">MVC y evolución del diseño</h2>
+        <p class="course-section-intro">Modelo-Vista-Controlador y la transición de paradigmas de diseño.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Arquitectura MVC</h3>
+        <p>Organiza la aplicación en tres componentes con responsabilidades separadas:</p>
+        <table class="course-table">
+          <thead><tr><th>Componente</th><th>Responsabilidad</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Modelo</strong></td><td>Lógica de aplicación y gestión de datos. Interactúa con la base de datos.</td></tr>
+            <tr><td><strong>Vista</strong></td><td>Interfaz de usuario. Presenta datos sin lógica de negocio.</td></tr>
+            <tr><td><strong>Controlador</strong></td><td>Intermediario entre modelo y vista. Procesa entradas del usuario.</td></tr>
+          </tbody>
+        </table>
+        <p>Flujo: Controlador → Modelo (actualiza), Modelo → Vista (proporciona datos), Vista → Controlador (interacciones), Controlador → Vista (actualiza).</p>
+
+        <h3>Diagrama de clases UML</h3>
+        <p>Los cuadernos incluyen diagramas de clases generados con Graphviz que representan clases como <code>Usuario</code>, <code>Contador</code>, <code>VistaUsuario</code>, <code>ControladorUsuario</code> y sus relaciones.</p>
+
+        <h3>Evolución del diseño</h3>
+        <p>Transición de paradigmas: desde diseño monolítico hacia MVC, capas, SOLID y microservicios.</p>
+      </div>
+    </section>
+
+    <section id="solid" class="course-section" aria-labelledby="solid-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Principios SOLID</h2>
+        <h2 id="solid-titulo">Buenas prácticas de diseño orientado a objetos</h2>
+        <p class="course-section-intro">SRP, OCP, LSP, ISP y DIP para código mantenible y extensible.</p>
+      </div>
+      <div class="course-theory">
+        <table class="course-table">
+          <thead><tr><th>Principio</th><th>Nombre</th><th>Definición resumida</th></tr></thead>
+          <tbody>
+            <tr><td><strong>S</strong></td><td>Single Responsibility</td><td>Cada clase tiene una única razón para cambiar.</td></tr>
+            <tr><td><strong>O</strong></td><td>Open/Closed</td><td>Abiertas para extensión, cerradas para modificación.</td></tr>
+            <tr><td><strong>L</strong></td><td>Liskov Substitution</td><td>Clases derivadas sustituyen a la base sin romper el programa.</td></tr>
+            <tr><td><strong>I</strong></td><td>Interface Segregation</td><td>Interfaces pequeñas y específicas, no generales grandes.</td></tr>
+            <tr><td><strong>D</strong></td><td>Dependency Inversion</td><td>Depender de abstracciones, no de implementaciones concretas.</td></tr>
+          </tbody>
+        </table>
+        <p>Ejemplo SRP: una clase <code>Usuario</code> no debe enviar correos; eso corresponde a una clase separada <code>ServicioEmail</code>.</p>
+        <p>Ejemplo DIP: un <code>Controlador</code> depende de la interfaz <code>IRepositorio</code>, no de una implementación concreta de repositorio.</p>
+      </div>
+    </section>
+
+    <section id="cqrs" class="course-section" aria-labelledby="cqrs-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">CQRS</h2>
+        <h2 id="cqrs-titulo">Command Query Responsibility Segregation</h2>
+        <p class="course-section-intro">Separación de operaciones de lectura y escritura.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Comandos (Commands)</h3>
+        <p>Operaciones que modifican el estado del sistema (crear usuario, actualizar orden). Tienen efectos secundarios y lógica de negocio específica.</p>
+
+        <h3>Consultas (Queries)</h3>
+        <p>Operaciones que leen el estado sin modificarlo (obtener usuario por ID, listar órdenes). Optimizadas para rendimiento de lectura.</p>
+
+        <h3>Separación de modelos</h3>
+        <ul>
+          <li><strong>Modelos de comando:</strong> manejan lógica de negocio y actualizaciones de estado.</li>
+          <li><strong>Modelos de consulta:</strong> proporcionan datos de forma eficiente para consultas específicas.</li>
+        </ul>
+        <p>Beneficios: escalabilidad independiente de lectura/escritura, rendimiento optimizado, control de acceso diferenciado y flexibilidad para auditoría.</p>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los dos cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>DISEÑO_CAPAS</strong>
+            <span>Aplicación en capas para cálculo de IMC: SQL Server (datos), C# (lógica) y C# consola (presentación).</span>
+          </div>
+          <a class="course-button" href="DISEÑO_CAPAS.ipynb" download aria-label="Descargar DISEÑO_CAPAS">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>PatronesDiseño</strong>
+            <span>Arquitectura de software, MVC, capas, SOLID, CQRS y diagramas de clases UML con Graphviz.</span>
+          </div>
+          <a class="course-button" href="PatronesDiseño.ipynb" download aria-label="Descargar PatronesDiseño">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Diseño de Software · Basada en los cuadernos DISEÑO_CAPAS y PatronesDiseño disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

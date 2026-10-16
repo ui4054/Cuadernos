@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es" data-course="poo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Programación Orientada a Objetos II: herencia, clases base y derivadas, interfaces, patrón MVC, diagramas de clase y secuencia en C#.">
+  <title>Programación Orientada a Objetos II | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Programación Orientada a Objetos II, inicio">
+      <span class="course-brand-mark" aria-hidden="true">POO</span>
+      <span>POO II – Herencia e Interfaces</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · POO avanzada</p>
+        <h1 id="titulo-principal">Programación Orientada a Objetos II</h1>
+        <p>Dos cuadernos que profundizan en dos pilares de la POO: la herencia (clases base y derivadas, jerarquías de clases, reutilización de código) y las interfaces (contratos, polimorfismo, patrón MVC con Modelo-Vista-Controlador). Incluye ejemplos de juego de rol, gestión de datos de personas y diagramas UML (clase, secuencia, entidad-relación, caso de uso).</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#herencia">Herencia</a>
+      <a href="#interfaces">Interfaces</a>
+      <a href="#mvc">Patrón MVC</a>
+      <a href="#diagramas">Diagramas UML</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso profundiza en dos pilares de la Programación Orientada a Objetos: la herencia, que permite crear clases derivadas que reutilizan atributos y métodos de una clase base, y las interfaces, que definen contratos de comportamiento implementados por distintas clases. Incluye ejemplos prácticos (sistema de gestión de personas con MVC, juego de rol con personajes Mago, Guerrero, Bardo, Enano y Elfo) y diagramas UML.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Herencia</h3>
+          <p>Clase base y subclases, reutilización de código, jerarquías de clases, ejemplo Persona → Empleado y juego de rol con Mago, Guerrero, Bardo, Enano y Elfo.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Interfaces</h3>
+          <p>Definición de contratos (IActualizable), implementación en clases, polimorfismo y desacoplamiento.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Patrón MVC</h3>
+          <p>Modelo-Vista-Controlador: separación de lógica de datos, presentación y control del flujo. Ejemplo: gestión de datos de una persona.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>Diagramas UML</h3>
+          <p>Diagramas de clase, secuencia, entidad-relación y caso de uso generados con Graphviz.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden va de herencia (relaciones jerárquicas entre clases) a interfaces (contratos y polimorfismo), culminando en el patrón MVC y sus diagramas UML asociados.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Herencia en POO</h3>
+          <p>Definición de herencia, beneficios (reutilización, mantenimiento, jerarquía), clases base y derivadas (Persona, Empleado), y ejemplo de juego de rol con Personaje, Mago, Guerrero, Bardo, Enano y Elfo.</p>
+          <p class="course-note">Fuente: <a href="PROOBJ2-1-Herencia.ipynb" download>PROOBJ2-1-Herencia</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Interfaces y contratos</h3>
+          <p>Interfaz IActualizable con método ActualizarDatos, implementación en clases ModeloPersona y VistaPersona, uso de la interfaz para desacoplar componentes.</p>
+          <p class="course-note">Fuente: <a href="PROOBJ2_2_INTERFACES.ipynb" download>PROOBJ2_2_INTERFACES</a>, sección interfaz.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Patrón MVC</h3>
+          <p>Modelo (Persona), Vista (VistaPersona) y Controlador (ControladorPersona). El controlador conecta modelo y vista: cambios en el modelo se reflejan en la vista mediante ActualizarDatos.</p>
+          <p class="course-note">Fuente: <a href="PROOBJ2_2_INTERFACES.ipynb" download>PROOBJ2_2_INTERFACES</a>, sección MVC.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Diagramas UML con Graphviz</h3>
+          <p>Diagrama de caso de uso (Usuario, Actualizar Datos, Mostrar Datos), diagrama de clases (Persona, VistaPersona, ControladorPersona, IActualizable), diagrama de secuencia (Usuario → Controlador → Modelo/Vista) y diagrama entidad-relación.</p>
+          <p class="course-note">Fuente: <a href="PROOBJ2_2_INTERFACES.ipynb" download>PROOBJ2_2_INTERFACES</a>, celdas de Graphviz.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="herencia" class="course-section" aria-labelledby="herencia-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="herencia-titulo">Herencia: clases base y derivadas</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Definición</h3>
+        <p>La herencia permite que una clase (subclase o clase derivada) herede atributos y métodos de otra clase (superclase o clase base). La subclase accede a las funcionalidades de la superclase y puede añadir o sobrescribir funcionalidades propias.</p>
+
+        <h3>Beneficios</h3>
+        <ul>
+          <li><strong>Reutilización de código:</strong> se evita duplicar atributos y métodos.</li>
+          <li><strong>Mantenimiento:</strong> cambios en la superclase se propagan a todas las subclases.</li>
+          <li><strong>Jerarquía de clases:</strong> relaciones que representan conceptos del mundo real.</li>
+        </ul>
+
+        <h3>Ejemplo: Persona → Empleado</h3>
+        <div class="course-formula">
+```csharp
+// Clase base
+public class Persona {
+    public string Nombre { get; set; }
+    public int Edad { get; set; }
+    public void Saludar() {
+        Console.WriteLine($"Hola, mi nombre es {Nombre} y tengo {Edad} años.");
+    }
+}
+
+// Subclase
+public class Empleado : Persona {
+    public string Puesto { get; set; }
+    public void Trabajar() {
+        Console.WriteLine($"{Nombre} está trabajando como {Puesto}.");
+    }
+}
+```
+        </div>
+        <p>Uso:</p>
+        <div class="course-formula">
+```csharp
+Empleado empleado = new Empleado();
+empleado.Nombre = "Carlos";
+empleado.Edad = 30;
+empleado.Puesto = "Desarrollador";
+empleado.Saludar();   // método heredado de Persona
+empleado.Trabajar();  // método propio de Empleado
+```
+        </div>
+
+        <h3>Ejemplo: Juego de rol</h3>
+        <p>Jerarquía: Personaje → Mago, Guerrero, Bardo, Enano (→ Guerrero), Elfo. Cada subclase añade atributos y métodos específicos (PuntosDeMagia, Fuerza, Instrumento, Resistencia, Agilidad).</p>
+      </div>
+    </section>
+
+    <section id="interfaces" class="course-section" aria-labelledby="interfaces-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Interfaces</p>
+        <h2 id="interfaces-titulo">Contratos de comportamiento</h2>
+        <p class="course-section-intro">Una interfaz define un conjunto de miembros que las clases implementadoras deben proporcionar.</p>
+      </div>
+      <div class="course-theory">
+        <div class="course-formula">
+```csharp
+public interface IActualizable {
+    void ActualizarDatos(string nombre, string apellido, string telefono);
+}
+```
+        </div>
+        <p>Implementación en el modelo:</p>
+        <div class="course-formula">
+```csharp
+public class ModeloPersona : IActualizable {
+    public string Nombre { get; private set; }
+    public string Apellido { get; private set; }
+    public string Telefono { get; private set; }
+
+    public void ActualizarDatos(string nombre, string apellido, string telefono) {
+        Nombre = nombre;
+        Apellido = apellido;
+        Telefono = telefono;
+    }
+}
+```
+        </div>
+        <p>Una interfaz permite que clases no relacionadas (ModeloPersona y VistaPersona) implementen el mismo contrato, habilitando polimorfismo y desacoplamiento.</p>
+      </div>
+    </section>
+
+    <section id="mvc" class="course-section" aria-labelledby="mvc-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Patrón MVC</h2>
+        <h2 id="mvc-titulo">Modelo-Vista-Controlador</h2>
+        <p class="course-section-intro">Separación de responsabilidades en tres componentes.</p>
+      </div>
+      <div class="course-theory">
+        <table class="course-table">
+          <thead><tr><th>Componente</th><th>Responsabilidad</th><th>Clase ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Modelo</strong></td><td>Gestiona los datos y la lógica de negocio.</td><td>ModeloPersona</td></tr>
+            <tr><td><strong>Vista</strong></td><td>Presenta los datos al usuario.</td><td>VistaPersona</td></tr>
+            <tr><td><strong>Controlador</strong></td><td>Intermediario entre modelo y vista; procesa entradas del usuario.</td><td>ControladorPersona</td></tr>
+          </tbody>
+        </table>
+
+        <div class="course-formula">
+```csharp
+public class ControladorPersona {
+    private ModeloPersona _modelo;
+    private VistaPersona _vista;
+
+    public ControladorPersona(Persona modelo, VistaPersona vista) {
+        _modelo = modelo;
+        _vista = vista;
+    }
+
+    public void CambiarDatos(string nombre, string apellido, string telefono) {
+        _modelo.ActualizarDatos(nombre, apellido, telefono);
+        _vista.ActualizarDatos(nombre, apellido, telefono);
+    }
+}
+```
+        </div>
+        <p>Flujo: Usuario → Controlador.CambiarDatos() → Modelo.ActualizarDatos() y Vista.ActualizarDatos().</p>
+      </div>
+    </section>
+
+    <section id="diagramas" class="course-section" aria-labelledby="diagramas-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Diagramas UML</h2>
+        <h2 id="diagramas-titulo">Clase, secuencia, entidad-relación y caso de uso</h2>
+        <p class="course-section-intro">Diagramas generados con Graphviz para documentar la arquitectura.</p>
+      </div>
+      <div class="course-theory">
+        <ul>
+          <li><strong>Diagrama de caso de uso:</strong> Actor Usuario con casos "Actualizar Datos" y "Mostrar Datos".</li>
+          <li><strong>Diagrama de clases:</strong> Persona, VistaPersona, ControladorPersona e interfaz IActualizable con relaciones "Implements" y "Uses".</li>
+          <li><strong>Diagrama de secuencia:</strong> Usuario llama CambiarDatos al Controlador, que llama ActualizarDatos al Modelo y a la Vista.</li>
+          <li><strong>Diagrama entidad-relación:</strong> entidades Persona, VistaPersona, ControladorPersona con relaciones de gestión.</li>
+          <li><strong>Diagrama ER con interfaz:</strong> añade la entidad «interface» IActualizable con relaciones "Implements" desde Persona y VistaPersona.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los dos cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>PROOBJ2-1 – Herencia</strong>
+            <span>Concepto de herencia, clase base Persona y subclase Empleado, ejemplo de juego de rol con Personaje, Mago, Guerrero, Bardo, Enano y Elfo.</span>
+          </div>
+          <a class="course-button" href="PROOBJ2-1-Herencia.ipynb" download aria-label="Descargar PROOBJ2-1 Herencia">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>PROOBJ2_2 – Interfaces y MVC</strong>
+            <span>Interfaz IActualizable, patrón MVC (ModeloPersona, VistaPersona, ControladorPersona), diagramas de clase, secuencia, entidad-relación y caso de uso con Graphviz.</span>
+          </div>
+          <a class="course-button" href="PROOBJ2_2_INTERFACES.ipynb" download aria-label="Descargar PROOBJ2_2 Interfaces">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Programación Orientada a Objetos II · Basada en los cuadernos PROOBJ2-1-Herencia y PROOBJ2_2_INTERFACES disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

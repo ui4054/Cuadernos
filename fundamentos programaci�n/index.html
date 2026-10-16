@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="es" data-course="fundamentos-programacion">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Fundamentos de Programación: conceptos básicos, tipos de datos, estructuras de decisión, ciclos, arreglos unidimensionales y bidimensionales, diccionarios, listas y métodos en C#.">
+  <title>Fundamentos de Programación | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Fundamentos de Programación, inicio">
+      <span class="course-brand-mark" aria-hidden="true">FP</span>
+      <span>Fundamentos de Programación</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Programación desde cero</p>
+        <h1 id="titulo-principal">Fundamentos de Programación</h1>
+        <p>Nueve cuadernos que recorren desde los conceptos básicos del algoritmo (pseudocódigo y diagramas de flujo) hasta métodos con sobrecarga en C#. Incluye tipos de datos primitivos, operadores, estructuras de decisión (if/else, switch), ciclos (for, while, do-while), arreglos unidimensionales y bidimensionales, diccionarios, listas y métodos con sobrecarga.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuadernos</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#conceptos">Conceptos básicos</a>
+      <a href="#tipos-datos">Tipos de datos y operadores</a>
+      <a href="#decisiones">Estructuras de decisión</a>
+      <a href="#ciclos">Estructuras de repetición</a>
+      <a href="#colecciones">Colecciones de datos</a>
+      <a href="#metodos">Métodos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El curso enseña a pensar como programador: desde qué es un algoritmo y cómo representarlo (pseudocódigo y diagramas de flujo), hasta escribir código C# con variables, condicionales, bucles, colecciones de datos y métodos reutilizables. Cada cuaderno incluye teoría, ejemplos de código y ejercicios prácticos.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Conceptos básicos</h3>
+          <p>Algoritmo, elementos (entrada, proceso, salida), pseudocódigo, diagramas de flujo y estructuras lógicas (secuencia, selección, iteración).</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Tipos de datos y operadores</h3>
+          <p>Variables en C#: int, float, char, string, bool. Operadores aritméticos, lógicos y relacionales.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Estructuras de decisión</h3>
+          <p>if, else if, else y switch-case para tomar decisiones basadas en condiciones booleanas.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">04</span>
+          <h3>Estructuras de repetición</h3>
+          <p>Ciclos for, while y do-while para repetir bloques de código un número conocido o indeterminado de veces.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">05</span>
+          <h3>Colecciones de datos</h3>
+          <p>Arreglos unidimensionales y bidimensionales (matrices), diccionarios y listas dinámicas en C#.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">06</span>
+          <h3>Métodos</h3>
+          <p>Definición de métodos, parámetros, valores de retorno y sobrecarga de métodos.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través de los cuadernos</h2>
+        <p class="course-section-intro">El orden va de lo más abstracto (qué es un algoritmo) a lo más concreto (escribir métodos en C#), construyendo capa sobre capa.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Conceptos básicos del algoritmo</h3>
+          <p>Qué es un algoritmo, sus elementos, representación en pseudocódigo y diagramas de flujo, estructuras lógicas.</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_1_CONCEPBASICOS.ipynb" download>FUNDPROG_1_CONCEPBASICOS</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Tipos de datos primitivos</h3>
+          <p>Declaración y uso de variables int, float, char, string y bool. Operadores aritméticos, lógicos y relacionales.</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_2_PRIMITVS.ipynb" download>FUNDPROG_2_PRIMITVS</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Decisiones: if/else y switch</h3>
+          <p>Estructuras condicionales para seleccionar bloques de código. Ejercicios: número primo, año bisiesto, clasificación de notas, descuentos.</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_3_DECISION.ipynb" download>FUNDPROG_3_DECISION</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Ciclos: for, while, do-while</h3>
+          <p>Repetición de bloques de código. Imprimir números 1-10, suma hasta negativo, validación de contraseña.</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_4_CICLOS_REPETICIONES.ipynb" download>FUNDPROG_4_CICLOS_REPETICIONES</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">5</span>
+          <h3>Arreglos unidimensionales</h3>
+          <p>Declaración, inicialización, acceso por índice, ordenamiento con Array.Sort. Ejercicios: tabla de multiplicar, pares/impares, suma y promedio.</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_5_ARREGLOSUNID.ipynb" download>FUNDPROG_5_ARREGLOSUNID</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">6</span>
+          <h3>Arreglos bidimensionales (matrices)</h3>
+          <p>Declaración tipo[,], bucles anidados, tabla de multiplicar 10×10 y suma de matrices 3×3.</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_6_ARREGLOBIDIM.ipynb" download>FUNDPROG_6_ARREGLOBIDIM</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">7</span>
+          <h3>Diccionarios y listas</h3>
+          <p>Dictionary<TKey,TValue> para pares clave-valor y List<T> para colecciones dinámicas. Métodos Add, ContainsKey, Contains, iteración con foreach.</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_7_DICCIONARIOS.ipynb" download>FUNDPROG_7_DICCIONARIOS</a>, <a href="FUNDPROG_7A_LISTAS.ipynb" download>FUNDPROG_7A_LISTAS</a>.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">8</span>
+          <h3>Métodos y sobrecarga</h3>
+          <p>Métodos void y con retorno, con y sin parámetros, y sobrecarga (mismo nombre, distintas firmas).</p>
+          <p class="course-note">Fuente: <a href="FUNDPROG_8_METODOS.ipynb" download>FUNDPROG_8_METODOS</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="conceptos" class="course-section" aria-labelledby="conceptos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="conceptos-titulo">Qué es un algoritmo</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Definición</h3>
+        <p>Un algoritmo es un conjunto finito y preciso de instrucciones para resolver un problema. Sus elementos son: entrada, proceso, salida, eficiencia (tiempo/espacio) y corrección.</p>
+
+        <h3>Representación</h3>
+        <ul>
+          <li><strong>Pseudocódigo:</strong> lenguaje natural mezclado con estructuras de programación.</li>
+          <li><strong>Diagrama de flujo:</strong> símbolos gráficos (óvalo=inicio/fin, paralelogramo=entrada/salida, rectángulo=proceso, diamante=decisión).</li>
+        </ul>
+
+        <h3>Estructuras lógicas</h3>
+        <table class="course-table">
+          <thead><tr><th>Estructura</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Secuencia</strong></td><td>Instrucciones ejecutadas una tras otra en orden.</td></tr>
+            <tr><td><strong>Selección</strong></td><td>Decisiones basadas en condiciones (if/else, switch).</td></tr>
+            <tr><td><strong>Iteración</strong></td><td>Repetición de bloques de código (for, while, do-while).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="tipos-datos" class="course-section" aria-labelledby="tipos-datos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Tipos de datos y operadores</p>
+        <h2 id="tipos-datos-titulo">Variables en C#</h2>
+        <p class="course-section-intro">Tipos primitivos y sus operadores asociados.</p>
+      </div>
+      <div class="course-theory">
+        <table class="course-table">
+          <thead><tr><th>Tipo</th><th>Descripción</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><code>int</code></td><td>Enteros</td><td><code>int n = 5;</code></td></tr>
+            <tr><td><code>float</code></td><td>Números decimales</td><td><code>float x = 3.14f;</code></td></tr>
+            <tr><td><code>char</code></td><td>Un carácter</td><td><code>char c = 'A';</code></td></tr>
+            <tr><td><code>string</code></td><td>Texto</td><td><code>string s = "hola";</code></td></tr>
+            <tr><td><code>bool</code></td><td>Verdadero/Falso</td><td><code>bool b = true;</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>Operadores</h3>
+        <ul>
+          <li><strong>Aritméticos:</strong> <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> (módulo)</li>
+          <li><strong>Relacionales:</strong> <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code></li>
+          <li><strong>Lógicos:</strong> <code>&amp;&amp;</code> (AND), <code>||</code> (OR), <code>!</code> (NOT)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="decisiones" class="course-section" aria-labelledby="decisiones-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Estructuras de decisión</p>
+        <h2 id="decisiones-titulo">if/else y switch-case</h2>
+        <p class="course-section-intro">Branching basado en condiciones booleanas.</p>
+      </div>
+      <div class="course-theory">
+        <div class="course-formula">
+```csharp
+if (condicion) {
+    // bloque si es verdadero
+} else if (otraCondicion) {
+    // bloque alternativo
+} else {
+    // bloque por defecto
+}
+```
+        </div>
+
+        <h3>switch-case</h3>
+        <div class="course-formula">
+```csharp
+switch (expresion) {
+    case valor1:
+        // bloque 1;
+        break;
+    case valor2:
+        // bloque 2;
+        break;
+    default:
+        // bloque por defecto;
+        break;
+}
+```
+        </div>
+        <p>Ejemplos de aplicación: verificar si un número es primo, determinar año bisiesto (divisible por 4, no por 100 a menos que también por 400), clasificar notas (A–F) y calcular descuentos en una tienda de ropa.</p>
+      </div>
+    </section>
+
+    <section id="ciclos" class="course-section" aria-labelledby="ciclos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Estructuras de repetición</p>
+        <h2 id="ciclos-titulo">Ciclos for, while y do-while</h2>
+        <p class="course-section-intro">Repetición de bloques de código.</p>
+      </div>
+      <div class="course-theory">
+        <table class="course-table">
+          <thead><tr><th>Ciclo</th><th>Uso típico</th><th>Sintaxis clave</th></tr></thead>
+          <tbody>
+            <tr><td><code>for</code></td><td>Número conocido de iteraciones</td><td><code>for (init; cond; incr)</code></td></tr>
+            <tr><td><code>while</code></td><td>Número desconocido, condición primero</td><td><code>while (cond)</code></td></tr>
+            <tr><td><code>do-while</code></td><td>Al menos una ejecución</td><td><code>do { } while (cond);</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="course-formula">
+```csharp
+// for: imprimir 1 a 10
+for (int i = 1; i <= 10; i++) {
+    Console.WriteLine(i);
+}
+
+// while: suma hasta negativo
+int suma = 0;
+while (true) {
+    int n = int.Parse(Console.ReadLine());
+    if (n < 0) break;
+    suma += n;
+}
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="colecciones" class="course-section" aria-labelledby="colecciones-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Colecciones de datos</p>
+        <h2 id="colecciones-titulo">Arreglos, diccionarios y listas</h2>
+        <p class="course-section-intro">Almacenamiento de múltiples valores del mismo tipo.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Arreglo unidimensional</h3>
+        <div class="course-formula">
+```csharp
+int[] numeros = new int[5];
+numeros[0] = 10;
+foreach (int n in numeros) { ... }
+Array.Sort(numeros);
+```
+        </div>
+
+        <h3>Arreglo bidimensional (matriz)</h3>
+        <div class="course-formula">
+```csharp
+int[,] matriz = new int[filas, columnas];
+matriz[fila, columna] = valor;
+// Ejemplo: tabla de multiplicar 10×10
+tabla[i, j] = (i + 1) * (j + 1);
+```
+        </div>
+
+        <h3>Diccionario</h3>
+        <div class="course-formula">
+```csharp
+Dictionary<string, int> notas = new Dictionary<string, int>();
+notas.Add("Juan", 85);
+if (notas.ContainsKey("Juan")) { ... }
+foreach (var kvp in notas) { kvp.Key; kvp.Value; }
+```
+        </div>
+
+        <h3>Lista dinámica</h3>
+        <div class="course-formula">
+```csharp
+List<string> nombres = new List<string>();
+nombres.Add("Ana");
+if (nombres.Contains("Ana")) { ... }
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="metodos" class="course-section" aria-labelledby="metodos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Métodos</p>
+        <h2 id="metodos-titulo">Definición, parámetros y sobrecarga</h2>
+        <p class="course-section-intro">Bloques de código reutilizables dentro de una clase.</p>
+      </div>
+      <div class="course-theory">
+        <table class="course-table">
+          <thead><tr><th>Tipo de método</th><th>Parámetros</th><th>Retorno</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td>Void</td><td>Sin argumentos</td><td>No retorna</td><td><code>Saludar()</code></td></tr>
+            <tr><td>Void</td><td>Con argumentos</td><td>No retorna</td><td><code>ImprimirSuma(a, b)</code></td></tr>
+            <tr><td>Valor</td><td>Con argumentos</td><td>Retorna valor</td><td><code>CalcularSuma(a, b)</code></td></tr>
+            <tr><td>Sobrecarga</td><td>Distintas firmas</td><td>Variable</td><td><code>ImprimirMensaje()</code>, <code>ImprimirMensaje(s)</code>, <code>ImprimirMensaje(s, n)</code></td></tr>
+          </tbody>
+        </table>
+
+        <div class="course-formula">
+```csharp
+// Método con retorno
+int CalcularSuma(int a, int b) {
+    return a + b;
+}
+
+// Sobrecarga: mismo nombre, distinto parámetros
+void ImprimirMensaje() { ... }
+void ImprimirMensaje(string texto) { ... }
+void ImprimirMensaje(string texto, int veces) { ... }
+```
+        </div>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga los nueve cuadernos</h2>
+        <p class="course-section-intro">Cada enlace descarga el notebook original individual.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_1 – Conceptos básicos</strong>
+            <span>Algoritmo, pseudocódigo, diagrama de flujo, estructuras lógicas (secuencia, selección, iteración).</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_1_CONCEPBASICOS.ipynb" download aria-label="Descargar FUNDPROG 1">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_2 – Tipos de datos primitivos</strong>
+            <span>Variables int, float, char, string, bool en C#. Operadores aritméticos, lógicos y relacionales.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_2_PRIMITVS.ipynb" download aria-label="Descargar FUNDPROG 2">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_3 – Decisiones</strong>
+            <span>if, else if, else y switch-case. Ejercicios: número primo, año bisiesto, clasificación de notas, descuentos.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_3_DECISION.ipynb" download aria-label="Descargar FUNDPROG 3">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_4 – Ciclos de repetición</strong>
+            <span>for, while y do-while. Imprimir números, suma hasta negativo, validación de contraseña.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_4_CICLOS_REPETICIONES.ipynb" download aria-label="Descargar FUNDPROG 4">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_5 – Arreglos unidimensionales</strong>
+            <span>Declaración, acceso por índice, Array.Sort. Ejercicios: tabla de multiplicar, pares/impares, suma y promedio.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_5_ARREGLOSUNID.ipynb" download aria-label="Descargar FUNDPROG 5">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_6 – Arreglos bidimensionales</strong>
+            <span>Matrices tipo[,], bucles anidados, tabla de multiplicar 10×10, suma de matrices 3×3.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_6_ARREGLOBIDIM.ipynb" download aria-label="Descargar FUNDPROG 6">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_7 – Diccionarios</strong>
+            <span>Dictionary&lt;TKey,TValue&gt; para pares clave-valor. Add, ContainsKey, iteración con foreach.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_7_DICCIONARIOS.ipynb" download aria-label="Descargar FUNDPROG 7">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_7A – Listas</strong>
+            <span>List&lt;T&gt; para colecciones dinámicas. Add, Contains, iteración con foreach.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_7A_LISTAS.ipynb" download aria-label="Descargar FUNDPROG 7A">Descargar notebook</a>
+        </article>
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>FUNDPROG_8 – Métodos</strong>
+            <span>Métodos void y con retorno, con y sin parámetros, sobrecarga de métodos.</span>
+          </div>
+          <a class="course-button" href="FUNDPROG_8_METODOS.ipynb" download aria-label="Descargar FUNDPROG 8">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Fundamentos de Programación · Basada en los cuadernos FUNDPROG 1–8 disponibles.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

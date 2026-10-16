@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="es" data-course="analitica-datos">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de lectura de Analítica de Datos: introducción a Python para explorar y analizar datos con variables, operadores, estructuras de control, listas, tuplas y diccionarios.">
+  <title>Analítica de Datos | Guía del curso</title>
+  <link rel="stylesheet" href="../course-theme.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="course-header">
+    <a class="course-brand" href="#inicio" aria-label="Analítica de Datos, inicio">
+      <span class="course-brand-mark" aria-hidden="true">AD</span>
+      <span>Analítica de Datos</span>
+    </a>
+    <div class="course-header-actions">
+      <a href="../index.html">Biblioteca de cursos</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </div>
+  </header>
+
+  <main id="inicio" class="course-shell">
+    <section class="course-hero" aria-labelledby="titulo-principal">
+      <div class="course-hero-content">
+        <p class="course-eyebrow">Guía de estudio · Fundamentos de Python</p>
+        <h1 id="titulo-principal">Analítica de Datos</h1>
+        <p>Una introducción práctica a Python para la exploración y análisis de datos. El cuaderno disponible cubre desde la sintaxis básica y tipos de datos hasta estructuras de control, listas, tuplas y diccionarios con ejercicios interactivos.</p>
+        <div class="course-hero-actions">
+          <a class="course-button primary" href="#ruta">Explorar la ruta</a>
+          <a class="course-button" href="#cuadernos">Descargar cuaderno</a>
+        </div>
+      </div>
+    </section>
+
+    <nav class="course-nav" aria-label="Navegación de la guía">
+      <a href="#presentacion">Presentación</a>
+      <a href="#ruta">Ruta de estudio</a>
+      <a href="#fundamentos">Fundamentos</a>
+      <a href="#ejemplos">Ejemplos guiados</a>
+      <a href="#cuadernos">Cuadernos</a>
+    </nav>
+
+    <section id="presentacion" class="course-section" aria-labelledby="presentacion-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Orientación</p>
+        <h2 id="presentacion-titulo">¿Qué encontrarás aquí?</h2>
+        <p class="course-section-intro">El cuaderno <code>Python_1_colab.ipynb</code> está diseñado para una primera toma de contacto con Python en entornos como Google Colab. No es un temario exhaustivo de analítica avanzada, sino una base sólida de programación que luego permite abordar manipulación de datos, visualización y modelado.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">01</span>
+          <h3>Escribir y ejecutar código</h3>
+          <p>Entender la sintaxis básica, declarar variables de distintos tipos y usar <code>print()</code> e <code>input()</code> para interactuar.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">02</span>
+          <h3>Controlar el flujo</h3>
+          <p>Aplicar condicionales <code>if/elif/else</code> y bucles <code>for</code>/<code>while</code> para automatizar tareas repetitivas.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">03</span>
+          <h3>Estructurar datos</h3>
+          <p>Usar listas, tuplas y diccionarios para organizar colecciones de valores y acceder a ellos por índice o clave.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ruta" class="course-section" aria-labelledby="ruta-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Secuencia sugerida</p>
+        <h2 id="ruta-titulo">Una ruta a través del cuaderno</h2>
+        <p class="course-section-intro">El orden sigue la progresión natural del material: desde qué es Python hasta estructuras de datos compuestas. Cada sección incluye ejercicios propuestos para practicar.</p>
+      </div>
+      <div class="course-grid">
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">1</span>
+          <h3>Conceptos básicos y variables</h3>
+          <p>Tipos de datos primitivos (<code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>), asignación de variables, entrada/salida y primeros ejercicios de saludo personalizado.</p>
+          <p class="course-note">Fuente: <a href="Python_1_colab.ipynb" download>Fundamentos de Python</a>, secciones 1–2.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">2</span>
+          <h3>Operadores aritméticos</h3>
+          <p>Suma, resta, multiplicación, división, división entera, módulo y potencia. Construcción de una calculadora básica interactiva.</p>
+          <p class="course-note">Fuente: <a href="Python_1_colab.ipynb" download>Fundamentos de Python</a>, sección 3.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">3</span>
+          <h3>Estructuras de control</h3>
+          <p>Condicionales para decisiones y bucles <code>for</code> (con <code>range</code>) y <code>while</code> para repetición. Ejercicio: números pares del 1 al 100.</p>
+          <p class="course-note">Fuente: <a href="Python_1_colab.ipynb" download>Fundamentos de Python</a>, sección 4.</p>
+        </article>
+        <article class="course-card">
+          <span class="course-card-mark" aria-hidden="true">4</span>
+          <h3>Colecciones: listas, tuplas, diccionarios</h3>
+          <p>Crear, acceder, modificar, agregar y eliminar elementos. Diferencia entre mutabilidad (listas) e inmutabilidad (tuplas). Ejercicios de reporte de estudiante y máximo de una lista.</p>
+          <p class="course-note">Fuente: <a href="Python_1_colab.ipynb" download>Fundamentos de Python</a>, secciones 5–6.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="fundamentos" class="course-section" aria-labelledby="fundamentos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Conceptos centrales</p>
+        <h2 id="fundamentos-titulo">De variables a estructuras de datos</h2>
+      </div>
+      <div class="course-theory">
+        <h3>Tipos de datos y variables</h3>
+        <p>En Python, una variable es una referencia a un objeto en memoria. Los tipos básicos son:</p>
+        <div class="course-table-wrap">
+          <table class="course-table">
+            <thead>
+              <tr><th>Tipo</th><th>Descripción</th><th>Ejemplo</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>int</code></td><td>Enteros (precisión ilimitada)</td><td><code>42</code>, <code>-7</code></td></tr>
+              <tr><td><code>float</code></td><td>Punto flotante (IEEE 754)</td><td><code>3.14</code>, <code>-2.5e10</code></td></tr>
+              <tr><td><code>str</code></td><td>Secuencia inmutable de caracteres Unicode</td><td><code>"hola"</code>, <code>'mundo'</code></td></tr>
+              <tr><td><code>bool</code></td><td>Valores lógicos <code>True</code>/<code>False</code></td><td><code>5 > 3</code> → <code>True</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>La asignación <code>x = 10</code> vincula el nombre <code>x</code> al objeto entero <code>10</code>. Reasignar <code>x = "diez"</code> hace que <code>x</code> referencie un objeto <code>str</code> distinto; Python es de tipado dinámico.</p>
+
+        <h3>Operadores aritméticos</h3>
+        <p>Los operadores siguen la precedencia matemática estándar (potencia antes que multiplicación/división antes que suma/resta). Destacan dos operadores de división:</p>
+        <div class="course-formula">
+\[
+\begin{aligned}
+\text{División real:} &\quad 10 / 3 = 3.333\ldots \\
+\text{División entera:} &\quad 10 // 3 = 3 \\
+\text{Módulo (residuo):} &\quad 10 \% 3 = 1
+\end{aligned}
+\]
+        </div>
+        <p>La identidad <code>a == (a // b) * b + (a % b)</code> siempre se cumple para enteros.</p>
+
+        <h3>Estructuras de control</h3>
+        <p><strong>Condicionales:</strong> <code>if</code>, <code>elif</code>, <code>else</code> evalúan expresiones booleanas. En Python, valores "falsy" incluyen <code>0</code>, <code>""</code>, <code>[]</code>, <code>{}</code>, <code>None</code>, <code>False</code>.</p>
+        <p><strong>Bucles:</strong></p>
+        <ul>
+          <li><code>for x in iterable:</code> itera sobre cualquier iterable (lista, <code>range</code>, tupla, diccionario, conjunto).</li>
+          <li><code>while condicion:</code> repite mientras la condición sea verdadera; requiere actualizar la variable de control dentro del cuerpo.</li>
+        </ul>
+        <p>Ambos admiten <code>break</code> (salida inmediata) y <code>continue</code> (saltar a la siguiente iteración).</p>
+
+        <h3>Listas y tuplas</h3>
+        <p><strong>Listas</strong> (<code>[]</code>): mutables, ordenadas, admiten duplicados. Operaciones típicas: <code>append</code>, <code>remove</code>, <code>pop</code>, <code>insert</code>, indexación y rebanado (<code>lista[1:4]</code>).</p>
+        <p><strong>Tuplas</strong> (<code>()</code>): inmutables, ordenadas. Útiles para registros fijos o claves de diccionario. Desempaquetado: <code>a, b, c = (1, 2, 3)</code>.</p>
+
+        <h3>Diccionarios</h3>
+        <p>Colección de pares <code>clave: valor</code> con claves únicas e inmutables (<code>str</code>, <code>int</code>, <code>tuple</code>). Acceso en O(1) promedio: <code>d["clave"]</code> (lanza <code>KeyError</code> si no existe) o <code>d.get("clave", default)</code>. Métodos: <code>keys()</code>, <code>values()</code>, <code>items()</code>, <code>del d["clave"]</code>.</p>
+      </div>
+    </section>
+
+    <section id="ejemplos" class="course-section" aria-labelledby="ejemplos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Ejemplos guiados</p>
+        <h2 id="ejemplos-titulo">Código comentado paso a paso</h2>
+        <p class="course-section-intro">Estos fragmentos retoman los ejercicios propuestos en el cuaderno con explicación detallada.</p>
+      </div>
+      <div class="course-theory">
+        <h3>Ejemplo 1: Calculadora básica con entrada de usuario</h3>
+        <div class="course-formula">
+```python
+# Solicitar dos números enteros
+num1 = int(input("Ingresa el primer número: "))
+num2 = int(input("Ingresa el segundo número: "))
+
+# Operaciones aritméticas
+print("Suma:", num1 + num2)
+print("Resta:", num1 - num2)
+print("Multiplicación:", num1 * num2)
+print("División:", num1 / num2)        # resultado float
+print("División entera:", num1 // num2) # cociente entero
+print("Residuo:", num1 % num2)
+print("Potencia:", num1 ** num2)
+```
+        </div>
+        <p><strong>Puntos clave:</strong> <code>input()</code> devuelve <code>str</code>; <code>int()</code> convierte a entero. La división <code>/</code> siempre produce <code>float</code> en Python 3.</p>
+
+        <h3>Ejemplo 2: Números pares del 1 al 100 (bucle <code>for</code>)</h3>
+        <div class="course-formula">
+```python
+# range(inicio, fin_excluido, paso)
+for i in range(2, 101, 2):  # 2, 4, 6, ..., 100
+    print(i)
+```
+        </div>
+        <p><strong>Alternativa con <code>while</code>:</strong></p>
+        <div class="course-formula">
+```python
+i = 2
+while i <= 100:
+    print(i)
+    i += 2
+```
+        </div>
+
+        <h3>Ejemplo 3: Reporte de estudiante con diccionario</h3>
+        <div class="course-formula">
+```python
+estudiante = {
+    "nombre": "Carlos",
+    "edad": 21,
+    "carrera": "Ingeniería"
+}
+
+# Agregar promedio
+estudiante["promedio"] = 9.5
+
+# Mostrar reporte formateado
+print(f"Estudiante: {estudiante['nombre']}")
+print(f"Edad: {estudiante['edad']} años")
+print(f"Carrera: {estudiante['carrera']}")
+print(f"Promedio: {estudiante['promedio']}")
+```
+        </div>
+        <p>Las f-strings (<code>f"..."</code>) permiten interpolar expresiones dentro de cadenas de forma legible y eficiente.</p>
+
+        <h3>Ejemplo 4: Encontrar el máximo en una lista</h3>
+        <div class="course-formula">
+```python
+numeros = [17, 3, 92, 5, 41]
+
+maximo = numeros[0]
+for n in numeros[1:]:
+    if n > maximo:
+        maximo = n
+
+print("El mayor es:", maximo)
+# Equivalente nativo: max(numeros)
+```
+        </div>
+        <p>Este patrón de "inicializar con el primer elemento y actualizar" es la base de muchos algoritmos de reducción.</p>
+      </div>
+    </section>
+
+    <section id="cuadernos" class="course-section" aria-labelledby="cuadernos-titulo">
+      <div class="course-section-heading">
+        <p class="course-eyebrow">Material fuente</p>
+        <h2 id="cuadernos-titulo">Descarga el cuaderno</h2>
+        <p class="course-section-intro">El enlace descarga el notebook original. Las referencias anteriores apuntan a este mismo material.</p>
+      </div>
+      <div class="course-resource-list">
+        <article class="course-resource">
+          <div class="course-resource-info">
+            <strong>Fundamentos de Python</strong>
+            <span>Sintaxis, variables, operadores, condicionales, bucles, listas, tuplas y diccionarios con ejercicios.</span>
+          </div>
+          <a class="course-button" href="Python_1_colab.ipynb" download aria-label="Descargar Fundamentos de Python">Descargar notebook</a>
+        </article>
+      </div>
+    </section>
+
+    <p id="math-status" class="math-status" role="status" hidden>No se pudo cargar el motor KaTeX local. Las expresiones matemáticas aparecen en notación TeX sin formato; revisa los recursos de <code>vendor/katex/</code>.</p>
+
+    <footer class="course-footer">
+      <div class="course-footer-inner">
+        <span>Guía de lectura de Analítica de Datos · Basada en el cuaderno <code>Python_1_colab.ipynb</code>.</span>
+        <a href="../index.html">Volver a la biblioteca de cursos</a>
+      </div>
+    </footer>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false}
+          ],
+          throwOnError: false
+        });
+        document.getElementById('math-status').hidden = true;
+      } else {
+        document.getElementById('math-status').hidden = false;
+      }
+    });
+  </script>
+</body>
+</html>

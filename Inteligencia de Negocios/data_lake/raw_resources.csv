@@ -1,0 +1,6 @@
+resource_id,resource_name,role,hourly_rate_usd
+RES-01,Ana Martínez,Data Architect,95.0
+RES-02,Carlos López,Senior Developer,80.0
+RES-03,Beatriz Gómez,Project Manager,85.0
+RES-04,David Ruiz,BI Analyst,70.0
+RES-05,Elena Torres,DevOps Specialist,90.0
